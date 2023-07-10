@@ -6,10 +6,10 @@ class ClientApp:
         pass
 
     def set_config(self, configure):
-        print('서버 설정 적용됨')
+        print('클라이언트 설정 적용됨')
 
     def start(self):
-        print(f'서버 가동 시작 : {datetime.datetime.now()}')
+        print(f'클라이언트 프로그램 가동 시작 : {datetime.datetime.now()}')
 
     def exit(self):
-        print(f'서버 종료 시작 : {datetime.datetime.now()}')
+        print(f'클라이언트 프로그램 종료 시작 : {datetime.datetime.now()}')

@@ -1,10 +1,11 @@
 import time
 
+from Client_Program.client_config import ClientConfigure
 from Code.network.class_client import ClientApp
 
 if __name__ == '__main__':
     kkotalk_client = ClientApp()
-    configure = kkotalk_client.ServerConfigure()
+    configure = ClientConfigure()
     kkotalk_client.set_config(configure)
     kkotalk_client.start()
 
