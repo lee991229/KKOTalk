@@ -17,7 +17,7 @@ class Server:
         # 서버 소켓 설정
         self.server = socket(AF_INET, SOCK_STREAM)  # AF_INET(ipv4를 의미)
         self.server.bind((self.HOST, self.PORT))
-        self.server.listen()
+        self.server.listen()  # 접속 클라이언수 조절
 
     def set_config(self, configure):
         print('서버 설정 적용됨')
