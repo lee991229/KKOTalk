@@ -5,10 +5,10 @@ from threading import *
 
 class Server:
     HOST = '10.10.20.115'
-    PORT = '1111'
+    PORT = 9999
     BUFFER = 1024
     FORMAT = "utf-8"
-    connected_clients = {}
+    connected_clients = []
 
     def __init__(self):
         # 서버 소켓 설정
@@ -25,15 +25,15 @@ class Server:
     def run(self):
         print(f'서버 가동 시작 : {datetime.datetime.now()}')
         while True:
-            client_sock, addr = self.server.accept()  # 클라이언트에 접속할때 두개의 결값을 돌려준다.
+            client_sock, addr = self.server.accept()  # 클라이언트에 접속할때 두개의 결값을 돌려준다. ip주소랑, 클라이언트 소켓
             print(f"{addr}가 서버에 연결 되었습니다.")
             username = client_sock.recv(self.BUFFER).decode(self.FORMAT)
+            print(username)
             if self.connection_check_username(username):
                 client_sock.send('연결됨'.encode(self.FORMAT))
-                new_user = dict()
 
     def connection_check_username(self, username):
-        if self.connected_clients.get(username) == None:
+        if username in self.connected_clients:
             return True
         else:
             return False
