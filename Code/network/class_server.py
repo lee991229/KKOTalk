@@ -29,10 +29,10 @@ class Server:
             print(f"{addr}가 서버에 연결 되었습니다.")
             username = client_sock.recv(self.BUFFER).decode(self.FORMAT)
             print(username)
-            if self.connection_check_username(username):
+            if self.validate_username(username):
                 client_sock.send('연결됨'.encode(self.FORMAT))
 
-    def connection_check_username(self, username):
+    def validate_username(self, username):
         if username in self.connected_clients:
             return True
         else:
