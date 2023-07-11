@@ -5,7 +5,7 @@ from Code.domain.class_user import User
 
 
 class UnitTest(TestCase):
-    def setUp(self): # 각 테스트마다 실행되는 함수임, Create tables 하기땜에 싹 밀고 새로 생긴다고 보면됌
+    def setUp(self):  # 각 테스트마다 실행되는 함수임, Create tables 하기땜에 싹 밀고 새로 생긴다고 보면됌
         # 운영상 DB를 건들이지 않기위해 테스트용 db를 이용함
         self.conn = DBConnector(test_option=True)
         self.conn.create_tables()
@@ -40,3 +40,15 @@ class UnitTest(TestCase):
             self.assertEqual(db_instance.username, insert_instance.username)
             self.assertEqual(db_instance.password, insert_instance.password)
             self.assertEqual(db_instance.nickname, insert_instance.nickname)
+
+    def test_1(self):
+        # given
+        # when
+        # then
+        pass
+
+    def test_2(self):
+        # given
+        # when
+        # then
+        pass
