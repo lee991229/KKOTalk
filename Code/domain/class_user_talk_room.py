@@ -7,11 +7,15 @@ class UserTalkRoom:
         self.user_id = user_id
         self.talk_room_id = talk_room_id
 
-    def toJSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
+
+    def __str__(self):
+        return f"{self.__repr__()}"
 
     def __repr__(self):
-        return f'{self.__dict__}'
+        return f"{self.__dict__}"
+
+    def toJSON(self):
+        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 
     def __eq__(self, other):
         if isinstance(other, UserTalkRoom) and \
