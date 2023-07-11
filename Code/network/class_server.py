@@ -8,7 +8,8 @@ class Server:
     PORT = 9999
     BUFFER = 1024
     FORMAT = "utf-8"
-    connected_clients = []
+    connected_clients_id = ['test1', 'test2', 'test3']
+    connected_user = [('test1', 'password'), ('test2', 'password1'), ('test3', '123')]
 
     def __init__(self):
         # 서버 소켓 설정
@@ -27,10 +28,30 @@ class Server:
         while True:
             client_sock, addr = self.server.accept()  # 클라이언트에 접속할때 두개의 결값을 돌려준다. ip주소랑, 클라이언트 소켓
             print(f"{addr}가 서버에 연결 되었습니다.")
-            username = client_sock.recv(self.BUFFER).decode(self.FORMAT)
-            print(username)
-            if self.validate_username(username):
-                client_sock.send('연결됨'.encode(self.FORMAT))
+            user_id = client_sock.recv(self.BUFFER).decode(self.FORMAT)
+            if self.validate_id(user_id):
+                client_sock.send('아이디존재'.encode(self.FORMAT))
+                user_pw = client_sock.recv(self.BUFFER).decode(self.FORMAT)
+                if self.validate_pw(user_id, user_pw):
+                    client_sock.send('연결됨'.encode(self.FORMAT))
+                    print(f'{user_id}가 접속')
+            # if self.validate_username(user_id):
+            #     client_sock.send('연결됨'.encode(self.FORMAT))
+
+    # 아이디 확인
+    def validate_id(self, user_id):
+        if user_id in self.connected_clients_id:
+            return True
+        else:
+            return False
+
+    # 비밀번호 아이디 일치하는지 확인
+    def validate_pw(self, user_id, user_pw):
+        user_info = (user_id, user_pw)
+        if user_info in self.connected_user:
+            return True
+        else:
+            return False
 
     def validate_username(self, username):
         if username in self.connected_clients:
