@@ -3,7 +3,7 @@ import sys
 
 if __name__ == '__main__':
     uis = ['page_friend_list_ui', 'page_join_ui', 'page_login_ui', 'page_talk_room_list_ui', 'page_talk_room_ui',
-           'widget_make_talk_room_ui', 'widget_search_talk_room_member_list', 'widget_talk_room_member_plus']
+           'widget_make_talk_room_ui', 'widget_search_talk_room_member_list', 'widget_talk_room_member_plus','widget_profile_ui']
     for ui in uis:
         os.system(f'python -m PyQt5.uic.pyuic -x {ui}.ui -o ui_class_{ui}.py')
     # os.system(f'python -m PyQt5.uic.pyuic -x {name2}.ui -o {name2}.py')

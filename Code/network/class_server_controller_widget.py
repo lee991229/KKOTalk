@@ -7,10 +7,11 @@ from Code.network.server_ui.ui_server_controller_widget import Ui_server_control
 
 
 class ServerControllerWidget(QtWidgets.QWidget, Ui_server_controller):
-    def __init__(self, server_obj):
+    def __init__(self, server_obj, db_connector):
         super().__init__()
         self.setupUi(self)
         self.server = server_obj
+        self.db_conn = db_connector
         self.qthread = WorkerServerThread(self)
         self.check_timer = None
         self.set_initial_label()
