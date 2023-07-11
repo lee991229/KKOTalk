@@ -7,11 +7,12 @@ from Code.front.widget_make_talk_room import InviteFriendListWidget
 from Code.front.widget_talk_room_page import TalkRoomWidget
 from Code.front.widget_search_talk_room_member_list_page import SearchMemberListWidget
 from Code.front.widget_talk_room_member_plus_page import TalkRoomMemberPlusWidget
+from Code.front.widget_profile_page import ProfilePage
 
 
 class WindowController:
-    def __init__(self, db_connector=None):
-        assert isinstance(db_connector, DBConnector)
+    def __init__(self, db_connector=DBConnector):
+        # assert isinstance(db_connector, DBConnector)
         super().__init__()
         self.db_connector = db_connector  # db연결 인스턴스
         # Domain 인스턴스
@@ -24,23 +25,31 @@ class WindowController:
         self.make_talk_room = InviteFriendListWidget(self)
         self.room_member_list = SearchMemberListWidget(self)
         self.member_plus = TalkRoomMemberPlusWidget(self)
+        self.profile_page = ProfilePage(self)
+        # self.profilewidget = ProfileWidget(self, self.db_connector)
 
         self.join_id = None
         self.join_pw = None
         self.join_ninkname = None
+
     def join_success(self):
         """
         회원가입 성공시
         :return:
         """
-        #todo:'DB에 회원가입 정보 집어넣는 기능'
+        # todo:'DB에 회원가입 정보 집어넣는 기능'
         pass
+
     def id_duplicate_check(self):
         """
         회원가입 화면 아이디 중복체크 메서드
         """
         # todo:'db에 중복되는 아이디가 있는지 찾아본다'
         return True
+
+    def show_profile_page(self, user_id):
+        self.profile_page.set_profile_user_id(user_id)
+        self.profile_page.show()
 
     def show_talk_room(self):
         """
@@ -136,7 +145,7 @@ class WindowController:
         """
         self.friend_list_page.show()  # 친구창 띄우는 함수
         self.talk_room.show()  # 채팅방 띄우는 함수
+
     def get_friend_list(self):
-        #todo:데이터 베이스에서 리스트 가져오기
-        # self.db_connector.
-        pass
+        result_list = self.db_connector.find_all_user()
+        return result_list
