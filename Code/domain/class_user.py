@@ -1,3 +1,5 @@
+import json
+
 from Common.common_module import *
 
 
@@ -15,7 +17,7 @@ class User:
     def __repr__(self):
         return f"{self.__dict__}"
 
-    def toJSON(self):
+    def toJSON(self) -> str:
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 
     def __eq__(self, other):

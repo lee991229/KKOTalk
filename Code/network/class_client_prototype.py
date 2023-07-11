@@ -7,19 +7,24 @@ from Code.domain.class_user import User
 from Code.network.class_worker_thread import WorkerServerThread
 from Code.network.server_ui.ui_chat_room import Ui_prototype
 from Code.network.server_ui.ui_server_controller_widget import Ui_server_controller
+from Common.class_json import KKODecoder, KKOEncoder
+from Common.common_module import *
 
 
 class ClientPrototypeWidget(QtWidgets.QWidget, Ui_prototype):
-    def __init__(self, client, db_conn: DBConnector):
+    ENCODED_DOT = bytes('.', 'utf-8')
+    ENCODED_PASS = bytes('pass', 'utf-8')
+
+    def __init__(self, client_app):
         super().__init__()
         self.setupUi(self)
-        self.client = client
-        self.server = client
-        self.db_conn = db_conn
+        self.client_app = client_app
         self.valid_duplication_id = False
         self.qthread = WorkerServerThread(self)
         self.set_btn_trigger()
         self.set_init_label()
+        self.encoder = KKOEncoder()
+        self.decoder = KKODecoder()
 
     def set_init_label(self):
         self.initialize_app()
@@ -28,8 +33,8 @@ class ClientPrototypeWidget(QtWidgets.QWidget, Ui_prototype):
     def set_btn_trigger(self):
         self.btn_init.clicked.connect(lambda state: self.initialize_app())
         self.btn_check_same_id.clicked.connect(lambda state: self.send_join_id_for_assert_same_username())
-        self.btn_join.clicked.connect(lambda state: self.join_access())
-        self.btn_login.clicked.connect(lambda state: self.login_access())
+        self.btn_join.clicked.connect(lambda state: self.send_join_id_and_pw_for_join_access())
+        self.btn_login.clicked.connect(lambda state: self.send_login_id_and_pw_for_login_access())
         self.btn_send_message.clicked.connect(lambda state: self.send_message_to_chat_room())
         self.btn_transfer_file.clicked.connect(lambda state: self.send_file_to_chat_room())
 
@@ -43,35 +48,18 @@ class ClientPrototypeWidget(QtWidgets.QWidget, Ui_prototype):
         self.text_edit_chat_room.clear()
         self.valid_duplication_id = False
 
-    # server function =================================
-
-    def listening(self):
-        while True:
-            msg = self.server.recv(1024).decode("utf-8")
-            if msg == '/assert_username':
-                self.server.send(bytes(".", "utf-8"))
-                response = self.server.recv(1024).decode("utf-8")
-                if self.assert_same_join_id(response) is True:
-                    self.server.send('pass'.encode())
-            elif msg == '/login_':
-                pass
-
-    def assert_same_join_id(self, input_username):
-        return self.db_conn.assert_same_login_id(input_username)
-
-    def join_access(self):
-        pass
 
     # client function =================================
     def send_join_id_for_assert_same_username(self):
         input_username = self.line_edit_for_join_id.text()
-        self.client.send("/assert_username")  # 헤더를 붙이고 보내는 동작(?)
-        self.client.send(input_username.encode())  # 실제 내용을 붙여서 보내는 동작
-        return_result = self.client.recv(1024)  # 응답 받기
-        if return_result:
+        self.client_app.send(b"/assert_username")  # 헤더를 붙이고 보내는 동작(?)
+        self.client_app.recv(1024)  # "." 받음
+        self.client_app.send(input_username.encode())  # 실제 내용을 붙여서 보내는 동작
+        return_result = self.client_app.recv(1024).decode('utf-8')  # 응답 받기
+        if return_result == 'pass':
             self.valid_duplication_id = True
             return QtWidgets.QMessageBox.about(self, "가능", "중복 없는 아이디, 써도됌")
-        else:
+        elif return_result == '.':
             return QtWidgets.QMessageBox.about(self, "불가능", "중복 아이디, 새로 쓰기")
 
     def send_join_id_and_pw_for_join_access(self):
@@ -82,28 +70,38 @@ class ClientPrototypeWidget(QtWidgets.QWidget, Ui_prototype):
         join_pw = self.line_edit_for_join_pw.text()
         join_nickname = self.line_edit_for_join_nick.text()
         join_user = User(None, join_username, join_pw, join_nickname)
-        try:
-            self.db_conn.insert_user(join_user)
-            print(f"user {join_nickname} 가입 성공")
-        except Exception:
-            print("user join 실패")
+        user_json_str = join_user.toJSON()
+        self.client_app.send("/join_user")
+        self.client_app.recv(1024)  # "." 받음
+        self.client_app.send(user_json_str.encode())
+        return_result = self.client_app.recv(1024).decode('utf-8')  # 응답 받기
+        if return_result == 'pass':
+            return QtWidgets.QMessageBox.about(self, "성공", "회원가입 성공")
+        elif return_result == '.':
+            return QtWidgets.QMessageBox.about(self, "실패", "회원가입 실패")
 
-    def login_access(self):
-        username = self.line_edit_for_login_id
-        password = self.line_edit_for_login_pw
+    def send_login_id_and_pw_for_login_access(self):
+        login_username = self.line_edit_for_login_id.text()
+        login_pw = self.line_edit_for_login_pw.text()
+        sending_message = login_username + '%' + login_pw
+        self.client_app.send("/login")
+        self.client_app.recv(1024)  # "." 받음
+        self.client_app.send(sending_message.encode())
+        return_result = self.client_app.recv(1024).decode('utf-8')  # 응답 받기
 
-        user_obj = self.db_conn.user_log_in(username, password)
-        if user_obj is not False:
-            print('login 성공!')
-        else:
-            print('login 실패!')
+        if return_result == 'pass':
+            return QtWidgets.QMessageBox.about(self, "성공", "login 성공")
+        elif return_result == '.':
+            return QtWidgets.QMessageBox.about(self, "실패", "login 실패")
+
 
     def send_message_to_chat_room(self):
         txt_message = self.text_edit_for_send_chat.toPlainText()
-        print(txt_message)
+        #todo: send 메시지
 
     def send_file_to_chat_room(self):
         save_excel_dialog = QtWidgets.QMessageBox.question(self, "파일 업로드", "파일을 업로드합니까?")
         if save_excel_dialog == QtWidgets.QMessageBox.Yes:
             save_path_file_name, _, = QtWidgets.QFileDialog.getSaveFileName(self, '파일 저장', './')
-            print(f"{save_path_file_name} send 로직 발동")
+            print(f"{save_path_file_name} send 로직 실행")
+        # todo: send 메시지
