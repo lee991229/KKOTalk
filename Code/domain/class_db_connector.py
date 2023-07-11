@@ -22,7 +22,6 @@ class DBConnector:
     def start_conn(self):
         if self.test_option is True:
             self.conn = sqlite3.connect('db_test.db')
-
         else:
             self.conn = sqlite3.connect('main_db.db')
         return self.conn.cursor()
@@ -306,7 +305,7 @@ class DBConnector:
 
     def assert_same_login_id(self, inserted_id):
         c = self.start_conn()
-        username_id = c.execute('select * from user where username = ?', (inserted_id, ))
+        username_id = c.execute('select * from user where username = ?', (inserted_id, )).fetchone()
         if username_id is None:
             print('사용 가능한 아이디 입니다.')    #사용 가능 아이디
             return True
