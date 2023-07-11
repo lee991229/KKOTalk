@@ -69,15 +69,15 @@ class DBConnector:
                 "message_id" INTEGER, 
                 "sender_user_id" INTEGER, 
                 "talk_room_id" INTEGER,
-                "contents" TEXT, 
                 "send_time_stamp" TEXT, 
+                "contents" TEXT, 
                 "long_contents_id" INTEGER,
                 PRIMARY KEY("message_id" AUTOINCREMENT)
             );
             DROP TABLE IF EXISTS long_contents;
             CREATE TABLE "long_contents" (
                 "contents_id" INTEGER, 
-                "type" INTEGER, 
+                "contents_type" INTEGER, 
                 "long_text" TEXT, 
                 "image" BLOB,
                 PRIMARY KEY("contents_id" AUTOINCREMENT)
@@ -87,6 +87,7 @@ class DBConnector:
         self.commit_db()
         self.end_conn()
 
+
     # user 테이블========================================================================================
     def insert_user(self, user_object: User):
         c = self.start_conn()
@@ -94,17 +95,19 @@ class DBConnector:
         user_name = user_object.username
         password = user_object.password
         nickname = user_object.nickname
-        user_id_list = list()
-        user_ids = c.execute('select user_id from user').fetchall()
-        for _id in user_ids:
-            user_id_list.append(_id[0])
-        if user_id in user_id_list:
-            pass
-        else:
+        user_ids = c.execute('select * from user where user_id = ?', (user_id,)).fetchone()
+
+        if user_ids is None:
             c.execute('insert into user(username, password, nickname) values (?, ?, ?)',
                       (user_name, password, nickname))
             self.commit_db()
+            inserted_user_row = c.execute('select * from user order by user_id desc limit 1').fetchone()
+            inserted_user_obj = User(*inserted_user_row)
             self.end_conn()
+            return inserted_user_obj
+        else:
+            updated_user_obj = self.update_user(user_object)
+            return updated_user_obj
 
     def update_user(self, user_object: User):
         c = self.start_conn()
@@ -115,8 +118,12 @@ class DBConnector:
         c.execute('update user set username=?, password = ?, nickname=? where user_id = ?',
                   (user_name, password, nickname, user_id))
         self.commit_db()
+        updated_user_row = c.execute('select * from user where user_id = ?', (user_id,))
+        updated_user_obj = User(*updated_user_row)
         self.end_conn()
+        return updated_user_obj
 
+    # User 찾기
     def find_all_user(self):
         c = self.start_conn()
         user_data = c.execute('select * from user').fetchall()
@@ -137,11 +144,35 @@ class DBConnector:
         self.end_conn()
         return user_object
 
+    def find_user_by_user_id(self, user_id):
+        c = self.start_conn()
+        user_data = c.execute('select * from user where user_id = ?', (user_id,)).fetchone()
+        if user_data is None:
+            return None
+        user_object = User(*user_data)
+        self.end_conn()
+        return user_object
+
+    # user 삭제
     def delete_user_by_username(self, username: str):
         c = self.start_conn()
+        deleted_user = c.execute('select * from user where username = ?', (username,)).fetchone()
+        deleted_user_obj = User(*deleted_user)
         c.execute('delete from user where username = ?', (username,))
         self.commit_db()
         self.end_conn()
+        return deleted_user_obj
+
+    def delete_user_by_user_id(self, user_id):
+        c = self.start_conn()
+        deleted_user = c.execute('select * from user where user_id = ?', (user_id,)).fetchone()
+        deleted_user_obj = User(*deleted_user)
+        c.execute('delete from user where user_id = ?', (user_id,))
+        self.commit_db()
+        self.end_conn()
+        return deleted_user_obj
+
+    # id 기준으로 함수로 하나 더 만들기
 
     # user_talk_room================================================
     # 새로운 채팅방 생성 함수 호출 및 user_talk_room 테이블 정보 추가
@@ -167,11 +198,40 @@ class DBConnector:
         return users_talk_room_list
 
     # talk_room_id에 해당하는 톡방에 있는 유저 객체 반환
-    def find_all_user_by_talk_id(self, talk_room_id: int):
+    def find_all_user_by_talk_id(self, talk_room_id: int) -> User:
         c = self.start_conn()
+        all_user = list()
         involved_user = c.execute('select * from user_talk_room where talk_room_id = ?', (talk_room_id,))
-
+        for user in involved_user:
+            user_id = user[0]
+            user = c.execute('select * from user where user_id = ?', (user_id,)).fetchone()
+            all_user.append(User(*user))
         self.end_conn()
+        return all_user
+
+    # 회원이 자신이 속한 톡방을 나간 경우, user_id / username에 따라 삭제
+    def delete_user_talk_room_by_user_id(self, user_id):
+        c = self.start_conn()
+        c.execute('delete from user_talk_room where user_id = ?', (user_id))
+        self.commit_db()
+        self.end_conn()
+
+    def delete_user_talk_room_by_username(self, user_name):
+        out_user_id = self.find_user_by_username(user_name).user_id
+        self.delete_user_talk_room_by_user_id(out_user_id)
+
+    # 회원 탈퇴한 경우 user테이블 삭제 함수 및 user_talk_room 삭제 함수 호출(user 및 user_talk_room 모두 삭제)
+    def delete_withdrawal_user_talk_room_by_username(self, user_name: str):
+        withdrawal_user_id = self.delete_user_by_username(user_name).user_id
+        c = self.start_conn()
+        c.execute('delete from user_talk_room where user_id = ?', (withdrawal_user_id,))
+        self.commit_db()
+        self.end_conn()
+
+    def delete_withdrawal_user_talk_room_by_user_id(self, user_id):
+        self.delete_user_by_user_id(user_id)
+        self.delete_user_talk_room_by_user_id(user_id)
+
 
     # talk_room 테이블=======================================================
     # 새로운 채팅방 생성
@@ -193,7 +253,40 @@ class DBConnector:
         self.end_conn()
         return talk_room_obj
 
-    # Message테이블===================================================================================
+    # message테이블===================================================================================
+    def insert_message(self, sender_user_id, talk_room_id, send_time_stamp, contents = None, long_contents_id = None):
+        c = self.start_conn()
+        c.execute('insert into message (sender_user_id, talk_room_id, send_time_stamp, contents, long_contents_id',
+                  (sender_user_id, talk_room_id, send_time_stamp, contents, long_contents_id))
+        self.commit_db()
+        inserted_message_row = c.execute('select * from message order by message_id desc limit 1').fetchone()
+        inserted_message_obj = Message(*inserted_message_row)
+        self.end_conn()
+        return inserted_message_obj
+
+    def find_message_by_message_id(self, message_id):
+        c = self.start_conn()
+        message_row = c.execute('select * from message where message_id = ?', (message_id,)).fetchone()
+        message_obj = Message(*message_row)
+        self.end_conn()
+        return message_obj
+
+    #long_contents 테이블==========================================================================================
+    # contents_type - 0 : long_text, 1: image
+    def insert_long_contents(self, contents_type, long_text = None, image = None):
+        c = self.start_conn()
+        if contents_type == 0 and long_text is not None:
+            c.execute('insert into long_content (contents_type, long_text) values (?, ?)', (contents_type, long_text))
+            inserted_long_contents = ('select * from long_contents order by contents_id desc limit 1')
+            inserted_long_contents_obj = LongContents(*inserted_long_contents)
+            self.commit_db()
+            self.end_conn()
+            return inserted_long_contents_obj
+
+        elif contents_type == 0 and long_text is not None:
+            raise f"콘텐츠타입{contents_type} 과 롱텍스트{long_text} 불일치"
+
+        # elif contents_type == 1 and
 
 
 if __name__ == '__main__':
