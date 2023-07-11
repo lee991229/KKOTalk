@@ -10,4 +10,6 @@ class TalkRoomListWidget(QWidget, Ui_tk_room_list_widget):
         self.set_btn_trigger()
 
     def set_btn_trigger(self):
+        self.btn_friend_list_page.clicked.connect(self.client_controller.show_friend_list)
+        self.btn_tallk_room_make.clicked.connect(self.client_controller.show_make_talk_room)
         pass

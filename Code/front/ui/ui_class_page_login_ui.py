@@ -83,6 +83,10 @@ class Ui_login_widget(object):
         self.line_edit_pw = QtWidgets.QLineEdit(self.frame_6)
         self.line_edit_pw.setObjectName("line_edit_pw")
         self.verticalLayout_4.addWidget(self.line_edit_pw)
+        self.label_warning = QtWidgets.QLabel(self.frame_6)
+        self.label_warning.setText("")
+        self.label_warning.setObjectName("label_warning")
+        self.verticalLayout_4.addWidget(self.label_warning)
         spacerItem5 = QtWidgets.QSpacerItem(20, 19, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_4.addItem(spacerItem5)
         self.btn_login = QtWidgets.QPushButton(self.frame_6)
@@ -98,9 +102,6 @@ class Ui_login_widget(object):
         self.btn_join.setObjectName("btn_join")
         self.horizontalLayout_3.addWidget(self.btn_join)
         self.verticalLayout_4.addWidget(self.widget_2)
-        self.label_Warning = QtWidgets.QLabel(self.frame_6)
-        self.label_Warning.setObjectName("label_Warning")
-        self.verticalLayout_4.addWidget(self.label_Warning)
         self.verticalLayout_5.addWidget(self.frame_6)
         spacerItem7 = QtWidgets.QSpacerItem(20, 103, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_5.addItem(spacerItem7)
@@ -123,7 +124,6 @@ class Ui_login_widget(object):
         self.label_img.setText(_translate("login_widget", "이미지"))
         self.btn_login.setText(_translate("login_widget", "PushButton"))
         self.btn_join.setText(_translate("login_widget", "PushButton"))
-        self.label_Warning.setText(_translate("login_widget", "TextLabel"))
 
 
 if __name__ == "__main__":

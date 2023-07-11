@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'widget_talk_room_friend_plus.ui'
+# Form implementation generated from reading ui file 'widget_talk_room_member_plus.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -11,27 +11,15 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_Form(object):
-    def setupUi(self, Form):
-        Form.setObjectName("Form")
-        Form.resize(400, 300)
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(Form)
+class Ui_takl_room_member_plus_widget(object):
+    def setupUi(self, takl_room_member_plus_widget):
+        takl_room_member_plus_widget.setObjectName("takl_room_member_plus_widget")
+        takl_room_member_plus_widget.resize(400, 300)
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(takl_room_member_plus_widget)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
-        self.frame = QtWidgets.QFrame(Form)
-        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame.setObjectName("frame")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.frame)
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        spacerItem = QtWidgets.QSpacerItem(449, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem)
-        self.pushButton = QtWidgets.QPushButton(self.frame)
-        self.pushButton.setObjectName("pushButton")
-        self.horizontalLayout.addWidget(self.pushButton)
-        self.verticalLayout.addWidget(self.frame)
-        self.frame_3 = QtWidgets.QFrame(Form)
+        self.frame_3 = QtWidgets.QFrame(takl_room_member_plus_widget)
         self.frame_3.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_3.setObjectName("frame_3")
@@ -44,22 +32,22 @@ class Ui_Form(object):
         self.pushButton_4.setObjectName("pushButton_4")
         self.horizontalLayout_3.addWidget(self.pushButton_4)
         self.verticalLayout.addWidget(self.frame_3)
-        self.scrollArea = QtWidgets.QScrollArea(Form)
+        self.scrollArea = QtWidgets.QScrollArea(takl_room_member_plus_widget)
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 378, 131))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 378, 180))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.verticalLayout.addWidget(self.scrollArea)
-        self.frame_2 = QtWidgets.QFrame(Form)
+        self.frame_2 = QtWidgets.QFrame(takl_room_member_plus_widget)
         self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_2.setObjectName("frame_2")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.frame_2)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem1)
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem)
         self.pushButton_2 = QtWidgets.QPushButton(self.frame_2)
         self.pushButton_2.setObjectName("pushButton_2")
         self.horizontalLayout_2.addWidget(self.pushButton_2)
@@ -69,23 +57,22 @@ class Ui_Form(object):
         self.verticalLayout.addWidget(self.frame_2)
         self.verticalLayout_2.addLayout(self.verticalLayout)
 
-        self.retranslateUi(Form)
-        QtCore.QMetaObject.connectSlotsByName(Form)
+        self.retranslateUi(takl_room_member_plus_widget)
+        QtCore.QMetaObject.connectSlotsByName(takl_room_member_plus_widget)
 
-    def retranslateUi(self, Form):
+    def retranslateUi(self, takl_room_member_plus_widget):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
-        self.pushButton.setText(_translate("Form", "PushButton"))
-        self.pushButton_4.setText(_translate("Form", "PushButton"))
-        self.pushButton_2.setText(_translate("Form", "PushButton"))
-        self.pushButton_3.setText(_translate("Form", "PushButton"))
+        takl_room_member_plus_widget.setWindowTitle(_translate("takl_room_member_plus_widget", "Form"))
+        self.pushButton_4.setText(_translate("takl_room_member_plus_widget", "검색"))
+        self.pushButton_2.setText(_translate("takl_room_member_plus_widget", "확인"))
+        self.pushButton_3.setText(_translate("takl_room_member_plus_widget", "취소"))
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    Form = QtWidgets.QWidget()
-    ui = Ui_Form()
-    ui.setupUi(Form)
-    Form.show()
+    takl_room_member_plus_widget = QtWidgets.QWidget()
+    ui = Ui_takl_room_member_plus_widget()
+    ui.setupUi(takl_room_member_plus_widget)
+    takl_room_member_plus_widget.show()
     sys.exit(app.exec_())
