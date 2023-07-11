@@ -95,9 +95,9 @@ class DBConnector:
         user_name = user_object.username
         password = user_object.password
         nickname = user_object.nickname
-        user_ids = c.execute('select * from user where user_id = ?', (user_id,)).fetchone()
+        users_id = c.execute('select * from user where user_id = ?', (user_id,)).fetchone()
 
-        if user_ids is None:
+        if users_id is None:
             c.execute('insert into user(username, password, nickname) values (?, ?, ?)',
                       (user_name, password, nickname))
             self.commit_db()
@@ -277,16 +277,65 @@ class DBConnector:
         c = self.start_conn()
         if contents_type == 0 and long_text is not None:
             c.execute('insert into long_content (contents_type, long_text) values (?, ?)', (contents_type, long_text))
+            self.commit_db()
             inserted_long_contents = ('select * from long_contents order by contents_id desc limit 1')
             inserted_long_contents_obj = LongContents(*inserted_long_contents)
-            self.commit_db()
             self.end_conn()
             return inserted_long_contents_obj
 
         elif contents_type == 0 and long_text is not None:
-            raise f"콘텐츠타입{contents_type} 과 롱텍스트{long_text} 불일치"
+            raise f"콘텐츠타입{contents_type} 과 롱텍스트{long_text} 불일치, 이미지{image}"
 
-        # elif contents_type == 1 and
+        elif contents_type == 1 and image is not None:
+            c.execute('insert into long_content (contents_type, image) values (?, ?)', (contents_type, image))
+            self.commit_db()
+            inserted_long_contents = ('select * from long_contents order by contents_id desc limit 1')
+            inserted_long_contents_obj = LongContents(*inserted_long_contents)
+            self.end_conn()
+            return inserted_long_contents_obj
+
+        elif contents_type == 1 and image is None:
+            raise f"콘텐츠타입{contents_type} 과 이미지{image} 불일치, 롱텍스트{long_text}"
+
+    def find_long_contents_by_contents_id(self, contents_id):
+        c = self.start_conn()
+        long_contents_row = c.execute('select * from long_contents where contents_id = ?', (contents_id,)).fetchone()
+        long_contents_obj = LongContents(*long_contents_row)
+        self.end_conn()
+        return long_contents_obj
+
+    def assert_same_login_id(self, inserted_id):
+        c = self.start_conn()
+        username_id = c.execute('select * from user where username = ?', (inserted_id, ))
+        if username_id is None:
+            print('사용 가능한 아이디 입니다.')    #사용 가능 아이디
+            return True
+        else:
+            print('사용 불가능한 아이디 입니다.')   # 사용불가
+            return False
+
+    # 회원가입용 함수(insert_user함수 호출)
+    def user_sign_up(self, insert_id, insert_pw, nickname):
+        c = self.start_conn()
+        last_user_row = c.execute('select * from user order by user_id desc limit 1').fetchone()
+        user_id = last_user_row[0] + 1
+        sign_up_user_obj = User(user_id, insert_id, insert_pw, nickname)
+        self.end_conn()
+        sing_up_obj = self.insert_user(sign_up_user_obj)
+        return sing_up_obj
+
+    # 로그인 함수
+    def user_log_in(self, login_id, login_pw):
+        c = self.start_conn()
+        exist_user = c.execute('select * from user where username = ? and password = ?', (login_id, login_pw)).fetchone()
+        self.end_conn()
+        if exist_user is not None:
+            print('로그인 성공')
+            login_user_obj = User(*exist_user)
+            return login_user_obj
+        else:
+            print('아이디 혹은 비밀번호를 잘못 입력했습니다.')
+            return False
 
 
 if __name__ == '__main__':
