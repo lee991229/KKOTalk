@@ -1,10 +1,10 @@
 import sqlite3
 
-from class_user import User
-from class_user_talk_room import UserTalkRoom
-from class_talk_room import TalkRoom
-from class_message import Message
-from class_long_contents import LongContents
+from Code.domain.class_user import User
+from Code.domain.class_user_talk_room import UserTalkRoom
+from Code.domain.class_talk_room import TalkRoom
+from Code.domain.class_message import Message
+from Code.domain.class_long_contents import LongContents
 
 
 class DBConnector:
