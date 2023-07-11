@@ -3,7 +3,10 @@ from Code.front.widget_friend_list_page import FriendListWidget
 from Code.front.widget_join_page import JoinWidget
 from Code.front.widget_login_page import LoginWidget
 from Code.front.widget_talk_room_list_page import TalkRoomListWidget
-
+from Code.front.widget_make_talk_room import InviteFriendListWidget
+from Code.front.widget_talk_room_page import TalkRoomWidget
+from Code.front.widget_search_talk_room_member_list_page import SearchMemberListWidget
+from Code.front.widget_talk_room_member_plus_page import TalkRoomMemberPlusWidget
 class WindowController:
     def __init__(self, db_connector=None):
         super().__init__()
@@ -14,6 +17,11 @@ class WindowController:
         self.friend_list_page = FriendListWidget(self)  # 친구창 ui 클래스 함수화
         self.join_widget = JoinWidget(self)  # 회원 가입창 ui 클래스 함수화
         self.talk_room_list = TalkRoomListWidget(self)
+        self.talk_room = TalkRoomWidget(self)
+        self.make_talk_room = InviteFriendListWidget(self)
+        self.room_member_list = SearchMemberListWidget(self)
+        self.member_plus = TalkRoomMemberPlusWidget(self)
+
         self.join_id = None
         self.join_pw = None
         self.join_ninkname = None
@@ -25,6 +33,22 @@ class WindowController:
         #todo:'db에 중복되는 아이디가 있는지 찾아본다'
         return True
 
+    def show_talk_room(self):
+        self.talk_room.show()
+    def show_friend_list(self):
+        self.friend_list_page.show()
+    def show_member_plus(self):
+        self.member_plus.show()
+
+    def show_room_member_list(self):
+        self.room_member_list.show()
+
+    def show_make_talk_room(self):
+        self.make_talk_room.show()
+
+    # 채팅방 리스트 화면 띄우는 메서드
+    def show_talk_room_list_page(self):
+        self.talk_room_list.show()
     def show_join_page(self):
         '''
         회원 가입창 띄우는 메서드
@@ -75,3 +99,4 @@ class WindowController:
         로그인 승인 성공시(True) 친구창 화면 띄우는 메서드
         """
         self.friend_list_page.show()
+        self.talk_room.show()
