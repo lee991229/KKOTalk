@@ -1,7 +1,7 @@
 import time
 
 from Client_Program.client_config import ClientConfigure
-from Code.network.class_client import ClientApp
+from Code.network.class_client_3 import ClientApp
 
 if __name__ == '__main__':
     kkotalk_client = ClientApp()
