@@ -11,11 +11,12 @@ class FriendListWidget(QWidget, Ui_friend_list_widget):
         self.set_btn_trigger()
         self.start_hide_event()
 
+
     def start_hide_event(self):
         self.widget_3.hide()
 
     def set_btn_trigger(self):
-        # self.btn_tk_roomlist.clicked.connect()
+        self.btn_tk_roomlist.clicked.connect(self.client_controller.show_talk_room_list_page)
         # self.btn_flist_close.clicked.connect()
         # self.btn_flist_search
         # self.btn_flist_click_search

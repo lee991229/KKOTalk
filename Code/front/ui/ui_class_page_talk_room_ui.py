@@ -11,13 +11,13 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_Form(object):
-    def setupUi(self, Form):
-        Form.setObjectName("Form")
-        Form.resize(600, 850)
-        self.verticalLayout = QtWidgets.QVBoxLayout(Form)
+class Ui_talk_room_widget(object):
+    def setupUi(self, talk_room_widget):
+        talk_room_widget.setObjectName("talk_room_widget")
+        talk_room_widget.resize(600, 850)
+        self.verticalLayout = QtWidgets.QVBoxLayout(talk_room_widget)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.frame_3 = QtWidgets.QFrame(Form)
+        self.frame_3 = QtWidgets.QFrame(talk_room_widget)
         self.frame_3.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_3.setObjectName("frame_3")
@@ -34,20 +34,20 @@ class Ui_Form(object):
         self.label = QtWidgets.QLabel(self.frame_2)
         self.label.setObjectName("label")
         self.horizontalLayout_2.addWidget(self.label, 0, QtCore.Qt.AlignHCenter)
-        self.widget = QtWidgets.QWidget(self.frame_2)
-        self.widget.setObjectName("widget")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget)
+        self.widget_member_count = QtWidgets.QWidget(self.frame_2)
+        self.widget_member_count.setObjectName("widget_member_count")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget_member_count)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.label_2 = QtWidgets.QLabel(self.widget)
+        self.label_2 = QtWidgets.QLabel(self.widget_member_count)
         self.label_2.setObjectName("label_2")
         self.horizontalLayout.addWidget(self.label_2)
-        self.label_3 = QtWidgets.QLabel(self.widget)
+        self.label_3 = QtWidgets.QLabel(self.widget_member_count)
         self.label_3.setObjectName("label_3")
         self.horizontalLayout.addWidget(self.label_3)
-        self.horizontalLayout_2.addWidget(self.widget)
-        self.pushButton_2 = QtWidgets.QPushButton(self.frame_2)
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.horizontalLayout_2.addWidget(self.pushButton_2)
+        self.horizontalLayout_2.addWidget(self.widget_member_count)
+        self.btn_member_plus = QtWidgets.QPushButton(self.frame_2)
+        self.btn_member_plus.setObjectName("btn_member_plus")
+        self.horizontalLayout_2.addWidget(self.btn_member_plus)
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem1)
         self.pushButton = QtWidgets.QPushButton(self.frame_2)
@@ -84,26 +84,26 @@ class Ui_Form(object):
         self.verticalLayout_3.addWidget(self.frame_9)
         self.verticalLayout.addWidget(self.frame_3)
 
-        self.retranslateUi(Form)
-        QtCore.QMetaObject.connectSlotsByName(Form)
+        self.retranslateUi(talk_room_widget)
+        QtCore.QMetaObject.connectSlotsByName(talk_room_widget)
 
-    def retranslateUi(self, Form):
+    def retranslateUi(self, talk_room_widget):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
-        self.label.setText(_translate("Form", "크크오톡,채팅방 이름"))
-        self.label_2.setText(_translate("Form", "이미지"))
-        self.label_3.setText(_translate("Form", "숫자"))
-        self.pushButton_2.setText(_translate("Form", "+"))
-        self.pushButton.setText(_translate("Form", "x"))
-        self.pushButton_5.setText(_translate("Form", "PushButton"))
-        self.pushButton_6.setText(_translate("Form", "PushButton"))
+        talk_room_widget.setWindowTitle(_translate("talk_room_widget", "Form"))
+        self.label.setText(_translate("talk_room_widget", "크크오톡,채팅방 이름"))
+        self.label_2.setText(_translate("talk_room_widget", "이미지"))
+        self.label_3.setText(_translate("talk_room_widget", "숫자"))
+        self.btn_member_plus.setText(_translate("talk_room_widget", "+"))
+        self.pushButton.setText(_translate("talk_room_widget", "x"))
+        self.pushButton_5.setText(_translate("talk_room_widget", "PushButton"))
+        self.pushButton_6.setText(_translate("talk_room_widget", "PushButton"))
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    Form = QtWidgets.QWidget()
-    ui = Ui_Form()
-    ui.setupUi(Form)
-    Form.show()
+    talk_room_widget = QtWidgets.QWidget()
+    ui = Ui_talk_room_widget()
+    ui.setupUi(talk_room_widget)
+    talk_room_widget.show()
     sys.exit(app.exec_())

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'widget_search_talk_room_friend_list.ui'
+# Form implementation generated from reading ui file 'widget_search_talk_room_member_list.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -11,15 +11,15 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_Form(object):
-    def setupUi(self, Form):
-        Form.setObjectName("Form")
-        Form.resize(573, 300)
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(Form)
+class Ui_takl_room_member_widget(object):
+    def setupUi(self, takl_room_member_widget):
+        takl_room_member_widget.setObjectName("takl_room_member_widget")
+        takl_room_member_widget.resize(573, 300)
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(takl_room_member_widget)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
-        self.frame = QtWidgets.QFrame(Form)
+        self.frame = QtWidgets.QFrame(takl_room_member_widget)
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
@@ -31,7 +31,7 @@ class Ui_Form(object):
         self.pushButton.setObjectName("pushButton")
         self.horizontalLayout.addWidget(self.pushButton)
         self.verticalLayout.addWidget(self.frame)
-        self.scrollArea = QtWidgets.QScrollArea(Form)
+        self.scrollArea = QtWidgets.QScrollArea(takl_room_member_widget)
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
@@ -41,20 +41,20 @@ class Ui_Form(object):
         self.verticalLayout.addWidget(self.scrollArea)
         self.verticalLayout_2.addLayout(self.verticalLayout)
 
-        self.retranslateUi(Form)
-        QtCore.QMetaObject.connectSlotsByName(Form)
+        self.retranslateUi(takl_room_member_widget)
+        QtCore.QMetaObject.connectSlotsByName(takl_room_member_widget)
 
-    def retranslateUi(self, Form):
+    def retranslateUi(self, takl_room_member_widget):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
-        self.pushButton.setText(_translate("Form", "PushButton"))
+        takl_room_member_widget.setWindowTitle(_translate("takl_room_member_widget", "Form"))
+        self.pushButton.setText(_translate("takl_room_member_widget", "PushButton"))
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    Form = QtWidgets.QWidget()
-    ui = Ui_Form()
-    ui.setupUi(Form)
-    Form.show()
+    takl_room_member_widget = QtWidgets.QWidget()
+    ui = Ui_takl_room_member_widget()
+    ui.setupUi(takl_room_member_widget)
+    takl_room_member_widget.show()
     sys.exit(app.exec_())
