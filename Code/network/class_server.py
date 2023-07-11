@@ -4,7 +4,8 @@ from threading import *
 
 
 class Server:
-    HOST = '10.10.20.115'
+    # HOST = '10.10.20.115'
+    HOST = '127.0.0.1'
     PORT = 9999
     BUFFER = 1024
     FORMAT = "utf-8"
