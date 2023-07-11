@@ -9,10 +9,3 @@ class WindowController():
         # self.login_user =   # 스케줄러 페이지
         #
 
-
-
-    def assert_login(self, id, pa):
-        if self.db_connector.login(li):
-            return True
-        else:
-            return False
