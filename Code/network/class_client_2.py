@@ -18,8 +18,8 @@ class ClientApp:
         # self.receive_thread = Thread(target=self.receive_message)
         self.connect_to_surver()
         # 임의로 지정
-        self.user_id = 'test1'
-        self.user_pw = 'password'
+        self.user_id = 'test2'
+        self.user_pw = 'password1'
         self.validate_user(self.user_id, self.user_pw)
 
     def set_config(self, configure):
@@ -38,7 +38,6 @@ class ClientApp:
             print("로그인 됨")
             while True:
                 pass
-
             # 로그인되면 크크오톡 화면 뜨는건가? UI뜨게 변경되는 느낌인가?
             # self.receive_thread.start()
 
