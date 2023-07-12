@@ -16,9 +16,9 @@ from Common.common_module import *
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    server = Server2()
     db_conn = DBConnector(test_option=True)
     db_conn.create_tables()
+    server = Server2(db_conn)
     proto_widget = ServerControllerWidget(server, db_conn)
     proto_widget.show()
 
