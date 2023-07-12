@@ -7,6 +7,20 @@ class ProfilePage(QWidget, Ui_profile_page):
         super().__init__()
         self.setupUi(self)
         self.user_id = None
+        self.username = None
+        self.password = None
+        self.nickname = None
 
-    def set_profile_user_id(self, user_id):
-        self.user_id = user_id
+    def show(self):
+        self.set_label_text()
+        super().show()
+
+    def set_profile_user_data(self, user_data):
+        self.user_id = user_data.user_id
+        self.username = user_data.username
+        self.password = user_data.password
+        self.nickname = user_data.nickname
+
+    def set_label_text(self):
+        print(self.user_id)
+        self.nick_name_label.setText(self.nickname)

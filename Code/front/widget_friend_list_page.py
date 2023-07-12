@@ -11,18 +11,27 @@ class FriendListWidget(QWidget, Ui_friend_list_widget):
         self.client_controller = client_controller
         self.set_btn_trigger()
         self.setGeometry(250, 95, self.width(), self.height())
-        self.set_friend_widget()
+        self.set_initial_widget()
+        self.login_user_obj = None
+        self.friend_list = None
 
     # 아아 이건 오버 라이딩 이라는 것이다
     def show(self):
-        self.set_initial_widget()
+        self.login_user_obj = self.client_controller.login_user_obj
+        self.friend_list = self.client_controller.friend_list
+        self.get_friend_list()
         super().show()
 
     def set_initial_widget(self):
         self.friend_page_search_bar.hide()
 
+    def friend_page_close(self):
+        self.close()
+        self.client_controller.clear_widget(self.widget_2)
+
     def set_btn_trigger(self):
         self.btn_tk_roomlist.clicked.connect(self.client_controller.show_talk_room_list_page)
+        self.btn_flist_close.clicked.connect(self.friend_page_close)
         # self.btn_flist_close.clicked.connect()
         # self.btn_flist_search
         # self.btn_flist_click_search
@@ -31,11 +40,9 @@ class FriendListWidget(QWidget, Ui_friend_list_widget):
     def profile_press(self, user_id):
         self.client_controller.show_profile_page(user_id)
 
-
     # 친구 위젯 레이아웃에 넣기
-    def set_friend_widget(self):
-        friend_list = self.client_controller.get_friend_list()
-
+    def get_friend_list(self):
+        friend_list = self.friend_list
         for friend in friend_list:
             friend_profile = ProfileWidget(self, friend)
             self.friend_list_layout.addWidget(friend_profile)
