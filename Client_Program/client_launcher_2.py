@@ -1,5 +1,3 @@
-import time
-
 from Client_Program.client_config import ClientConfigure
 from Code.network.class_client_2 import ClientApp
 

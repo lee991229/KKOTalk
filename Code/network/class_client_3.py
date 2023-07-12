@@ -1,7 +1,5 @@
 import datetime
-import threading
 from socket import *
-from threading import *
 
 
 class ClientApp:

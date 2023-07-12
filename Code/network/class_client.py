@@ -14,9 +14,9 @@ class ClientApp:
     def __init__(self):
         # self.controller =  ClientController()
         self.connected = False
+        Thread(target=self.connect_to_surver)
         self.client = socket(AF_INET, SOCK_STREAM)
         # self.receive_thread = Thread(target=self.receive_message)
-        self.connect_to_surver()
         # 임의로 지정
         self.user_id = 'test1'
         self.user_pw = 'password'
