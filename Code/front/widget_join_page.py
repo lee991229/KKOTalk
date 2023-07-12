@@ -31,7 +31,7 @@ class JoinWidget(QWidget, Ui_join_widget):
             self.show_label_id_message('아이디가 중복 됩니다')
 
     def duplicate_check_pw(self):
-        reconfirm_pw = self.lineEdit_join_reconfirm_pw.text()
+        reconfirm_pw = self.lineedit_join_reconfirm_pw.text()
         pw = self.lineedit_join_pw.text()
         # todo:'비밀번호 특문 조건 넣나?'
         if pw == reconfirm_pw:  # 비밀 번호와 비밀 번호 확인이 일치하면

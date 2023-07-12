@@ -355,7 +355,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QLineEdit" name="lineEdit_join_pw"/>
+                   <widget class="QLineEdit" name="lineedit_join_pw"/>
                   </item>
                   <item>
                    <widget class="QLabel" name="label_3">
@@ -411,7 +411,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QLineEdit" name="lineEdit_join_reconfirm_pw"/>
+                   <widget class="QLineEdit" name="lineedit_join_reconfirm_pw"/>
                   </item>
                   <item>
                    <widget class="QLabel" name="label_8">
@@ -467,7 +467,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QLineEdit" name="lineEdit_join_user_name"/>
+                   <widget class="QLineEdit" name="lineedit_join_user_name"/>
                   </item>
                   <item>
                    <widget class="QLabel" name="label_9">

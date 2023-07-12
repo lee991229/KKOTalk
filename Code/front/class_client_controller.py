@@ -7,11 +7,13 @@ from Code.front.widget_make_talk_room import InviteFriendListWidget
 from Code.front.widget_talk_room_page import TalkRoomWidget
 from Code.front.widget_search_talk_room_member_list_page import SearchMemberListWidget
 from Code.front.widget_talk_room_member_plus_page import TalkRoomMemberPlusWidget
+from Code.front.widget_profile_page import ProfilePage
 
+from Code.domain.class_user import User
 
 class WindowController:
-    def __init__(self, db_connector=None):
-        assert isinstance(db_connector, DBConnector)
+    def __init__(self, db_connector=DBConnector):
+        # assert isinstance(db_connector, DBConnector)
         super().__init__()
         self.db_connector = db_connector  # db연결 인스턴스
         # Domain 인스턴스
@@ -24,23 +26,38 @@ class WindowController:
         self.make_talk_room = InviteFriendListWidget(self)
         self.room_member_list = SearchMemberListWidget(self)
         self.member_plus = TalkRoomMemberPlusWidget(self)
-
+        self.profile_page = ProfilePage(self)
+        # self.profilewidget = ProfileWidget(self, self.db_connector)
+        self.all_user = None
+        self.friend_list = None
+        self.login_user_obj = None
         self.join_id = None
         self.join_pw = None
         self.join_ninkname = None
+
+    # def all_user_takl_room_insert(self):
+        # self.db_connector.insert_user_talk_room()
     def join_success(self):
         """
         회원가입 성공시
         :return:
         """
-        #todo:'DB에 회원가입 정보 집어넣는 기능'
+        # todo:'DB에 회원가입 정보 집어넣는 기능'
         pass
+
     def id_duplicate_check(self):
         """
         회원가입 화면 아이디 중복체크 메서드
         """
         # todo:'db에 중복되는 아이디가 있는지 찾아본다'
         return True
+
+    def show_profile_page(self, user_id):
+        friend_profile = self.db_connector.find_user_by_user_id(user_id)
+        self.profile_page.set_profile_user_data(friend_profile)
+        self.profile_page.show()
+
+    # def get_friend_profile(self):
 
     def show_talk_room(self):
         """
@@ -101,42 +118,42 @@ class WindowController:
         """
         기능1:
         로그인 화면에서 로그인 승인 버튼에 시그널을 주면 DB에 ID,PW가 저장 되있고 일치 하는지
-        확인하는 메서드 저장,일치 한다면 True를 넘겨준다
-        기능2:
-        아이디,비밀번호가 일치하지 않거나 적지 않았을때 hide 라벨을 show해주고 라벨에 안내문구를 띄워준다
-
-        login_id = 유저가 입력한 아이디
-        login_pw = 유저가 입력한 비밀번호
-        db_id = db에 저장된 id들
-        db_pw = db에 저장된 password들
+        확인하는 메서드
         """
+        login_user_obj = self.db_connector.user_log_in(login_id=login_id, login_pw=login_pw)
 
-        db_id = '1234'
-        db_pw = '1234'
-        if db_id == login_id and db_pw == login_pw:
-            return True
+        if len(login_id) == 0:  # 아이디 칸이 비어 있거나 잘못 적었을때
+            self.login_page.no_input_id()
+        elif len(login_pw) == 0: # 비밀 번호 칸이 비어 있거나 잘못 적었을때
+            self.login_page.no_input_pw()
+        elif isinstance(login_user_obj, User) is False: #아이디와 비밀번호가 틀렸을때
+            self.login_page.none_id_pw()
+        elif isinstance(login_user_obj, User):
+            self.login_user_obj = login_user_obj # 컨트롤러 로그인 유저 인스턴스 저장
+            self.get_friend_list()
+            return login_user_obj
 
         self.login_page.label_warning.show()
 
-        if db_id != login_id:  # 아이디 칸이 비어 있거나 잘못 적었을때
-            if len(login_id) == 0:
-                self.login_page.no_input_id()
-            else:
-                self.login_page.none_id()
-
-        elif db_pw != login_pw:  # 비밀 번호 칸이 비어 있거나 잘못 적었을때
-            if len(login_pw) == 0:
-                self.login_page.no_input_pw()
-            else:
-                self.login_page.none_pw()
-
     def show_login_success(self):
-        """
-        로그인 승인 성공시(True) 친구창,채팅방 띄우는 메서드
-        """
+        # todo: 친구창과 채팅방을 띄울때 본인의 정보를 따로 처리해야한다
         self.friend_list_page.show()  # 친구창 띄우는 함수
         self.talk_room.show()  # 채팅방 띄우는 함수
+
+    def clear_widget(self, widget):
+        if widget.layout() is not None:
+            while widget.layout().count() > 0:
+                item = widget.layout().takeAt(0)
+                if item.widget():
+                    item.widget().deleteLater()
     def get_friend_list(self):
-        #todo:데이터 베이스에서 리스트 가져오기
-        # self.db_connector.
-        pass
+        friend_list = list()
+        result_list = self.db_connector.find_all_user()
+        login_user_id = self.login_user_obj.user_id
+
+        for friend in result_list:
+            if friend.user_id != login_user_id:
+                friend_list.append(friend)
+
+        self.all_user = result_list
+        self.friend_list = friend_list
