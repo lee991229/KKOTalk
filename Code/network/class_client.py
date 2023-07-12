@@ -14,7 +14,6 @@ class ClientApp:
     def __init__(self):
         # self.controller =  ClientController()
         self.connected = False
-        self.client = socket(AF_INET, SOCK_STREAM)
         self.message = None
         # 아직 쓴 이유를 모르겠음 일단 필요할것 같음
         # 임의로 지정
@@ -25,6 +24,7 @@ class ClientApp:
 
     # 소캣이 서버에 접촉
     def connect_to_surver(self):
+        self.client = socket(AF_INET, SOCK_STREAM)
         self.client.connect(self.SERVER)
 
     def disconnect_to_surver(self):
