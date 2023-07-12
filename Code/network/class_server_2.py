@@ -1,3 +1,4 @@
+import os
 from socket import *
 from threading import Thread, Event
 
@@ -20,7 +21,7 @@ class Server2:
         self.sockets_list.append(self.server_socket)
         self.clients = dict()
         self.thread_for_run = None
-        self.close_signal = Event()
+        self.run_signal = True
         self.server_socket.listen()
 
     def set_config(self, configure):
@@ -28,19 +29,21 @@ class Server2:
         print('서버 설정 적용됨')
 
     def start(self):
-        if self.thread_for_run is not None: # 실행중이면 종료 시키기
+        if self.thread_for_run is not None:  # 실행중이면 종료 시키기
             self.thread_for_run: Thread
-            self.close_signal.set()
-        self.thread_for_run = Thread(target=self.run, args=(self.close_signal,))
+            self.stop()
+        self.run_signal = True
+        self.thread_for_run = Thread(target=self.run, args=(self.run_signal,))
         self.thread_for_run.start()
 
     def stop(self):
-        self.close_signal.set()
+        self.run_signal = False
 
-    def run(self, event):
+    def run(self, signal):
         while True:
-            if event.is_set():
+            if signal is False:
                 break
+
             read_sockets, _, exception_sockets = select.select(self.sockets_list, [], self.sockets_list)
 
             for notified_socket in read_sockets:
