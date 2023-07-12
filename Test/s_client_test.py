@@ -17,7 +17,7 @@ from Common.common_module import *
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     client = ClientApp()
-    proto_widget = ClientPrototypeWidget(client)
+    proto_widget = ClientPrototypeWidget(client) # 전략 패턴
     proto_widget.show()
 
     sys.excepthook = lambda exctype, value, traceback: show_error_message(str(value), traceback)

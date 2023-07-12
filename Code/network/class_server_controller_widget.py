@@ -6,19 +6,16 @@ from Code.domain.class_user import User
 from Code.network.class_worker_thread import WorkerServerThread
 from Code.network.server_ui.ui_server_controller_widget import Ui_server_controller
 
-global_total_user_list = list()
 
 class ServerControllerWidget(QtWidgets.QWidget, Ui_server_controller):
     ENCODED_DOT = bytes('.', 'utf-8')
     ENCODED_PASS = bytes('pass', 'utf-8')
 
     def __init__(self, server_obj, db_connector):
-        global global_total_user_list
         super().__init__()
         self.setupUi(self)
         self.server = server_obj
         self.db_conn = db_connector
-        # self.qthread = WorkerServerThread(self, global_total_user_list)
         self.check_timer = None
         self.set_initial_label()
         self.set_btn_trigger()
@@ -46,12 +43,13 @@ class ServerControllerWidget(QtWidgets.QWidget, Ui_server_controller):
         self.btn_stop.clicked.connect(lambda state: self.server_stop())
 
     def server_run(self):
-        self.qthread.set_work(self.server.run)
-        self.qthread.start()  # 쓰레드 동작시킴
-
+        self.server.start()
 
     def server_stop(self):
         self.server.stop()
+
+    def check_server(self):
+        pass
 
     def listening(self):
         while True:
