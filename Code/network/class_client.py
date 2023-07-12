@@ -15,14 +15,10 @@ class ClientApp:
         # self.controller =  ClientController()
         self.connected = False
         self.client = socket(AF_INET, SOCK_STREAM)
+        self.message = None
         # 아직 쓴 이유를 모르겠음 일단 필요할것 같음
-        self.connect_to_surver()
         # 임의로 지정
-        self.user_id = 'test1'
-        self.user_pw = 'password'
-        self.validate_user(self.user_id, self.user_pw)
-
-
+        # self.validate_user(self.user_id, self.user_pw)
 
     def set_config(self, configure):
         print('클라이언트 설정 적용됨')
@@ -31,29 +27,33 @@ class ClientApp:
     def connect_to_surver(self):
         self.client.connect(self.SERVER)
 
-    def validate_user(self, user_id, user_pw):
+    def disconnect_to_surver(self):
+        self.client.shutdown(1)
+        self.client.close()
+        print('죽음?')
+
+    # 프로토 타입에서 로그인 가능함... 지워도 될듯하다.
+    def validate_user(self, sending_login):
         client = self.client
         format_ = self.FORMAT
         buffer = self.BUFFER
-        # 아이디 전송
-        client.send(user_id.encode(format_))
-        if client.recv(buffer).decode(format_) == '아이디존재':
-            # 비밀번호 전송
-            client.send(user_pw.encode(format_))
-            if client.recv(buffer).decode(format_) == "연결됨":
-                # 연결상태로 변경
-                self.connected = True
-                print('도착')
-                self.send_thread = Thread(target=self.send_message)
-                self.send_thread.start()
-                self.receive_thread = Thread(target=self.receive_message)
-                self.receive_thread.start()
-                while True:
-                    pass
-                # 화면 변경되면서 채팅바응로 들어가진다.
+        # 아이디, 비밀번호
+        client.send(sending_login.encode(format_))
+        if client.recv(buffer).decode(format_) == 'pass':
+            # 연결상태로 변경
+            self.connected = True
+            self.send_thread = Thread(target=self.send_message)
+            self.send_thread.start()
+            self.receive_thread = Thread(target=self.receive_message)
+            self.receive_thread.start()
+            while True:
+                pass
+        else:
+            self.connected = False
 
-            # 로그인되면 크크오톡 화면 뜨는건가? UI뜨게 변경되는 느낌인가?
-            # self.receive_thread.start()
+    def test_start(self):
+        self.receive_thread = Thread(target=self.receive_message)
+        self.receive_thread.start()
 
     def send_message(self):
         while True:
@@ -65,9 +65,9 @@ class ClientApp:
             print(message)
 
     def receive_message(self):
-        while self.connected:
-            message = self.client.recv(self.BUFFER).decode(self.FORMAT)
-            print(message)
+        while True:
+            self.message = self.client.recv(self.BUFFER).decode(self.FORMAT)
+
 
     def start(self):
         print(f'클라이언트 프로그램 가동 시작 : {datetime.datetime.now()}')
