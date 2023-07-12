@@ -75,11 +75,11 @@ class DBConnector:
             );
             DROP TABLE IF EXISTS long_contents;
             CREATE TABLE "long_contents" (
-                "contents_id" INTEGER, 
+                "long_contents_id" INTEGER, 
                 "contents_type" INTEGER, 
                 "long_text" TEXT, 
                 "image" BLOB,
-                PRIMARY KEY("contents_id" AUTOINCREMENT)
+                PRIMARY KEY("long_contents_id" AUTOINCREMENT)
             );
 
         """)
@@ -194,7 +194,7 @@ class DBConnector:
         self.end_conn()
         return inserted_user_talk_room_obj
 
-    # 유저가 속한 모든 채팅방 객체 반환
+    # 유저가 속한 모든 채팅방(TalkRoom) 객체 리스트로 반환
     def find_all_talk_room_by_user_id(self, user_id: int) -> list[TalkRoom]:
         c = self.start_conn()
         users_talk_room_list = list()
@@ -206,6 +206,7 @@ class DBConnector:
             users_talk_room_list.append(searched_talk_room)
         self.end_conn()
         return users_talk_room_list
+
 
     def find_all_talk_room_by_username(self, username: str) -> list[TalkRoom]:
         c = self.start_conn()
@@ -273,6 +274,7 @@ class DBConnector:
         self.end_conn()
         return created_talk_room_obj
 
+    # user_talk_room_obj 의 talk_room_id로 talk_room_obj 반환
     def find_talk_room_by_talk_room_id(self, user_talk_room_obj: UserTalkRoom):
         c = self.start_conn()
         talk_room_id = user_talk_room_obj.talk_room_id
@@ -284,12 +286,22 @@ class DBConnector:
     # message테이블===================================================================================
     def insert_message(self, sender_user_id, talk_room_id, send_time_stamp, contents=None, long_contents_id=None):
         c = self.start_conn()
-        c.execute('insert into message (sender_user_id, talk_room_id, send_time_stamp, contents, long_contents_id',
-                  (sender_user_id, talk_room_id, send_time_stamp, contents, long_contents_id))
+        c.execute('''insert into message (sender_user_id, talk_room_id, send_time_stamp, contents, long_contents_id)
+        values (?, ?, ?, ?, ?)''', (sender_user_id, talk_room_id, send_time_stamp, contents, long_contents_id))
         self.commit_db()
         inserted_message_row = c.execute('select * from message order by message_id desc limit 1').fetchone()
         inserted_message_obj = Message(*inserted_message_row)
         self.end_conn()
+        return inserted_message_obj
+
+    # 메세지 객체 받아 db에 저장
+    def create_message(self, message_obj: Message):
+        sender_user_id = message_obj.sender_user_id
+        talk_room_id = message_obj.talk_room_id
+        send_time_stamp = message_obj.send_time_stamp
+        contents = message_obj.contents
+        long_contents_id = message_obj.long_contents_id
+        inserted_message_obj = self.insert_message(sender_user_id, talk_room_id, send_time_stamp, contents, long_contents_id)
         return inserted_message_obj
 
     def find_message_by_message_id(self, message_id):
@@ -299,37 +311,64 @@ class DBConnector:
         self.end_conn()
         return message_obj
 
+    def find_all_message_by_sender_user_id(self, sender_user_id) -> list[Message]:
+        c = self.start_conn()
+        message_rows = c.execute('select * from message where sender_user_id = ?', (sender_user_id,)).fetchall()
+        message_obj_list = list()
+        for message_row in message_rows:
+            message_obj = Message(*message_row)
+            message_obj_list.append(message_obj)
+        self.end_conn()
+        return message_obj_list
+
+    def find_all_message_by_talk_room_id(self, talk_room_id) -> list[Message]:
+        c = self.start_conn()
+        message_rows = c.execute('select * from message where talk_room_id = ?', (talk_room_id,)).fetchall()
+        message_obj_list = list()
+        for message_row in message_rows:
+            message_obj = Message(*message_row)
+            message_obj_list.append(message_obj)
+        self.end_conn()
+        return message_obj_list
+
     # long_contents 테이블==========================================================================================
     # contents_type - 0 : long_text, 1: image
     def insert_long_contents(self, contents_type, long_text=None, image=None):
         c = self.start_conn()
         if contents_type == 0 and long_text is not None:
-            c.execute('insert into long_content (contents_type, long_text) values (?, ?)', (contents_type, long_text))
+            c.execute('insert into long_contents (contents_type, long_text) values (?, ?)', (contents_type, long_text))
             self.commit_db()
             inserted_long_contents = c.execute(
-                'select * from long_contents order by contents_id desc limit 1').fetchone()
+                'select * from long_contents order by long_contents_id desc limit 1').fetchone()
             inserted_long_contents_obj = LongContents(*inserted_long_contents)
             self.end_conn()
             return inserted_long_contents_obj
 
-        elif contents_type == 0 and long_text is not None:
-            raise f"콘텐츠타입{contents_type} 과 롱텍스트{long_text} 불일치, 이미지{image}"
+        elif contents_type == 0 and long_text is None:
+            return f"콘텐츠타입{contents_type} 과 롱텍스트{long_text} 불일치, 이미지{image}"
 
         elif contents_type == 1 and image is not None:
-            c.execute('insert into long_content (contents_type, image) values (?, ?)', (contents_type, image))
+            c.execute('insert into long_contents (contents_type, image) values (?, ?)', (contents_type, image))
             self.commit_db()
             inserted_long_contents = c.execute(
-                'select * from long_contents order by contents_id desc limit 1').fetchone()
+                'select * from long_contents order by long_contents_id desc limit 1').fetchone()
             inserted_long_contents_obj = LongContents(*inserted_long_contents)
             self.end_conn()
             return inserted_long_contents_obj
 
         elif contents_type == 1 and image is None:
-            raise f"콘텐츠타입{contents_type} 과 이미지{image} 불일치, 롱텍스트{long_text}"
+            return f"콘텐츠타입{contents_type} 과 이미지{image} 불일치, 롱텍스트{long_text}"
 
-    def find_long_contents_by_contents_id(self, contents_id):
+    def create_long_contents(self, long_contents_obj:LongContents):
+        contents_type = long_contents_obj.contents_type
+        long_text = long_contents_obj.long_text
+        image = long_contents_obj.image
+        inserted_long_contents_obj = self.insert_long_contents(contents_type, long_text=long_text, image=image)
+        return inserted_long_contents_obj
+
+    def find_long_contents_by_long_contents_id(self, long_contents_id):
         c = self.start_conn()
-        long_contents_row = c.execute('select * from long_contents where contents_id = ?', (contents_id,)).fetchone()
+        long_contents_row = c.execute('select * from long_contents where long_contents_id = ?', (long_contents_id,)).fetchone()
         long_contents_obj = LongContents(*long_contents_row)
         self.end_conn()
         return long_contents_obj
@@ -406,14 +445,10 @@ if __name__ == '__main__':
 
     # dbconn.update_user()
 
-    # LongContents(1, 0, long_text = '아주 긴 글')
-    # LongContents(2, 1, long_text = '아주 긴 글')
-    # LongContents(3, 0, image = '아주 긴 글')
-    # LongContents(4, 1, image = '사진')
     usertalkroom1 = UserTalkRoom(1, 1, 1)
     usertalkroom2 = UserTalkRoom(2, 1, 2)
     usertalkroom3 = UserTalkRoom(3, 4, 2)
-    usertalkroom4 = UserTalkRoom(4, 4, 3)
+    usertalkroom4 = UserTalkRoom(4, 2, 3)
     usertalkroom5 = UserTalkRoom(4, 4, 3)
     # usertalkroom1 = UserTalkRoom(5, 1, 2)
 
@@ -430,6 +465,36 @@ if __name__ == '__main__':
     print(dbconn.create_talk_room('1번방', '2023-01-01'))
     print(dbconn.create_talk_room('2번방', '2023-02-01'))
     print(dbconn.create_talk_room('3번방', '2023-03-01'))
+    message1 = Message(1, 4, 2, '2020-01-01','호롤로 메시지 내용', None)
+    message2 = Message(2, 4, 2, '2020-01-01', None, 1)
+    message3 = Message(3, 1, 3, '2020-01-01', None, 2)
+    message4 = Message(4, 2, 1, '2020-01-01', None, 3)
+    message5 = Message(4, 5, 3, '2020-01-01', None, 4)
+    print('Message객체 db저장')
+    print(dbconn.create_message(message1))
+    print(dbconn.create_message(message2))
+    print(dbconn.create_message(message3))
+    print(dbconn.create_message(message4))
+    print(dbconn.create_message(message5))
+    print('message_id로 Message객체 반환')
+    print(dbconn.find_message_by_message_id(2))
+    print('sender_user_id로 Message객체 반환')
+    print(dbconn.find_all_message_by_sender_user_id(4))
+    print('talk_room_id로 Message객체 반환')
+    print(dbconn.find_all_message_by_talk_room_id(3))
+
+    long1 = LongContents(1, 0, long_text='아주 긴 글1', image=None) #타입일치
+    long2 = LongContents(2, 1, long_text='아주 긴 글2', image=None) #불일치
+    long3 = LongContents(3, 0, long_text = None, image='사진3')   #불일치
+    long4 = LongContents(4, 1, long_text=None, image='사진4') #타입일치
+    print('\n')
+    print(dbconn.create_long_contents(long1))
+    print(dbconn.create_long_contents(long2))
+    print(dbconn.create_long_contents(long3))
+    print(dbconn.create_long_contents(long4))
+    print(dbconn.find_long_contents_by_long_contents_id(1))
+    print(dbconn.find_long_contents_by_long_contents_id(2))
+
     # print(dbconn.find_all_talk_room_by_user_id(1))
     # print(dbconn.find_all_talk_room_by_username('유리'))
 
@@ -449,8 +514,7 @@ if __name__ == '__main__':
     # print(dbconn.find_all_talk_room_by_user_id(1))
     # print(dbconn.find_all_user())
     # print(dbconn.find_all_talk_room_by_username('짱구'))
-
-    print(dbconn.find_talk_room_by_talk_room_id(talkroom1))
+    # print(dbconn.find_talk_room_by_talk_room_id(usertalkroom1))
     # # 로그인 아이디, 비밀번호 일치 여부 반환
     # dbconn.user_log_in('짱구', '12345')
     # dbconn.user_log_in('짱구', '11111')

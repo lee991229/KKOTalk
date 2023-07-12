@@ -1,7 +1,5 @@
 import json
 
-from Common.common_module import *
-
 
 class User:
     def __init__(self, user_id, username, password, nickname):
