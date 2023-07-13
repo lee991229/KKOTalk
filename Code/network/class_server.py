@@ -2,6 +2,7 @@ import os
 from multiprocessing import Process
 from socket import *
 from threading import Thread, Event
+from Common.class_json import *
 
 import select
 
@@ -17,7 +18,7 @@ class Server:
 
     assert_username = f"{'assert_username':<{HEADER_LENGTH}}"
     join_user = f"{'join_user':<{HEADER_LENGTH}}"
-    login = "login"
+    login = f"{'login':<{HEADER_LENGTH}}"
     send_msg_c_room = "send_msg_c_room"
     send_alarm_c_room = "send_alarm_c_room"
     pass_encoded = f"{'pass':<{1024-HEADER_LENGTH}}".encode(FORMAT)
@@ -40,6 +41,7 @@ class Server:
         self.clients = dict()
         self.thread_for_run = None
         self.run_signal = True
+        self.decoder = KKODecoder()
 
     def set_config(self, configure):
         self.config = configure
@@ -105,8 +107,23 @@ class Server:
                 if result is True:
                     response_header = self.assert_username.encode(self.FORMAT)
                     client_socket.send(response_header + self.pass_encoded)
+                elif result is False:
+                    response_header = self.assert_username.encode(self.FORMAT)
+                    client_socket.send(response_header + self.dot_encoded)
             # 회원가입
             elif request_header == self.join_user.strip():
-                result = self.db_conn.user_sign_up()
+                object_ = self.decoder.decode(request_data)
+                print(object_.username)
+                result = self.db_conn.user_sign_up(object_.username, object_.password, object_.nickname)
+                if result is False:
+                    response_header = self.join_user.encode(self.FORMAT)
+                    client_socket.send(response_header + self.dot_encoded)
+                else:
+                    response_header = self.join_user.encode(self.FORMAT)
+                    client_socket.send(response_header + self.pass_encoded)
+            # 로그인
+            elif request_header == self.login.strip():
+                pass
+
         except:
             return False

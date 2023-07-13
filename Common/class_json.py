@@ -17,6 +17,7 @@ class KKODecoder(JSONDecoder):
         super().__init__()
 
     def decode(self, o, **kwargs):
+
         dict_obj = super().decode(o, **kwargs)
         if 'user_id' in dict_obj.keys():
             return User(dict_obj['user_id'], dict_obj['username'], dict_obj['password'], dict_obj['nickname'])

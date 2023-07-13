@@ -17,7 +17,8 @@ class ClientPrototypeWidget(QtWidgets.QWidget, Ui_prototype):
     ENCODED_PASS = bytes('pass', 'utf-8')
 
     # signal 클래스 변수
-    assert_same_id_siganl = pyqtSignal(bool)
+    assert_same_id_signal = pyqtSignal(bool)
+    sign_up_signal = pyqtSignal(bool)
 
     def __init__(self, client_app):
         super().__init__()
@@ -30,8 +31,8 @@ class ClientPrototypeWidget(QtWidgets.QWidget, Ui_prototype):
         self.encoder = KKOEncoder()
         self.decoder = KKODecoder()
         self.set_client_know_each_other()
-        self.assert_same_id_siganl.connect(self.event_assert_same_join_id)
-
+        self.assert_same_id_signal.connect(self.event_assert_same_join_id)
+        self.sign_up_signal.connect(self.evenet_join_access)
 
     def set_client_know_each_other(self):
         self.client_app.set_widget(self)
@@ -65,13 +66,14 @@ class ClientPrototypeWidget(QtWidgets.QWidget, Ui_prototype):
         self.client_app.send_join_id_for_assert_same_username(input_username)  # 헤더를 붙이고 보내는 동작(?)
 
     # 서버 -> 클라 아이디 중복 체크 결과 대응
-    def event_assert_same_join_id(self, return_result:bool):
+    def event_assert_same_join_id(self, return_result: bool):
         if return_result is True:
             self.valid_duplication_id = True
             return QtWidgets.QMessageBox.about(self, "가능", "중복 없는 아이디, 써도됌")
         elif return_result is False:
             return QtWidgets.QMessageBox.about(self, "불가능", "중복 아이디, 새로 쓰기")
 
+    # 클라 -> 서버 회원가입 요청
     def join_access(self):
         if self.valid_duplication_id is False:
             QtWidgets.QMessageBox.about(self, "어허", "아이디 중복확인 먼저 시행해주세요")
@@ -79,7 +81,10 @@ class ClientPrototypeWidget(QtWidgets.QWidget, Ui_prototype):
         join_username = self.line_edit_for_join_id.text()
         join_pw = self.line_edit_for_join_pw.text()
         join_nickname = self.line_edit_for_join_nick.text()
-        return_result = self.client_app.send_join_id_and_pw_for_join_access(join_username, join_pw, join_nickname)
+        self.client_app.send_join_id_and_pw_for_join_access(join_username, join_pw, join_nickname)
+
+    # 서버 -> 클라 회원가입 결과 체크 결과 대응
+    def evenet_join_access(self, return_result: bool):
         if return_result is True:
             return QtWidgets.QMessageBox.about(self, "성공", "회원가입 성공")
         elif return_result is False:
