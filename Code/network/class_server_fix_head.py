@@ -8,7 +8,7 @@ import select
 from Code.domain.class_db_connector import DBConnector
 
 
-class Server2:
+class ServerFixHead:
     HOST = '127.0.0.1'
     PORT = 9999
     BUFFER = 1024
@@ -20,8 +20,8 @@ class Server2:
     login = "login"
     send_msg_c_room = "send_msg_c_room"
     send_alarm_c_room = "send_alarm_c_room"
-    pass_encoded = f"{'pass':<{HEADER_LENGTH}}".encode(FORMAT)
-    dot_encoded = f"{'.':<{HEADER_LENGTH}}".encode(FORMAT)
+    pass_encoded = f"{'pass':<{1024}}".encode(FORMAT)
+    dot_encoded = f"{'.':<{1024}}".encode(FORMAT)
 
     HEADER_LIST = {
         assert_username: assert_username.encode(FORMAT),
@@ -98,21 +98,19 @@ class Server2:
 
     def receive_message(self, client_socket:socket):
         try:
-            message_header = client_socket.recv(self.HEADER_LENGTH*2)
-            request_msg = message_header[:self.HEADER_LENGTH].strip().decode(self.FORMAT)
-            data_length = int(message_header[self.HEADER_LENGTH:].strip().decode(self.FORMAT))
-            input_data = client_socket.recv(data_length).decode(self.FORMAT)
-            print(f"message_header : {message_header}")
+            recv_message = client_socket.recv(self.BUFFER)
+            request_msg = recv_message[:self.HEADER_LENGTH].strip().decode(self.FORMAT)
+            input_data = recv_message[self.HEADER_LENGTH:].strip().decode(self.FORMAT)
+            print(f"message_header : {recv_message}")
             print(f"request_msg : {request_msg}")
-            print(f"data_length : {data_length}")
             print(f"input_data : {input_data}")
             if request_msg == self.assert_username:
                 client_socket.send(self.pass_encoded)
-                data_msg = client_socket.recv(data_length).decode(self.FORMAT)
-                print(f"클라이언트로 받은 요청 : {request_msg} | 내용 : {data_msg}")
-                return {'header': message_header, 'data': data_msg}
+                print(f"클라이언트로 받은 요청 : {request_msg} | 내용 : {input_data}")
+                return {'header': recv_message, 'data': input_data}
             elif request_msg == self.join_user:
-                client_socket.send()
+                # client_socket.send()
+                pass
         except:
             return False
 

@@ -3,7 +3,7 @@ import socket
 from Code.domain.class_user import User
 
 
-class ClientApp2:
+class ClientAppFixHead:
     HOST = '127.0.0.1'
     PORT = 9999
     BUFFER = 1024
@@ -39,12 +39,12 @@ class ClientApp2:
         # client function =================================
 
     def send_join_id_for_assert_same_username(self, input_username: str):
-        data_msg = input_username.encode(self.FORMAT)
+        data_msg = f"{input_username:<{self.BUFFER-self.HEADER_LENGTH}}".encode(self.FORMAT)
         data_msg_length = len(data_msg)
         request_msg = self.assert_username
-        header_msg = f"{request_msg:<{self.HEADER_LENGTH}}{data_msg_length:<{self.HEADER_LENGTH}}".encode(self.FORMAT)
+        header_msg = f"{request_msg:<{self.HEADER_LENGTH}}".encode(self.FORMAT)
         self.client_socket.send(header_msg + data_msg)  # 헤더를 붙이고 보내는 동작(?)
-        return_result = self.client_socket.recv(self.HEADER_LENGTH).decode(self.FORMAT)  # 응답 받기
+        return_result = self.client_socket.recv(self.BUFFER).strip().decode(self.FORMAT)  # 응답 받기
         print(return_result)
         if return_result == 'pass':
             return True
