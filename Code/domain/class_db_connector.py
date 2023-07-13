@@ -87,6 +87,7 @@ class DBConnector:
         self.end_conn()
 
     # user 테이블========================================================================================
+    # 인자로 들어온 User객체의 user_id 이미 존재하는지 확인, 존재하는 경우 update 함수 실행하는 로직 구현
     def insert_user(self, user_object: User):
         c = self.start_conn()
         user_id = user_object.user_id
@@ -194,30 +195,39 @@ class DBConnector:
         self.end_conn()
         return inserted_user_talk_room_obj
 
-    # 유저가 속한 모든 채팅방(TalkRoom) 객체 리스트로 반환
-    def find_all_talk_room_by_user_id(self, user_id: int) -> list[TalkRoom]:
+    def find_all_user_talk_room(self):
         c = self.start_conn()
-        users_talk_room_list = list()
+        all_user_talk_room_obj_list = list()
+        user_talk_room_rows = c.execute('select * from user_talk_room').fetchall()
+        for row in user_talk_room_rows:
+            user_talk_room_obj = UserTalkRoom(*row)
+            all_user_talk_room_obj_list.append(user_talk_room_obj)
+        self.end_conn()
+        return all_user_talk_room_obj_list
+
+    # 유저가 속한 모든 채팅방(TalkRoom) 객체 리스트로 반환
+    def find_user_talk_room_by_user_id(self, user_id: int) -> list[UserTalkRoom]:
+        c = self.start_conn()
+        users_talk_room_obj_list = list()
         user_talk_rooms = c.execute('select * from user_talk_room where user_id = ?', (user_id,)).fetchall()
         # talk_rooms = c.execute('select * from talk_room').fetchall()
         for user_talk_row in user_talk_rooms:
             user_talk_room_obj = UserTalkRoom(*user_talk_row)
-            searched_talk_room = self.find_talk_room_by_talk_room_id(user_talk_room_obj)
-            users_talk_room_list.append(searched_talk_room)
+            users_talk_room_obj_list.append(user_talk_room_obj)
         self.end_conn()
-        return users_talk_room_list
+        return users_talk_room_obj_list
 
 
-    def find_all_talk_room_by_username(self, username: str) -> list[TalkRoom]:
+    def find_user_talk_room_by_username(self, username: str) -> list[UserTalkRoom]:
         c = self.start_conn()
         username_row = c.execute('select * from user where username = ?', (username,)).fetchone()
         user_id = username_row[0]
         self.end_conn()
-        result = self.find_all_talk_room_by_user_id(user_id)
+        result = self.find_user_talk_room_by_user_id(user_id)
         return result
 
     # talk_room_id에 해당하는 톡방에 있는 유저 객체 반환
-    def find_all_user_by_talk_room_id(self, talk_room_id: int) -> list[User]:
+    def find_user_by_talk_room_id(self, talk_room_id: int) -> list[User]:
         c = self.start_conn()
         all_user = list()
         involved_user = c.execute('select * from user_talk_room where talk_room_id = ?', (talk_room_id,)).fetchall()
@@ -264,7 +274,9 @@ class DBConnector:
 
     # talk_room 테이블=======================================================
     # 새로운 채팅방 생성
-    def create_talk_room(self, talk_room_name, open_time_stamp):
+    def insert_talk_room(self, talk_room_obj: TalkRoom):
+        talk_room_name = talk_room_obj.talk_room_name
+        open_time_stamp = talk_room_obj.open_time_stamp
         c = self.start_conn()
         c.execute('insert into talk_room (talk_room_name, open_time_stamp) values (?, ?)',
                   (talk_room_name, open_time_stamp))
@@ -274,14 +286,41 @@ class DBConnector:
         self.end_conn()
         return created_talk_room_obj
 
-    # user_talk_room_obj 의 talk_room_id로 talk_room_obj 반환
-    def find_talk_room_by_talk_room_id(self, user_talk_room_obj: UserTalkRoom):
+    # def create_talk_room(self, talk_room_name, open_time_stamp):
+    #     c = self.start_conn()
+    #     c.execute('insert into talk_room (talk_room_name, open_time_stamp) values (?, ?)',
+    #               (talk_room_name, open_time_stamp))
+    #     self.commit_db()
+    #     created_talk_room = c.execute('select * from talk_room order by talk_room_id desc limit 1').fetchone()
+    #     created_talk_room_obj = TalkRoom(*created_talk_room)
+    #     self.end_conn()
+    #     return created_talk_room_obj
+
+    def find_all_talk_room(self):
         c = self.start_conn()
-        talk_room_id = user_talk_room_obj.talk_room_id
+        all_talk_room_obj_list = list()
+        all_talk_room_rows = c.execute('select * from talk_room').fetchall()
+        for talk_room_row in all_talk_room_rows:
+            talk_room_obj = TalkRoom(*talk_room_row)
+            all_talk_room_obj_list.append(talk_room_obj)
+        self.end_conn()
+        return all_talk_room_obj_list
+
+    # talk_room_id로 talk_room_obj 반환 : user_talk_room_obj 의 talk_room_id로 talk_room_obj 반환가능
+    def find_talk_room_by_talk_room_id(self, talk_room_id):
+        c = self.start_conn()
         row_data = c.execute('select * from talk_room where talk_room_id = ?', (talk_room_id,)).fetchone()
         talk_room_obj = TalkRoom(*row_data)
         self.end_conn()
         return talk_room_obj
+
+    # def find_talk_room_by_talk_room_id(self, user_talk_room_obj: UserTalkRoom):
+    #     c = self.start_conn()
+    #     talk_room_id = user_talk_room_obj.talk_room_id
+    #     row_data = c.execute('select * from talk_room where talk_room_id = ?', (talk_room_id,)).fetchone()
+    #     talk_room_obj = TalkRoom(*row_data)
+    #     self.end_conn()
+    #     return talk_room_obj
 
     # message테이블===================================================================================
     def insert_message(self, sender_user_id, talk_room_id, send_time_stamp, contents=None, long_contents_id=None):
@@ -290,7 +329,8 @@ class DBConnector:
         values (?, ?, ?, ?, ?)''', (sender_user_id, talk_room_id, send_time_stamp, contents, long_contents_id))
         self.commit_db()
         inserted_message_row = c.execute('select * from message order by message_id desc limit 1').fetchone()
-        inserted_message_obj = Message(*inserted_message_row)
+        sender_user_obj = self.find_user_by_user_id(sender_user_id)
+        inserted_message_obj = Message(*inserted_message_row, sender_user_obj)
         self.end_conn()
         return inserted_message_obj
 
@@ -307,26 +347,31 @@ class DBConnector:
     def find_message_by_message_id(self, message_id):
         c = self.start_conn()
         message_row = c.execute('select * from message where message_id = ?', (message_id,)).fetchone()
-        message_obj = Message(*message_row)
+        sender_user_id = message_row[1]
+        sender_user_obj = self.find_user_by_user_id(sender_user_id)
+        message_obj = Message(*message_row, sender_user_obj)
         self.end_conn()
         return message_obj
 
-    def find_all_message_by_sender_user_id(self, sender_user_id) -> list[Message]:
+    def find_message_by_sender_user_id(self, sender_user_id) -> list[Message]:
         c = self.start_conn()
         message_rows = c.execute('select * from message where sender_user_id = ?', (sender_user_id,)).fetchall()
         message_obj_list = list()
         for message_row in message_rows:
-            message_obj = Message(*message_row)
+            sender_user_obj = self.find_user_by_user_id(sender_user_id)
+            message_obj = Message(*message_row, sender_user_obj)
             message_obj_list.append(message_obj)
         self.end_conn()
         return message_obj_list
 
-    def find_all_message_by_talk_room_id(self, talk_room_id) -> list[Message]:
+    def find_message_by_talk_room_id(self, talk_room_id) -> list[Message]:
         c = self.start_conn()
         message_rows = c.execute('select * from message where talk_room_id = ?', (talk_room_id,)).fetchall()
         message_obj_list = list()
         for message_row in message_rows:
-            message_obj = Message(*message_row)
+            sender_user_id = message_row[1]
+            sender_user_obj = self.find_user_by_user_id(sender_user_id)
+            message_obj = Message(*message_row, sender_user_obj)
             message_obj_list.append(message_obj)
         self.end_conn()
         return message_obj_list
@@ -413,6 +458,24 @@ class DBConnector:
             print('아이디 혹은 비밀번호를 잘못 입력했습니다.')
             return False
 
+    # 해당 talkroom에 존재하지 않는 user 반환 객체 리스트 반환(초대 가능한 사람 리스트)
+    def uninvited_users_from_talk_room(self, talk_room_id):
+        c = self.start_conn()
+        invited_user = c.execute('select * from user_talk_room where talk_room_id = ?', (talk_room_id,)).fetchall()
+        invited_user_id = list()
+        for user in invited_user:
+            invited_user_id.append(user[1])
+        print(invited_user_id)
+        uninvited_user_obj_list = list()
+        uninvited_user_rows = c.execute("select * from user where user_id not in (" + ",".join("?" * len(invited_user_id)) + ")", invited_user_id).fetchall()
+        for un_user_row in uninvited_user_rows:
+            un_user_obj = User(*un_user_row)
+            uninvited_user_obj_list.append(un_user_obj)
+        self.end_conn()
+        return uninvited_user_obj_list
+
+
+
 if __name__ == '__main__':
     dbconn = DBConnector()
     dbconn.create_tables()
@@ -421,55 +484,78 @@ if __name__ == '__main__':
     user3 = User(3, '훈이', '12345', '훈이닉네임')
     user4 = User(4, '유리', '12345', '유리닉네임')
     user5 = User(5, '맹구', '12345', '맹구닉네임')
-    # print('>>> insert_user/update_user')
+    user6 = User(6, '수지', '11111', '수지닉네임')
+    user7 = User(7, '치타', '11111', '치타닉네임')
+    # print('>>> insert_user 함수 테스트 완료')
     print(dbconn.insert_user(user1))
     print(dbconn.insert_user(user2))
     print(dbconn.insert_user(user3))
     print(dbconn.insert_user(user4))
     print(dbconn.insert_user(user5))
-    # print('\n>>> find_all_user')
-    # print(dbconn.find_all_user())
-    # print('\n>>> find_user_by_username')
+    print(dbconn.insert_user(user6))
+    print(dbconn.insert_user(user7))
+
+    # find_all_user() 함수 테스트 완료
+    print(dbconn.find_all_user())
+
+    # print('\n>>> find_user_by_username 함수 테스트 완료')
     # print(dbconn.find_user_by_username('훈이'))
     # print(dbconn.find_user_by_username('철수'))
-    # print('\n>>> find_user_by_user_id')
+
+    # print('\n>>> find_user_by_user_id 함수 테스트 완료')
     # print(dbconn.find_user_by_user_id(1))
     # print(dbconn.find_user_by_user_id(5))
-    # print('\n>>> delete_user_by_username')
+
+    # print('\n>>> delete_user_by_username 함수 테스트 완료')
     # print(dbconn.delete_user_by_username('유리'))
     # # print(dbconn.delete_user_by_username('안경')) #존재하지 않는 username 입력하면 오류남(당연함)
     # print(dbconn.find_all_user())
-    # print('\n>>> delete_user_by_user_id')
+
+    # print('\n>>> delete_user_by_user_id함수 테스트 완료')
     # print(dbconn.delete_user_by_user_id(2))
     # print(dbconn.find_all_user())
 
-    # dbconn.update_user()
+    # print('update_user 함수 테스트 완료')
+    # user2.nickname = '철수철수철수'
+    # user2.password = 'cc1234'
+    # print(dbconn.update_user(user2))
 
     usertalkroom1 = UserTalkRoom(1, 1, 1)
     usertalkroom2 = UserTalkRoom(2, 1, 2)
     usertalkroom3 = UserTalkRoom(3, 4, 2)
     usertalkroom4 = UserTalkRoom(4, 2, 3)
-    usertalkroom5 = UserTalkRoom(4, 4, 3)
-    # usertalkroom1 = UserTalkRoom(5, 1, 2)
+    usertalkroom5 = UserTalkRoom(5, 1, 4)
+    usertalkroom6 = UserTalkRoom(6, 6, 4)
+    usertalkroom7 = UserTalkRoom(7, 7, 4)
 
-    talkroom1 = TalkRoom(1, '1번방', '2023-01-01')
-    talkroom2 = TalkRoom(2, '2번방', '2023-02-01')
-    talkroom3 = TalkRoom(3, '3번방', '2023-03-01')
-
+    # insert_user_talk_room 함수 테스트 완료
     print(dbconn.insert_user_talk_room(usertalkroom1))
     print(dbconn.insert_user_talk_room(usertalkroom2))
     print(dbconn.insert_user_talk_room(usertalkroom3))
     print(dbconn.insert_user_talk_room(usertalkroom4))
     print(dbconn.insert_user_talk_room(usertalkroom5))
+    print(dbconn.insert_user_talk_room(usertalkroom6))
+    print(dbconn.insert_user_talk_room(usertalkroom7))
 
-    print(dbconn.create_talk_room('1번방', '2023-01-01'))
-    print(dbconn.create_talk_room('2번방', '2023-02-01'))
-    print(dbconn.create_talk_room('3번방', '2023-03-01'))
-    message1 = Message(1, 4, 2, '2020-01-01','호롤로 메시지 내용', None)
-    message2 = Message(2, 4, 2, '2020-01-01', None, 1)
-    message3 = Message(3, 1, 3, '2020-01-01', None, 2)
-    message4 = Message(4, 2, 1, '2020-01-01', None, 3)
-    message5 = Message(4, 5, 3, '2020-01-01', None, 4)
+    talkroom1 = TalkRoom(1, '1번방', '2023-01-01 00:00:00')
+    talkroom2 = TalkRoom(2, '2번방', '2023-02-01')
+    talkroom3 = TalkRoom(3, '3번방', '2023-03-01')
+    talkroom4 = TalkRoom(4, '4번방', '2023-04-01')
+
+    # create_talk_room 함수 테스트 완료
+    print(dbconn.insert_talk_room(talkroom1))
+    print(dbconn.insert_talk_room(talkroom2))
+    print(dbconn.insert_talk_room(talkroom3))
+    print(dbconn.insert_talk_room(talkroom4))
+
+    print('\n초대 안 된 유저 객체 반환')
+    print(dbconn.uninvited_users_from_talk_room(4))
+
+    message1 = Message(1, user4.user_id, 2, '2020-01-01','호롤로 메시지 내용', None)
+    message2 = Message(2, user4.user_id, 2, '2020-01-01', None, 1)
+    message3 = Message(3, user1.user_id, 3, '2020-01-01', None, 2)
+    message4 = Message(4, user2.user_id, 1, '2020-01-01', None, 3)
+    message5 = Message(4, user5.user_id, 3, '2020-01-01', None, 4)
     print('Message객체 db저장')
     print(dbconn.create_message(message1))
     print(dbconn.create_message(message2))
@@ -479,9 +565,9 @@ if __name__ == '__main__':
     print('message_id로 Message객체 반환')
     print(dbconn.find_message_by_message_id(2))
     print('sender_user_id로 Message객체 반환')
-    print(dbconn.find_all_message_by_sender_user_id(4))
+    print(dbconn.find_message_by_sender_user_id(4))
     print('talk_room_id로 Message객체 반환')
-    print(dbconn.find_all_message_by_talk_room_id(3))
+    print(dbconn.find_message_by_talk_room_id(3))
 
     long1 = LongContents(1, 0, long_text='아주 긴 글1', image=None) #타입일치
     long2 = LongContents(2, 1, long_text='아주 긴 글2', image=None) #불일치
@@ -494,27 +580,45 @@ if __name__ == '__main__':
     print(dbconn.create_long_contents(long4))
     print(dbconn.find_long_contents_by_long_contents_id(1))
     print(dbconn.find_long_contents_by_long_contents_id(2))
+    print('\n')
 
-    # print(dbconn.find_all_talk_room_by_user_id(1))
-    # print(dbconn.find_all_talk_room_by_username('유리'))
+    # find_all_talk_room() 함수 테스트 완료
+    # print(dbconn.find_all_talk_room())
+    # all_talk_room = dbconn.find_all_talk_room()
+    # for i in all_talk_room:
+    #     print(i)
 
-    # print(dbconn.find_all_talk_room_by_username('철수'))
-    # print(dbconn.find_all_talk_room_by_username('맹구'))
-    # print('>>> find_all_user_by_talk_room_id')
-    # print(dbconn.find_all_user_by_talk_room_id(2))
-    # print('delete_user_talk_room_by_user_id / delete_user_talk_room_by_user_id')
-    # print(dbconn.find_all_talk_room_by_user_id(1))
-    # print(dbconn.find_all_talk_room_by_username('짱구'))
+    # find_talk_room_by_talk_room_id 함수 테스트 완료
+    # print(dbconn.find_talk_room_by_talk_room_id(1))
+
+    # ==================user_talk_room 도메인 함수========================================
+    # find_all_user_talk_room() 함수 테스트 완료
+    # print(dbconn.find_all_user_talk_room())
+    # all_user_talk_room = dbconn.find_all_user_talk_room()
+    # for i in all_user_talk_room:
+    #     print(i)
+
+    # print('find_user_talk_room_by_user_id 함수 테스트 완료')
+    # print(dbconn.find_user_talk_room_by_user_id(1))
+
+    # print('find_user_talk_room_by_user_id 함수 테스트 완료')
+    # print(dbconn.find_user_talk_room_by_username('짱구'))
+
+    # print('delete_user_talk_room_by_user_id / delete_user_talk_room_by_username 함수 테스트 완료')
     # dbconn.delete_user_talk_room_by_user_id(1)
     # dbconn.delete_user_talk_room_by_username('짱구')
+
+    #  delete_user_talk_room_by_user_id_and_talk_room_id / delete_user_talk_room_by_username_and_talk_room_id 테스트 완료
     # dbconn.delete_user_talk_room_by_user_id_and_talk_room_id(1, 1)
     # dbconn.delete_user_talk_room_by_username_and_talk_room_id('짱구', 1)
+
+    # delete_withdrawal_user_talk_room_by_user_id / delete_withdrawal_user_talk_room_by_username 테스트 완료
     # dbconn.delete_withdrawal_user_talk_room_by_user_id(1)
     # dbconn.delete_withdrawal_user_talk_room_by_username('짱구')
-    # print(dbconn.find_all_talk_room_by_user_id(1))
-    # print(dbconn.find_all_user())
-    # print(dbconn.find_all_talk_room_by_username('짱구'))
-    # print(dbconn.find_talk_room_by_talk_room_id(usertalkroom1))
+    # all_user_talk_room = dbconn.find_all_user_talk_room()
+    # for i in all_user_talk_room:
+    #     print(i)
+
     # # 로그인 아이디, 비밀번호 일치 여부 반환
     # dbconn.user_log_in('짱구', '12345')
     # dbconn.user_log_in('짱구', '11111')
