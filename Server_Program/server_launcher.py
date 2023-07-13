@@ -9,10 +9,11 @@ import sys
 
 
 if __name__ == '__main__':
+
     kkotalk_server = Server() # 서버 인스턴스화
     configure = server_config.ServerConfigure() # 서버 설정 인스턴스화
     kkotalk_server.set_config(configure) # 서버 설정 적용
-    kkotalk_server.run()
+    # kkotalk_server.run()
 
     # qt 기본 설정
     app = QApplication(sys.argv)

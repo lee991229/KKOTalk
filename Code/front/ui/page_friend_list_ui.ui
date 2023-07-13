@@ -139,7 +139,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QFrame" name="frame_7">
+       <widget class="QFrame" name="friend_page_search_bar_1">
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
         </property>
@@ -177,7 +177,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QWidget" name="widget_3" native="true">
+       <widget class="QFrame" name="friend_page_search_bar_2">
         <layout class="QHBoxLayout" name="horizontalLayout_6">
          <property name="leftMargin">
           <number>0</number>
@@ -302,6 +302,12 @@
              <layout class="QVBoxLayout" name="verticalLayout_10">
               <item>
                <widget class="QScrollArea" name="scrollArea_2">
+                <property name="verticalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOn</enum>
+                </property>
+                <property name="horizontalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
                 <property name="widgetResizable">
                  <bool>true</bool>
                 </property>
@@ -310,10 +316,64 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>477</width>
+                   <width>460</width>
                    <height>683</height>
                   </rect>
                  </property>
+                 <layout class="QVBoxLayout" name="la1">
+                  <property name="spacing">
+                   <number>0</number>
+                  </property>
+                  <property name="leftMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>0</number>
+                  </property>
+                  <item>
+                   <widget class="QWidget" name="friend_list_layout_widget" native="true">
+                    <layout class="QVBoxLayout" name="friend_list_layout">
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>0</number>
+                     </property>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QWidget" name="widget" native="true">
+                    <layout class="QVBoxLayout" name="verticalLayout_5">
+                     <item>
+                      <spacer name="verticalSpacer">
+                       <property name="orientation">
+                        <enum>Qt::Vertical</enum>
+                       </property>
+                       <property name="sizeHint" stdset="0">
+                        <size>
+                         <width>20</width>
+                         <height>662</height>
+                        </size>
+                       </property>
+                      </spacer>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                 </layout>
                 </widget>
                </widget>
               </item>

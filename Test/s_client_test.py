@@ -2,7 +2,7 @@ import sys
 
 from PyQt5.QtWidgets import QApplication
 
-from Code.network.class_client_p_fix_head import ClientApp
+from Code.network.class_client import ClientApp
 from Code.network.class_client_prototype import ClientPrototypeWidget
 from Common.common_module import *
 
@@ -12,8 +12,6 @@ from Common.common_module import *
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    # client = ClientApp()
-    # client = ClientApp2()
     client = ClientApp()
     proto_widget = ClientPrototypeWidget(client) # 전략 패턴
     proto_widget.show()

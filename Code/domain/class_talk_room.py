@@ -1,11 +1,15 @@
 import json
-
+import datetime
 
 class TalkRoom:
     def __init__(self, talk_room_id, talk_room_name, open_time_stamp):
         self.talk_room_id = talk_room_id
         self.talk_room_name = talk_room_name
         self.open_time_stamp = open_time_stamp
+
+    def get_datetime(self):
+        datetime_obj = datetime.datetime.strptime(self.open_time_stamp)
+        return datetime_obj
 
 
     def __str__(self):

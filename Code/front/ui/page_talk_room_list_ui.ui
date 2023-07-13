@@ -10,6 +10,18 @@
     <height>850</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>600</width>
+    <height>850</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>600</width>
+    <height>850</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
@@ -139,7 +151,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QFrame" name="frame_7">
+       <widget class="QFrame" name="talk_list_page_search_bar_1">
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
         </property>
@@ -196,7 +208,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QWidget" name="widget_3" native="true">
+       <widget class="QWidget" name="talk_list_page_search_bar_2" native="true">
         <layout class="QHBoxLayout" name="horizontalLayout_6">
          <property name="leftMargin">
           <number>0</number>
@@ -336,6 +348,32 @@
                    <height>692</height>
                   </rect>
                  </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_4">
+                  <item>
+                   <widget class="QWidget" name="widget" native="true">
+                    <layout class="QVBoxLayout" name="verticalLayout_6"/>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QWidget" name="widget_2" native="true">
+                    <layout class="QVBoxLayout" name="verticalLayout_5">
+                     <item>
+                      <spacer name="verticalSpacer">
+                       <property name="orientation">
+                        <enum>Qt::Vertical</enum>
+                       </property>
+                       <property name="sizeHint" stdset="0">
+                        <size>
+                         <width>20</width>
+                         <height>629</height>
+                        </size>
+                       </property>
+                      </spacer>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                 </layout>
                 </widget>
                </widget>
               </item>

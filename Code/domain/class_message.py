@@ -2,13 +2,14 @@ import json
 
 
 class Message:
-    def __init__(self, message_id, sender_user_id, talk_room_id, contents, send_time_stamp, long_contents_id):
+    def __init__(self, message_id, sender_user_id, talk_room_id, send_time_stamp, contents, long_contents_id, user_obj=None):
         self.message_id = message_id
         self.sender_user_id = sender_user_id
         self.talk_room_id = talk_room_id
-        self.contents = contents
         self.send_time_stamp = send_time_stamp
+        self.contents = contents
         self.long_contents_id = long_contents_id
+        self.user_obj = user_obj
 
     def toJSON(self):
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
@@ -26,3 +27,4 @@ class Message:
                 self.long_contents_id == other.long_contents_id:
             return True
         return False
+

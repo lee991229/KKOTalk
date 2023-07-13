@@ -1,3 +1,6 @@
+import datetime
+import os
+import time
 from threading import Thread
 
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -6,22 +9,30 @@ from Code.domain.class_user import User
 from Code.network.class_worker_thread import WorkerServerThread
 from Code.network.server_ui.ui_server_controller_widget import Ui_server_controller
 
-global_total_user_list = list()
 
 class ServerControllerWidget(QtWidgets.QWidget, Ui_server_controller):
     ENCODED_DOT = bytes('.', 'utf-8')
     ENCODED_PASS = bytes('pass', 'utf-8')
+    LOG_PATH = """C:\\Users\\KDT115\\Desktop\\KKOTalk\\log.txt"""
+    SERVER_STATUS_PATH = """C:\\Users\\KDT115\\Desktop\\KKOTalk\\server_status.txt"""
+
+    @staticmethod
+    def save_server_log():
+        os.system("""C:\\Users\\KDT115\\Desktop\\KKOTalk\\Code\\network\\server_logger.bat""")
+
+    @staticmethod
+    def check_netstat_via_cmd():
+        os.system("""C:\\Users\\KDT115\\Desktop\\KKOTalk\\Code\\network\\check_server_on.bat""")
 
     def __init__(self, server_obj, db_connector):
-        global global_total_user_list
         super().__init__()
         self.setupUi(self)
         self.server = server_obj
         self.db_conn = db_connector
-        # self.qthread = WorkerServerThread(self, global_total_user_list)
         self.check_timer = None
         self.set_initial_label()
         self.set_btn_trigger()
+        self.check_netstat_via_cmd()
         self.set_timer_to_check_server_status()
 
     def set_timer_to_check_server_status(self):
@@ -30,12 +41,31 @@ class ServerControllerWidget(QtWidgets.QWidget, Ui_server_controller):
         self.check_timer.timeout.connect(lambda: self.assert_server_status())
         self.check_timer.start()
 
+    def is_server_listening(self):
+        try:
+            with open(self.SERVER_STATUS_PATH, "w", encoding="utf-8") as file:
+                file.write('')
+            self.check_netstat_via_cmd()
+            with open(self.SERVER_STATUS_PATH, "r", encoding="utf-8") as file:
+                if "LISTENING" in file.read().split("\n")[0]:
+                    return True
+        except:
+            return False
+
+    def is_server_running(self):
+        result = self.is_server_listening()
+        if result:  # 서버가 켜저있는 경우
+            return True
+        else:
+            return False
+
     def assert_server_status(self):
-        # if self.server.status == ""
-        # self.label_server_status.setText("🟢 가동중")
+        self.check_netstat_via_cmd()
+        if self.is_server_running() is True:
+            self.label_server_status.setText("🟢 가동중")
+        else:
+            self.label_server_status.setText("🔴 종료됨")
         # self.label_server_status.setText("🟠 시작중")
-        # self.label_server_status.setText("🔴 종료됨")
-        pass
 
     def set_initial_label(self):
         # todo check serve status logic
@@ -46,12 +76,23 @@ class ServerControllerWidget(QtWidgets.QWidget, Ui_server_controller):
         self.btn_stop.clicked.connect(lambda state: self.server_stop())
 
     def server_run(self):
-        self.qthread.set_work(self.server.run)
-        self.qthread.start()  # 쓰레드 동작시킴
-
+        self.server.start()
+        print(f"{datetime.datetime.now()} server start")
 
     def server_stop(self):
         self.server.stop()
+        self.label_server_status.setText("🔴 종료됨")
+        print(f"{datetime.datetime.now()} server stop")
+        # temp_time = QtCore.QTimer(self)s self.task_server_kill())
+
+    def task_server_kill(self):
+        last_line = None
+        self.check_netstat_via_cmd()
+        with open(self.SERVER_STATUS_PATH, "r", encoding="utf-8") as file:
+            last_line = file.readline().split("\n")[0].split(' ')[-2].strip()
+            os.system(f"taskkill /pid {last_line}")
+
+
 
     def listening(self):
         while True:
