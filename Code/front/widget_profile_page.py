@@ -6,10 +6,18 @@ class ProfilePage(QWidget, Ui_profile_page):
     def __init__(self, client_controller):
         super().__init__()
         self.setupUi(self)
+        self.client_controller = client_controller
         self.user_id = None
         self.username = None
         self.password = None
         self.nickname = None
+        self.set_btn_trigger()
+
+    def set_btn_trigger(self):
+        self.close_btn.clicked.connect(self.page_close)
+
+    def page_close(self):
+        self.close()
 
     def show(self):
         self.set_label_text()

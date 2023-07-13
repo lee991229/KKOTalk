@@ -2,12 +2,14 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 from Code.front.ui.ui_class_page_login_ui import Ui_login_widget
 from Code.domain.class_user import User
+from PyQt5.QtCore import Qt
 
 class LoginWidget(QWidget, Ui_login_widget):
 
     def __init__(self, client_controller):
         super().__init__()
         self.setupUi(self)
+        self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
         self.client_controller = client_controller
         self.set_btn_trigger()
         self.set_initial_widget()
