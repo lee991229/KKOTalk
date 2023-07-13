@@ -7,6 +7,7 @@ named 'KKOTalk' chatting application with python made by Going To Pro Level Team
 ###### link : https://cafe.naver.com/startdev/37360
 ###### link : https://cafe.naver.com/startdev/37391
 
+
 ### * 제작 예정 모듈은 총 다섯 가지
 [Common] 공통 함수, 상수, String 저장하는 모듈입니다. common_module.py에 저장하고 사용합니다. 
 <br>
