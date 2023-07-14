@@ -61,6 +61,7 @@ class Server:
         self.run_signal = False
         if self.thread_for_run is not None:
             self.thread_for_run.join()
+        # if self.server_socket.
         self.server_socket.close()
         self.thread_for_run = None
 

@@ -29,17 +29,60 @@ class ServerControllerWidget(QtWidgets.QWidget, Ui_server_controller):
         self.setupUi(self)
         self.server = server_obj
         self.db_conn = db_connector
-        self.check_timer = None
+        self.server_status_check_timer = None
+        self.server_running_timer = None
+        self.server_running_second = 0
+        self.server_start_time = None
         self.set_initial_label()
         self.set_btn_trigger()
         self.check_netstat_via_cmd()
         self.set_timer_to_check_server_status()
+        self.set_timer_to_server_running_timer()
+        self.get_last_time_server_and_set_label()
 
     def set_timer_to_check_server_status(self):
-        self.check_timer = QtCore.QTimer(self)
-        self.check_timer.setInterval(1000)
-        self.check_timer.timeout.connect(lambda: self.assert_server_status())
-        self.check_timer.start()
+        if self.server_status_check_timer is None:
+            self.server_status_check_timer = QtCore.QTimer(self)
+            self.server_status_check_timer.setInterval(1000)
+            self.server_status_check_timer.timeout.connect(lambda: self.assert_server_status())
+            self.server_status_check_timer.start()
+        else:
+            self.server_status_check_timer.stop()
+            self.server_status_check_timer.start()
+
+    def set_timer_to_server_running_timer(self):
+        if self.server_running_timer is None:
+            self.server_running_timer = QtCore.QTimer(self)
+            self.server_running_timer.setInterval(1000)
+            self.server_running_timer.timeout.connect(lambda: self.count_running_time())
+
+    def count_running_time(self):
+        self.server_start_time: datetime.datetime
+        run_time = datetime.datetime.now() - self.server_start_time
+        s = run_time.seconds
+        hours, remainder = divmod(s, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        self.label_run_time.setText(f"{hours:02}:{minutes:02}:{seconds:02}")
+
+    def get_last_time_server_and_set_label(self):
+        last_line = None
+        try:
+            with open(self.LOG_PATH, 'r', encoding="utf-8") as file:
+                whole_log = file.read().split('\n')
+                line_count = len(whole_log)
+                for i in range(line_count - 1, -1, -1):
+                    print(i, whole_log[i])
+                    if len(whole_log[i]) > 3:
+                        last_line = whole_log[i]
+                        break
+            if last_line is not None:
+                temp_list = last_line.split(' ')
+                last_date_time = ' '.join(temp_list[:2])
+                self.label_last_stop.setText(last_date_time)
+            else:
+                self.label_last_stop.setText("-")
+        except:
+            self.label_last_stop.setText("-")
 
     def is_server_listening(self):
         try:
@@ -70,19 +113,37 @@ class ServerControllerWidget(QtWidgets.QWidget, Ui_server_controller):
     def set_initial_label(self):
         # todo check serve status logic
         self.label_server_status.setText("🔴 종료됨")
+        self.label_start_time.setText("-")
+        self.label_run_time.setText("00:00:00")
 
     def set_btn_trigger(self):
         self.btn_run.clicked.connect(lambda state: self.server_run())
         self.btn_stop.clicked.connect(lambda state: self.server_stop())
 
     def server_run(self):
-        self.server.start()
-        print(f"{datetime.datetime.now()} server start")
+        if self.is_server_running() is False:
+            self.server.start()
+            self.server_start_time = datetime.datetime.now()
+            self.server_running_second = 0
+            self.server_running_timer.start()
+            now_time_str = self.server_start_time.strftime("%Y-%m-%d %H:%M:%S")
+            self.label_start_time.setText(now_time_str)
+            log_msg = f"{now_time_str} server start"
+            with open(self.LOG_PATH, 'a', encoding="utf-8") as file:
+                file.write(log_msg)
+            print(log_msg)
 
     def server_stop(self):
         self.server.stop()
+        if self.server_running_timer is not None:
+            self.server_running_timer.stop()
         self.label_server_status.setText("🔴 종료됨")
-        print(f"{datetime.datetime.now()} server stop")
+        log_msg = f"{datetime.datetime.now()} server stop"
+        with open(self.LOG_PATH, 'a', encoding="utf-8") as file:
+            file.write(log_msg + '\n')
+        print(log_msg)
+        self.get_last_time_server_and_set_label()
+        self.label_start_time.setText("-")
         # temp_time = QtCore.QTimer(self)s self.task_server_kill())
 
     def task_server_kill(self):
@@ -91,33 +152,6 @@ class ServerControllerWidget(QtWidgets.QWidget, Ui_server_controller):
         with open(self.SERVER_STATUS_PATH, "r", encoding="utf-8") as file:
             last_line = file.readline().split("\n")[0].split(' ')[-2].strip()
             os.system(f"taskkill /pid {last_line}")
-
-
-
-    def listening(self):
-        while True:
-            msg = self.server.recv(1024).decode("utf-8")
-            if msg == '/assert_username':
-                self.server.send(self.ENCODED_DOT)
-                response = self.server.recv(1024).decode("utf-8")
-                if self.db_conn.assert_same_join_id(response) is True:
-                    self.server.send(self.ENCODED_PASS)
-                else:
-                    self.server.send('.'.encode())
-            elif msg == '/join_user':
-                self.server.send(self.ENCODED_DOT)
-                response = self.server.recv(1024).decode("utf-8")
-                if self.join_access(response) is True:
-                    self.server.send('pass'.encode(encoding='utf-8'))
-                else:
-                    self.server.send(self.ENCODED_PASS)
-            elif msg == '/login':
-                self.server.send(self.ENCODED_DOT)
-                response = self.server.recv(1024).decode("utf-8")
-                if self.join_access(response) is True:
-                    self.server.send(self.ENCODED_PASS)
-                else:
-                    self.server.send(self.ENCODED_DOT)
 
     def assert_same_join_id(self, input_username):
         return self.db_conn.assert_same_login_id(input_username)
