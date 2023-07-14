@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 from Code.front.ui.ui_class_page_friend_list_ui import Ui_friend_list_widget
-from Code.front.widget_profile import ProfileWidget
+from Code.front.widget_profile_item import ProfileItemWidget
 from PyQt5.QtCore import Qt
 
 
@@ -16,6 +16,17 @@ class FriendListWidget(QWidget, Ui_friend_list_widget):
         self.set_initial_widget()
         self.login_user_obj = None
         self.friend_list = None
+        self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.drag_start_position = event.globalPos() - self.frameGeometry().topLeft()
+            event.accept()
+
+    def mouseMoveEvent(self, event):
+        if event.buttons() == Qt.LeftButton:
+            self.move(event.globalPos() - self.client_controller.drag_start_position)
+            event.accept()
 
     def show(self):
         self.login_user_obj = self.client_controller.login_user_obj
@@ -32,14 +43,11 @@ class FriendListWidget(QWidget, Ui_friend_list_widget):
         self.setAttribute(Qt.WA_TranslucentBackground)
 
     def mousePressEvent(self, event):
-        if event.button() == Qt.LeftButton:
-            self.drag_start_position = event.globalPos() - self.frameGeometry().topLeft()
-            event.accept()
+        self.client_controller.mousePressEvent(self, event)
 
     def mouseMoveEvent(self, event):
-        if event.buttons() == Qt.LeftButton:
-            self.move(event.globalPos() - self.drag_start_position)
-            event.accept()
+        self.client_controller.mouseMoveEvent(self, event)
+
     def page_close(self):
         self.close()
         self.client_controller.clear_widget(self.friend_list_layout_widget)
@@ -56,5 +64,5 @@ class FriendListWidget(QWidget, Ui_friend_list_widget):
     def get_friend_list(self):
         friend_list = self.friend_list
         for friend in friend_list:
-            friend_profile = ProfileWidget(self, friend)
+            friend_profile = ProfileItemWidget(self, friend)
             self.friend_list_layout.addWidget(friend_profile)

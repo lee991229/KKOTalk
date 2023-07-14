@@ -8,10 +8,17 @@ class JoinWidget(QWidget, Ui_join_widget):
     def __init__(self, client_controller):
         super().__init__()
         self.setupUi(self)
-        self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
         # self.setAttribute(Qt.WA_TranslucentBackground, True)
         self.client_controller = client_controller
         self.set_btn_trigger()  # 버튼 시그널 받는 메서드
+        self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint)
+
+
+    def mousePressEvent(self, event):
+        self.client_controller.mousePressEvent(self,event)
+
+    def mouseMoveEvent(self, event):
+        self.client_controller.mouseMoveEvent(self,event)
 
     # 회원 가입 창 버튼 시그널 메서드
     def set_btn_trigger(self):
@@ -77,7 +84,7 @@ class JoinWidget(QWidget, Ui_join_widget):
         else:
             self.client_controller.join_pw = self.lineedit_join_pw.text()
             self.client_controller.join_nickname = self.lineedit_join_user_name.text()
-            self.client_controller.join_success()
+            self.client_controller.try_join()
             # todo: '유저 가입 만들기 '
             self.close()
 

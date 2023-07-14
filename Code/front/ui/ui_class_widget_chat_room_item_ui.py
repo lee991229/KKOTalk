@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'widget_profile_ui.ui'
+# Form implementation generated from reading ui file 'widget_chat_room_item_ui.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -11,18 +11,18 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_profile_widget(object):
-    def setupUi(self, profile_widget):
-        profile_widget.setObjectName("profile_widget")
-        profile_widget.resize(459, 80)
-        profile_widget.setMinimumSize(QtCore.QSize(459, 80))
-        profile_widget.setMaximumSize(QtCore.QSize(459, 80))
-        profile_widget.setStyleSheet("#out_widget {\n"
+class Ui_chat_room_item_widget(object):
+    def setupUi(self, chat_room_item_widget):
+        chat_room_item_widget.setObjectName("chat_room_item_widget")
+        chat_room_item_widget.resize(459, 80)
+        chat_room_item_widget.setMinimumSize(QtCore.QSize(459, 80))
+        chat_room_item_widget.setMaximumSize(QtCore.QSize(459, 80))
+        chat_room_item_widget.setStyleSheet("#out_widget {\n"
 "    background-color: #FFFFFF;\n"
-"    color: #331D2C;\n"
+"    color: #F1C93B;\n"
 "    border-style: solid;\n"
 "    border-width: 2px;\n"
-"    border-color: #1D5D9B;\n"
+"    border-color: #FFF9C9;\n"
 "    border-radius: 5px;\n"
 "}\n"
 "#out_widget:hover{\n"
@@ -32,14 +32,14 @@ class Ui_profile_widget(object):
 "\n"
 "\n"
 "QLabel{\n"
-"    color: #1D5D9B;\n"
+"    color: #F1C93B;\n"
 "    font: bold 16pt \"나눔고딕\";\n"
 "}")
-        self.verticalLayout = QtWidgets.QVBoxLayout(profile_widget)
+        self.verticalLayout = QtWidgets.QVBoxLayout(chat_room_item_widget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setSpacing(0)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.out_widget = QtWidgets.QWidget(profile_widget)
+        self.out_widget = QtWidgets.QWidget(chat_room_item_widget)
         self.out_widget.setObjectName("out_widget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.out_widget)
         self.horizontalLayout.setObjectName("horizontalLayout")
@@ -56,20 +56,20 @@ class Ui_profile_widget(object):
         self.horizontalLayout.addWidget(self.profile)
         self.verticalLayout.addWidget(self.out_widget)
 
-        self.retranslateUi(profile_widget)
-        QtCore.QMetaObject.connectSlotsByName(profile_widget)
+        self.retranslateUi(chat_room_item_widget)
+        QtCore.QMetaObject.connectSlotsByName(chat_room_item_widget)
 
-    def retranslateUi(self, profile_widget):
+    def retranslateUi(self, chat_room_item_widget):
         _translate = QtCore.QCoreApplication.translate
-        profile_widget.setWindowTitle(_translate("profile_widget", "Form"))
-        self.profile_name_label.setText(_translate("profile_widget", "닉네임"))
+        chat_room_item_widget.setWindowTitle(_translate("chat_room_item_widget", "Form"))
+        self.profile_name_label.setText(_translate("chat_room_item_widget", "채팅방 이름"))
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    profile_widget = QtWidgets.QWidget()
-    ui = Ui_profile_widget()
-    ui.setupUi(profile_widget)
-    profile_widget.show()
+    chat_room_item_widget = QtWidgets.QWidget()
+    ui = Ui_chat_room_item_widget()
+    ui.setupUi(chat_room_item_widget)
+    chat_room_item_widget.show()
     sys.exit(app.exec_())

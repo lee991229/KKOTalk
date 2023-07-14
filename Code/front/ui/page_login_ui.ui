@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>600</width>
-    <height>1028</height>
+    <height>1000</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,6 +16,10 @@
   <property name="styleSheet">
    <string notr="true">#login_widget{
 	background-color: #1D5D9B
+}
+
+#frame_5{
+	background-color: white;
 }
 
 QLabel{
@@ -521,8 +525,6 @@ QLineEdit{
   </layout>
  </widget>
  <resources>
-  <include location="../src_img/my_qrc.qrc"/>
-  <include location="../src_img/my_qrc.qrc"/>
   <include location="../src_img/my_qrc.qrc"/>
  </resources>
  <connections/>

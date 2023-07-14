@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'widget_make_talk_room_ui.ui'
+# Form implementation generated from reading ui file 'widget_talk_room_invite_user_list_in_chat_room.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_make_talk_room_widget(object):
     def setupUi(self, make_talk_room_widget):
         make_talk_room_widget.setObjectName("make_talk_room_widget")
-        make_talk_room_widget.resize(542, 511)
+        make_talk_room_widget.resize(542, 477)
         make_talk_room_widget.setStyleSheet("#widget {\n"
 "    background-color: #75C2F6;\n"
 "    color: #1D5D9B;\n"
@@ -100,7 +100,7 @@ class Ui_make_talk_room_widget(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.widget_3 = QtWidgets.QWidget()
-        self.widget_3.setGeometry(QtCore.QRect(0, 0, 522, 264))
+        self.widget_3.setGeometry(QtCore.QRect(0, 0, 522, 279))
         self.widget_3.setObjectName("widget_3")
         self.layout = QtWidgets.QVBoxLayout(self.widget_3)
         self.layout.setContentsMargins(0, 0, 0, 0)
@@ -130,17 +130,6 @@ class Ui_make_talk_room_widget(object):
         self.frame.setObjectName("frame")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.frame)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.widget_4 = QtWidgets.QWidget(self.frame)
-        self.widget_4.setObjectName("widget_4")
-        self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.widget_4)
-        self.horizontalLayout_5.setObjectName("horizontalLayout_5")
-        self.label_3 = QtWidgets.QLabel(self.widget_4)
-        self.label_3.setObjectName("label_3")
-        self.horizontalLayout_5.addWidget(self.label_3)
-        self.lineEdit = QtWidgets.QLineEdit(self.widget_4)
-        self.lineEdit.setObjectName("lineEdit")
-        self.horizontalLayout_5.addWidget(self.lineEdit)
-        self.verticalLayout.addWidget(self.widget_4)
         self.widget_5 = QtWidgets.QWidget(self.frame)
         self.widget_5.setObjectName("widget_5")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.widget_5)
@@ -192,8 +181,6 @@ class Ui_make_talk_room_widget(object):
         _translate = QtCore.QCoreApplication.translate
         make_talk_room_widget.setWindowTitle(_translate("make_talk_room_widget", "Form"))
         self.label_title.setText(_translate("make_talk_room_widget", "초대목록"))
-        self.label_3.setText(_translate("make_talk_room_widget", "채팅방 이름"))
-        self.lineEdit.setPlaceholderText(_translate("make_talk_room_widget", "채팅방의 이름을 입력해주세요"))
         self.label.setText(_translate("make_talk_room_widget", "닉네임 리스트"))
         self.label_2.setText(_translate("make_talk_room_widget", "선택:"))
         self.label_4.setText(_translate("make_talk_room_widget", "0명"))

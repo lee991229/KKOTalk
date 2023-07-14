@@ -14,9 +14,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_login_widget(object):
     def setupUi(self, login_widget):
         login_widget.setObjectName("login_widget")
-        login_widget.resize(600, 1028)
+        login_widget.resize(600, 1000)
         login_widget.setStyleSheet("#login_widget{\n"
 "    background-color: #1D5D9B\n"
+"}\n"
+"\n"
+"#frame_5{\n"
+"    background-color: white;\n"
 "}\n"
 "\n"
 "QLabel{\n"

@@ -40,21 +40,18 @@ class Ui_talk_room_widget(object):
 "    background-color:#FEF5AC;\n"
 "}\n"
 "\n"
-"#btn_member_plus,\n"
-"#btn_member_minus\n"
+"#header_frame QPushButton\n"
 "{\n"
 "    background-color:#1D5D9B;\n"
 "    border-radius:10px;\n"
 "}\n"
 "\n"
-"#btn_member_plus:hover,\n"
-"#btn_member_minus:hover\n"
+"#header_frame QPushButton:hover\n"
 "{\n"
 "    background-color:#B0DAFF;\n"
 "}\n"
 "\n"
-"#btn_member_plus:pressed,\n"
-"#btn_member_minus:pressed\n"
+"#header_frame QPushButton:pressed\n"
 "{\n"
 "    background-color:#9AC5F4;\n"
 "}\n"
@@ -97,26 +94,6 @@ class Ui_talk_room_widget(object):
         self.frame_3.setObjectName("frame_3")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.frame_3)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.frame_title = QtWidgets.QFrame(self.frame_3)
-        self.frame_title.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_title.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_title.setObjectName("frame_title")
-        self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.frame_title)
-        self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_4.setSpacing(0)
-        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        spacerItem = QtWidgets.QSpacerItem(200, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_4.addItem(spacerItem)
-        self.btn_flist_close = QtWidgets.QPushButton(self.frame_title)
-        self.btn_flist_close.setMinimumSize(QtCore.QSize(30, 30))
-        self.btn_flist_close.setMaximumSize(QtCore.QSize(30, 30))
-        self.btn_flist_close.setText("")
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/newPrefix/x.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.btn_flist_close.setIcon(icon)
-        self.btn_flist_close.setObjectName("btn_flist_close")
-        self.horizontalLayout_4.addWidget(self.btn_flist_close)
-        self.verticalLayout_3.addWidget(self.frame_title)
         self.header_frame = QtWidgets.QFrame(self.frame_3)
         self.header_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.header_frame.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -146,30 +123,38 @@ class Ui_talk_room_widget(object):
         self.label_member_count.setObjectName("label_member_count")
         self.horizontalLayout.addWidget(self.label_member_count)
         self.horizontalLayout_2.addWidget(self.widget_member_count)
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem1)
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem)
         self.btn_member_plus = QtWidgets.QPushButton(self.header_frame)
         self.btn_member_plus.setMinimumSize(QtCore.QSize(60, 60))
         self.btn_member_plus.setMaximumSize(QtCore.QSize(60, 60))
         self.btn_member_plus.setText("")
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(":/newPrefix/user-plus.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.btn_member_plus.setIcon(icon1)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/newPrefix/user-plus.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btn_member_plus.setIcon(icon)
         self.btn_member_plus.setIconSize(QtCore.QSize(40, 40))
         self.btn_member_plus.setObjectName("btn_member_plus")
         self.horizontalLayout_2.addWidget(self.btn_member_plus)
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem2)
         self.btn_member_minus = QtWidgets.QPushButton(self.header_frame)
         self.btn_member_minus.setMinimumSize(QtCore.QSize(60, 60))
         self.btn_member_minus.setMaximumSize(QtCore.QSize(60, 60))
         self.btn_member_minus.setText("")
-        icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap(":/newPrefix/log-out.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.btn_member_minus.setIcon(icon2)
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap(":/newPrefix/log-out.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btn_member_minus.setIcon(icon1)
         self.btn_member_minus.setIconSize(QtCore.QSize(40, 40))
         self.btn_member_minus.setObjectName("btn_member_minus")
         self.horizontalLayout_2.addWidget(self.btn_member_minus)
+        self.btn_flist_close = QtWidgets.QPushButton(self.header_frame)
+        self.btn_flist_close.setMinimumSize(QtCore.QSize(60, 60))
+        self.btn_flist_close.setMaximumSize(QtCore.QSize(60, 60))
+        self.btn_flist_close.setText("")
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap(":/newPrefix/x-yellow.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btn_flist_close.setIcon(icon2)
+        self.btn_flist_close.setIconSize(QtCore.QSize(40, 40))
+        self.btn_flist_close.setObjectName("btn_flist_close")
+        self.horizontalLayout_2.addWidget(self.btn_flist_close)
         self.verticalLayout_3.addWidget(self.header_frame)
         self.frame_11 = QtWidgets.QFrame(self.frame_3)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
@@ -187,7 +172,7 @@ class Ui_talk_room_widget(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.chatting_area = QtWidgets.QWidget()
-        self.chatting_area.setGeometry(QtCore.QRect(0, 0, 576, 646))
+        self.chatting_area.setGeometry(QtCore.QRect(0, 0, 576, 684))
         self.chatting_area.setObjectName("chatting_area")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.chatting_area)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
@@ -201,8 +186,8 @@ class Ui_talk_room_widget(object):
         self.widget_2.setObjectName("widget_2")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.widget_2)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
-        spacerItem3 = QtWidgets.QSpacerItem(20, 640, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout_5.addItem(spacerItem3)
+        spacerItem1 = QtWidgets.QSpacerItem(20, 640, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout_5.addItem(spacerItem1)
         self.verticalLayout_2.addWidget(self.widget_2)
         self.scrollArea.setWidget(self.chatting_area)
         self.horizontalLayout_9.addWidget(self.scrollArea)
@@ -228,6 +213,7 @@ class Ui_talk_room_widget(object):
         self.horizontalLayout_10.addWidget(self.btn_transfer_file)
         self.user_chatting_lineedit = QtWidgets.QLineEdit(self.frame_9)
         self.user_chatting_lineedit.setMinimumSize(QtCore.QSize(0, 30))
+        self.user_chatting_lineedit.setClearButtonEnabled(False)
         self.user_chatting_lineedit.setObjectName("user_chatting_lineedit")
         self.horizontalLayout_10.addWidget(self.user_chatting_lineedit)
         self.btn_chat_enter = QtWidgets.QPushButton(self.frame_9)
