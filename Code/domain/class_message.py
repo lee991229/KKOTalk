@@ -12,8 +12,10 @@ class Message:
         self.user_obj = user_obj
 
     def toJSON(self):
+
         obj_str = json.dumps(self, default=lambda o: o.__dict__)
         return obj_str
+
 
     def __repr__(self):
         return f'{self.__dict__}'
@@ -28,5 +30,4 @@ class Message:
                 self.long_contents_id == other.long_contents_id:
             return True
         return False
-
 

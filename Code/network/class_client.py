@@ -11,6 +11,7 @@ class ClientApp:
     FORMAT = "utf-8"
     HEADER_LENGTH = 30
 
+
     assert_username = "assert_username"
     join_user = "join_user"
     login = "login"
@@ -51,9 +52,12 @@ class ClientApp:
         self.client_widget = widget_
 
     def send_join_id_for_assert_same_username(self, input_username: str):
+        data_msg = f"{input_username:<{self.BUFFER-self.HEADER_LENGTH}}".encode(self.FORMAT)
+        data_msg_length = len(data_msg)
         request_msg = self.assert_username
-        result = self.fixed_volume(request_msg, input_username)
-        self.client_socket.send(result)  # 헤더를 붙이고 보내는 동작(?)
+        header_msg = f"{request_msg:<{self.HEADER_LENGTH}}".encode(self.FORMAT)
+        self.client_socket.send(header_msg + data_msg)  # 헤더를 붙이고 보내는 동작(?)
+
 
     def send_join_id_and_pw_for_join_access(self, join_username, join_pw, join_nickname):
         join_user = User(None, join_username, join_pw, join_nickname)
@@ -149,3 +153,4 @@ class ClientApp:
             # 채팅방 리스트 정보
             elif response_header == self.user_talk_room_list:
                 self.client_widget.user_talk_room_signal.emit(response_data)
+

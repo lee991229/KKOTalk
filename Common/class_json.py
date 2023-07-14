@@ -1,3 +1,4 @@
+
 import json
 
 from Code.domain.class_long_contents import LongContents
@@ -9,10 +10,12 @@ from json import JSONEncoder, JSONDecoder
 from Code.domain.class_user_talk_room import UserTalkRoom
 
 
+
 class KKOEncoder(JSONEncoder):
 
     def __init__(self):
         super().__init__()
+
 
     def encode(self, o) -> str:
         if isinstance(o, list) and isinstance(o[0], User):
@@ -30,6 +33,7 @@ class KKOEncoder(JSONEncoder):
             return json.dumps(temp_list)
 
         return json.dumps(o, default=lambda o: o.__dict__)
+
 
     def default(self, o):
         return o.__dict__
@@ -142,3 +146,4 @@ if __name__ == '__main__':
     list_obj = decoder.decode_any(list_str_obj)
     print(type(list_obj))
     print(type(list_obj[0]))
+

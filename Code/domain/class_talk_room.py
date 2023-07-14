@@ -19,7 +19,9 @@ class TalkRoom:
         return f"{self.__dict__}"
 
     def toJSON(self):
+
         return json.dumps(self, default=lambda o: o.__dict__)
+
 
     def __eq__(self, other):
         if isinstance(other, TalkRoom) and \

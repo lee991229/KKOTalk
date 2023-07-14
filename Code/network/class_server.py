@@ -5,6 +5,7 @@ from threading import Thread, Event
 from Common.class_json import *
 
 
+
 import select
 
 from Code.domain.class_db_connector import DBConnector
@@ -28,6 +29,7 @@ class Server:
     pass_encoded = f"{'pass':<{BUFFER-HEADER_LENGTH}}".encode(FORMAT)
     dot_encoded = f"{'.':<{BUFFER-HEADER_LENGTH}}".encode(FORMAT)
 
+
     HEADER_LIST = {
         assert_username: assert_username.encode(FORMAT),
         join_user: join_user.encode(FORMAT),
@@ -45,8 +47,10 @@ class Server:
         self.clients = dict()
         self.thread_for_run = None
         self.run_signal = True
+
         self.decoder = KKODecoder()
         self.encoder = KKOEncoder()
+
 
     def set_config(self, configure):
         self.config = configure
@@ -177,6 +181,7 @@ class Server:
                 room_list_str = self.encoder.encode(room_list)
                 return_result = room_list_str.encode(self.FORMAT)
                 client_socket.send(response_header + return_result)
+
 
         except:
             return False
