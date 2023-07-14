@@ -15,7 +15,81 @@ class Ui_talk_room_widget(object):
     def setupUi(self, talk_room_widget):
         talk_room_widget.setObjectName("talk_room_widget")
         talk_room_widget.resize(600, 850)
+        talk_room_widget.setStyleSheet("#talk_room_widget {\n"
+"    background-color: #25316D;\n"
+"    color: #1D5D9B;\n"
+"}\n"
+"\n"
+"\n"
+"QLabel{\n"
+"    color: #1D5D9B;\n"
+"    font: bold 16pt \"나눔고딕\";\n"
+"}\n"
+"\n"
+"QPushButton{\n"
+"    background-color:#F4D160;\n"
+"    color: #1D5D9B;\n"
+"    font: bold 12pt \"나눔고딕\";\n"
+"}\n"
+"\n"
+"QPushButton:hover{\n"
+"    background-color:#FFFF9D;\n"
+"}\n"
+"\n"
+"QPushButton:pressed{\n"
+"    background-color:#FEF5AC;\n"
+"}\n"
+"\n"
+"#btn_member_plus,\n"
+"#btn_member_minus\n"
+"{\n"
+"    background-color:#1D5D9B;\n"
+"    border-radius:10px;\n"
+"}\n"
+"\n"
+"#btn_member_plus:hover,\n"
+"#btn_member_minus:hover\n"
+"{\n"
+"    background-color:#B0DAFF;\n"
+"}\n"
+"\n"
+"#btn_member_plus:pressed,\n"
+"#btn_member_minus:pressed\n"
+"{\n"
+"    background-color:#9AC5F4;\n"
+"}\n"
+"\n"
+"#widget_title_wrapper{\n"
+"    background-color:#F8FDCF;\n"
+"    border-radius:10px;\n"
+"}\n"
+"\n"
+"\n"
+"#widget_title_wrapper #label_member_count{\n"
+"    color: #453C67;\n"
+"}\n"
+"#header_frame #label_member_count:hover{\n"
+"    color: #FBEEAC\n"
+"}\n"
+"\n"
+"\n"
+"#label_title{\n"
+"    font: bold 20pt \"나눔고딕\";\n"
+"    color: #7286D3;\n"
+"}\n"
+"#label_member_count{\n"
+"    font: bold 15pt \"나눔고딕\";\n"
+"    color: #F4D160;\n"
+"}\n"
+"\n"
+"QLineEdit{\n"
+"    color: #1D5D9B;\n"
+"    font: bold 12pt \"나눔고딕\";\n"
+"}\n"
+"")
         self.verticalLayout = QtWidgets.QVBoxLayout(talk_room_widget)
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout.setSpacing(0)
         self.verticalLayout.setObjectName("verticalLayout")
         self.frame_3 = QtWidgets.QFrame(talk_room_widget)
         self.frame_3.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -23,37 +97,80 @@ class Ui_talk_room_widget(object):
         self.frame_3.setObjectName("frame_3")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.frame_3)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.frame_2 = QtWidgets.QFrame(self.frame_3)
-        self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_2.setObjectName("frame_2")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.frame_2)
+        self.frame_title = QtWidgets.QFrame(self.frame_3)
+        self.frame_title.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_title.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_title.setObjectName("frame_title")
+        self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.frame_title)
+        self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_4.setSpacing(0)
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        spacerItem = QtWidgets.QSpacerItem(200, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_4.addItem(spacerItem)
+        self.btn_flist_close = QtWidgets.QPushButton(self.frame_title)
+        self.btn_flist_close.setMinimumSize(QtCore.QSize(30, 30))
+        self.btn_flist_close.setMaximumSize(QtCore.QSize(30, 30))
+        self.btn_flist_close.setText("")
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/newPrefix/x.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btn_flist_close.setIcon(icon)
+        self.btn_flist_close.setObjectName("btn_flist_close")
+        self.horizontalLayout_4.addWidget(self.btn_flist_close)
+        self.verticalLayout_3.addWidget(self.frame_title)
+        self.header_frame = QtWidgets.QFrame(self.frame_3)
+        self.header_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.header_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.header_frame.setObjectName("header_frame")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.header_frame)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem)
-        self.label = QtWidgets.QLabel(self.frame_2)
-        self.label.setObjectName("label")
-        self.horizontalLayout_2.addWidget(self.label, 0, QtCore.Qt.AlignHCenter)
-        self.widget_member_count = QtWidgets.QWidget(self.frame_2)
+        self.widget_title_wrapper = QtWidgets.QWidget(self.header_frame)
+        self.widget_title_wrapper.setMinimumSize(QtCore.QSize(250, 0))
+        self.widget_title_wrapper.setObjectName("widget_title_wrapper")
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.widget_title_wrapper)
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.label_title = QtWidgets.QLabel(self.widget_title_wrapper)
+        self.label_title.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_title.setObjectName("label_title")
+        self.horizontalLayout_3.addWidget(self.label_title)
+        self.horizontalLayout_2.addWidget(self.widget_title_wrapper)
+        self.widget_member_count = QtWidgets.QWidget(self.header_frame)
         self.widget_member_count.setObjectName("widget_member_count")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget_member_count)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.label_2 = QtWidgets.QLabel(self.widget_member_count)
-        self.label_2.setObjectName("label_2")
-        self.horizontalLayout.addWidget(self.label_2)
-        self.label_3 = QtWidgets.QLabel(self.widget_member_count)
-        self.label_3.setObjectName("label_3")
-        self.horizontalLayout.addWidget(self.label_3)
+        self.label_member_icon = QtWidgets.QLabel(self.widget_member_count)
+        self.label_member_icon.setText("")
+        self.label_member_icon.setPixmap(QtGui.QPixmap(":/newPrefix/user.svg"))
+        self.label_member_icon.setObjectName("label_member_icon")
+        self.horizontalLayout.addWidget(self.label_member_icon)
+        self.label_member_count = QtWidgets.QLabel(self.widget_member_count)
+        self.label_member_count.setObjectName("label_member_count")
+        self.horizontalLayout.addWidget(self.label_member_count)
         self.horizontalLayout_2.addWidget(self.widget_member_count)
-        self.btn_member_plus = QtWidgets.QPushButton(self.frame_2)
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem1)
+        self.btn_member_plus = QtWidgets.QPushButton(self.header_frame)
+        self.btn_member_plus.setMinimumSize(QtCore.QSize(60, 60))
+        self.btn_member_plus.setMaximumSize(QtCore.QSize(60, 60))
+        self.btn_member_plus.setText("")
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap(":/newPrefix/user-plus.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btn_member_plus.setIcon(icon1)
+        self.btn_member_plus.setIconSize(QtCore.QSize(40, 40))
         self.btn_member_plus.setObjectName("btn_member_plus")
         self.horizontalLayout_2.addWidget(self.btn_member_plus)
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem1)
-        self.pushButton = QtWidgets.QPushButton(self.frame_2)
-        self.pushButton.setObjectName("pushButton")
-        self.horizontalLayout_2.addWidget(self.pushButton)
-        self.verticalLayout_3.addWidget(self.frame_2)
+        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem2)
+        self.btn_member_minus = QtWidgets.QPushButton(self.header_frame)
+        self.btn_member_minus.setMinimumSize(QtCore.QSize(60, 60))
+        self.btn_member_minus.setMaximumSize(QtCore.QSize(60, 60))
+        self.btn_member_minus.setText("")
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap(":/newPrefix/log-out.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btn_member_minus.setIcon(icon2)
+        self.btn_member_minus.setIconSize(QtCore.QSize(40, 40))
+        self.btn_member_minus.setObjectName("btn_member_minus")
+        self.horizontalLayout_2.addWidget(self.btn_member_minus)
+        self.verticalLayout_3.addWidget(self.header_frame)
         self.frame_11 = QtWidgets.QFrame(self.frame_3)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -70,11 +187,12 @@ class Ui_talk_room_widget(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.chatting_area = QtWidgets.QWidget()
-        self.chatting_area.setGeometry(QtCore.QRect(0, 0, 558, 703))
+        self.chatting_area.setGeometry(QtCore.QRect(0, 0, 576, 646))
         self.chatting_area.setObjectName("chatting_area")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.chatting_area)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.widget = QtWidgets.QWidget(self.chatting_area)
+        self.widget.setStyleSheet("")
         self.widget.setObjectName("widget")
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.widget)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
@@ -83,27 +201,45 @@ class Ui_talk_room_widget(object):
         self.widget_2.setObjectName("widget_2")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.widget_2)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
-        spacerItem2 = QtWidgets.QSpacerItem(20, 640, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout_5.addItem(spacerItem2)
+        spacerItem3 = QtWidgets.QSpacerItem(20, 640, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout_5.addItem(spacerItem3)
         self.verticalLayout_2.addWidget(self.widget_2)
         self.scrollArea.setWidget(self.chatting_area)
         self.horizontalLayout_9.addWidget(self.scrollArea)
         self.verticalLayout_3.addWidget(self.frame_11)
         self.frame_9 = QtWidgets.QFrame(self.frame_3)
+        self.frame_9.setMinimumSize(QtCore.QSize(0, 50))
+        self.frame_9.setMaximumSize(QtCore.QSize(16777215, 50))
         self.frame_9.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_9.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_9.setObjectName("frame_9")
         self.horizontalLayout_10 = QtWidgets.QHBoxLayout(self.frame_9)
+        self.horizontalLayout_10.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_10.setObjectName("horizontalLayout_10")
-        self.pushButton_5 = QtWidgets.QPushButton(self.frame_9)
-        self.pushButton_5.setObjectName("pushButton_5")
-        self.horizontalLayout_10.addWidget(self.pushButton_5)
-        self.lineEdit_4 = QtWidgets.QLineEdit(self.frame_9)
-        self.lineEdit_4.setObjectName("lineEdit_4")
-        self.horizontalLayout_10.addWidget(self.lineEdit_4)
-        self.input_button = QtWidgets.QPushButton(self.frame_9)
-        self.input_button.setObjectName("input_button")
-        self.horizontalLayout_10.addWidget(self.input_button)
+        self.btn_transfer_file = QtWidgets.QPushButton(self.frame_9)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.btn_transfer_file.sizePolicy().hasHeightForWidth())
+        self.btn_transfer_file.setSizePolicy(sizePolicy)
+        self.btn_transfer_file.setMinimumSize(QtCore.QSize(0, 30))
+        self.btn_transfer_file.setMaximumSize(QtCore.QSize(16777215, 30))
+        self.btn_transfer_file.setObjectName("btn_transfer_file")
+        self.horizontalLayout_10.addWidget(self.btn_transfer_file)
+        self.user_chatting_lineedit = QtWidgets.QLineEdit(self.frame_9)
+        self.user_chatting_lineedit.setMinimumSize(QtCore.QSize(0, 30))
+        self.user_chatting_lineedit.setObjectName("user_chatting_lineedit")
+        self.horizontalLayout_10.addWidget(self.user_chatting_lineedit)
+        self.btn_chat_enter = QtWidgets.QPushButton(self.frame_9)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.btn_chat_enter.sizePolicy().hasHeightForWidth())
+        self.btn_chat_enter.setSizePolicy(sizePolicy)
+        self.btn_chat_enter.setMinimumSize(QtCore.QSize(0, 30))
+        self.btn_chat_enter.setMaximumSize(QtCore.QSize(16777215, 30))
+        self.btn_chat_enter.setObjectName("btn_chat_enter")
+        self.horizontalLayout_10.addWidget(self.btn_chat_enter)
         self.verticalLayout_3.addWidget(self.frame_9)
         self.verticalLayout.addWidget(self.frame_3)
 
@@ -113,13 +249,11 @@ class Ui_talk_room_widget(object):
     def retranslateUi(self, talk_room_widget):
         _translate = QtCore.QCoreApplication.translate
         talk_room_widget.setWindowTitle(_translate("talk_room_widget", "Form"))
-        self.label.setText(_translate("talk_room_widget", "크크오톡,채팅방 이름"))
-        self.label_2.setText(_translate("talk_room_widget", "이미지"))
-        self.label_3.setText(_translate("talk_room_widget", "숫자"))
-        self.btn_member_plus.setText(_translate("talk_room_widget", "+"))
-        self.pushButton.setText(_translate("talk_room_widget", "x"))
-        self.pushButton_5.setText(_translate("talk_room_widget", "PushButton"))
-        self.input_button.setText(_translate("talk_room_widget", "PushButton"))
+        self.label_title.setText(_translate("talk_room_widget", "테스트 1번방"))
+        self.label_member_count.setText(_translate("talk_room_widget", "2"))
+        self.btn_transfer_file.setText(_translate("talk_room_widget", "파일 첨부"))
+        self.btn_chat_enter.setText(_translate("talk_room_widget", "입력"))
+from Code.front.ui import my_qrc_rc
 
 
 if __name__ == "__main__":

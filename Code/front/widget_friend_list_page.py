@@ -17,7 +17,6 @@ class FriendListWidget(QWidget, Ui_friend_list_widget):
         self.login_user_obj = None
         self.friend_list = None
 
-    # 아아 이건 오버 라이딩 이라는 것이다
     def show(self):
         self.login_user_obj = self.client_controller.login_user_obj
         self.friend_list = self.client_controller.friend_list
@@ -27,17 +26,27 @@ class FriendListWidget(QWidget, Ui_friend_list_widget):
     def set_initial_widget(self):
         self.friend_page_search_bar_2.hide()
         self.btn_flist_search.hide()
-        # self.friend_page_search_bar_1.hide()
-        # self.friend_page_search_bar_1.hide()
         pass
 
+    def set_window_drag(self):
+        self.setAttribute(Qt.WA_TranslucentBackground)
 
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.drag_start_position = event.globalPos() - self.frameGeometry().topLeft()
+            event.accept()
+
+    def mouseMoveEvent(self, event):
+        if event.buttons() == Qt.LeftButton:
+            self.move(event.globalPos() - self.drag_start_position)
+            event.accept()
     def page_close(self):
         self.close()
         self.client_controller.clear_widget(self.friend_list_layout_widget)
 
     def set_btn_trigger(self):
-        self.btn_tk_roomlist.clicked.connect(lambda x: (self.client_controller.show_talk_room_list_page(), self.page_close()))
+        self.btn_start_chat.clicked.connect(
+            lambda x: (self.client_controller.show_talk_room_list_page(), self.page_close()))
         self.btn_flist_close.clicked.connect(self.page_close)
 
     def profile_press(self, user_id):

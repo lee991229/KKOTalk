@@ -7,11 +7,49 @@
     <x>0</x>
     <y>0</y>
     <width>600</width>
-    <height>867</height>
+    <height>1028</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">#login_widget{
+	background-color: #1D5D9B
+}
+
+QLabel{
+	color: #FBEEAC
+}
+
+
+QPushButton{
+	background-color:#F4D160;
+	color: #1D5D9B;
+	font: bold 12pt &quot;나눔고딕&quot;;
+}
+
+QPushButton:hover{
+	background-color:#FFFF9D;
+}
+
+QPushButton:pressed{
+	background-color:#FEF5AC;
+}
+
+
+QLineEdit{
+	color: #1D5D9B;
+	font: bold 12pt &quot;나눔고딕&quot;;
+}
+
+#label_title{
+	font: bold 20pt &quot;나눔고딕&quot;;
+}
+
+#frame_6{
+	background-color : #75C2F6;
+}</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -53,6 +91,70 @@
          <number>0</number>
         </property>
         <item>
+         <widget class="QWidget" name="widget" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>50</height>
+           </size>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <spacer name="horizontalSpacer_6">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="btn_close">
+             <property name="minimumSize">
+              <size>
+               <width>40</width>
+               <height>40</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>40</width>
+               <height>40</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../src_img/my_qrc.qrc">
+               <normaloff>:/newPrefix/x.svg</normaloff>:/newPrefix/x.svg</iconset>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_5">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
          <widget class="QFrame" name="frame_2">
           <property name="frameShape">
            <enum>QFrame::StyledPanel</enum>
@@ -82,7 +184,7 @@
               <enum>Qt::Horizontal</enum>
              </property>
              <property name="sizeType">
-              <enum>QSizePolicy::Fixed</enum>
+              <enum>QSizePolicy::Expanding</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -95,7 +197,7 @@
            <item alignment="Qt::AlignHCenter">
             <widget class="QLabel" name="label_title">
              <property name="text">
-              <string>크크오톡,채팅방 이름</string>
+              <string>Going To Pro Level 크크오톡</string>
              </property>
             </widget>
            </item>
@@ -105,7 +207,7 @@
               <enum>Qt::Horizontal</enum>
              </property>
              <property name="sizeType">
-              <enum>QSizePolicy::Preferred</enum>
+              <enum>QSizePolicy::Expanding</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -114,25 +216,6 @@
               </size>
              </property>
             </spacer>
-           </item>
-           <item>
-            <widget class="QPushButton" name="btn_close">
-             <property name="minimumSize">
-              <size>
-               <width>30</width>
-               <height>30</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>30</width>
-               <height>30</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>x</string>
-             </property>
-            </widget>
            </item>
           </layout>
          </widget>
@@ -157,7 +240,7 @@
                 <enum>Qt::Horizontal</enum>
                </property>
                <property name="sizeType">
-                <enum>QSizePolicy::Fixed</enum>
+                <enum>QSizePolicy::Expanding</enum>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
@@ -182,12 +265,12 @@
                    <enum>Qt::Vertical</enum>
                   </property>
                   <property name="sizeType">
-                   <enum>QSizePolicy::Fixed</enum>
+                   <enum>QSizePolicy::Expanding</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
                     <width>20</width>
-                    <height>100</height>
+                    <height>60</height>
                    </size>
                   </property>
                  </spacer>
@@ -203,7 +286,7 @@
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
-                    <height>200</height>
+                    <height>250</height>
                    </size>
                   </property>
                   <property name="frameShape">
@@ -215,8 +298,26 @@
                   <layout class="QHBoxLayout" name="horizontalLayout_4">
                    <item>
                     <widget class="QLabel" name="label_img">
+                     <property name="minimumSize">
+                      <size>
+                       <width>224</width>
+                       <height>230</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>224</width>
+                       <height>230</height>
+                      </size>
+                     </property>
                      <property name="text">
-                      <string>이미지</string>
+                      <string/>
+                     </property>
+                     <property name="pixmap">
+                      <pixmap resource="../src_img/my_qrc.qrc">:/newPrefix/logo.png</pixmap>
+                     </property>
+                     <property name="scaledContents">
+                      <bool>true</bool>
                      </property>
                     </widget>
                    </item>
@@ -229,7 +330,7 @@
                    <enum>Qt::Vertical</enum>
                   </property>
                   <property name="sizeType">
-                   <enum>QSizePolicy::Fixed</enum>
+                   <enum>QSizePolicy::Expanding</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
@@ -252,25 +353,48 @@
                     <number>6</number>
                    </property>
                    <property name="leftMargin">
-                    <number>0</number>
+                    <number>9</number>
                    </property>
                    <property name="topMargin">
-                    <number>0</number>
+                    <number>9</number>
                    </property>
                    <property name="rightMargin">
-                    <number>0</number>
+                    <number>9</number>
                    </property>
                    <property name="bottomMargin">
-                    <number>0</number>
+                    <number>9</number>
                    </property>
                    <item>
-                    <widget class="QLineEdit" name="line_edit_id"/>
+                    <widget class="QLineEdit" name="line_edit_id">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                    </widget>
                    </item>
                    <item>
-                    <widget class="QLineEdit" name="line_edit_pw"/>
+                    <widget class="QLineEdit" name="line_edit_pw">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                     <property name="echoMode">
+                      <enum>QLineEdit::Password</enum>
+                     </property>
+                    </widget>
                    </item>
                    <item>
                     <widget class="QLabel" name="label_warning">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>30</height>
+                      </size>
+                     </property>
                      <property name="text">
                       <string/>
                      </property>
@@ -355,7 +479,7 @@
                    <enum>Qt::Vertical</enum>
                   </property>
                   <property name="sizeType">
-                   <enum>QSizePolicy::Fixed</enum>
+                   <enum>QSizePolicy::Expanding</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
@@ -374,7 +498,7 @@
                 <enum>Qt::Horizontal</enum>
                </property>
                <property name="sizeType">
-                <enum>QSizePolicy::Fixed</enum>
+                <enum>QSizePolicy::Expanding</enum>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
@@ -396,6 +520,10 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../src_img/my_qrc.qrc"/>
+  <include location="../src_img/my_qrc.qrc"/>
+  <include location="../src_img/my_qrc.qrc"/>
+ </resources>
  <connections/>
 </ui>

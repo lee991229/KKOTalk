@@ -25,6 +25,26 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">#out_widget {
+	background-color: #FFFFFF;
+	color: #331D2C;
+	border-style: solid;
+	border-width: 2px;
+	border-color: #1D5D9B;
+	border-radius: 5px;
+}
+#out_widget:hover{
+	background-color: #E6FFFD;
+}
+
+
+
+QLabel{
+	color: #1D5D9B;
+	font: bold 16pt &quot;나눔고딕&quot;;
+}</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
@@ -42,28 +62,42 @@
     <number>0</number>
    </property>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QWidget" name="profile" native="true">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(85, 0, 127);</string>
-       </property>
-       <widget class="QLabel" name="profile_name_label">
-        <property name="geometry">
-         <rect>
-          <x>50</x>
-          <y>20</y>
-          <width>161</width>
-          <height>41</height>
-         </rect>
+    <widget class="QWidget" name="out_widget" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QWidget" name="profile" native="true">
+        <property name="styleSheet">
+         <string notr="true"/>
         </property>
-        <property name="text">
-         <string>이름</string>
-        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="profile_name_label">
+           <property name="text">
+            <string>닉네임</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
-      </widget>
-     </item>
-    </layout>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>

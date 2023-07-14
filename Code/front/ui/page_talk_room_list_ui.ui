@@ -25,6 +25,48 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">#tk_room_list_widget {
+	background-color: #75C2F6;
+	color: #1D5D9B;
+}
+
+
+QLabel{
+	color: #1D5D9B;
+	font: bold 16pt &quot;나눔고딕&quot;;
+}
+
+QPushButton{
+	background-color:#F4D160;
+	color: #1D5D9B;
+	font: bold 12pt &quot;나눔고딕&quot;;
+}
+
+QPushButton:hover{
+	background-color:#FFFF9D;
+}
+
+QPushButton:pressed{
+	background-color:#FEF5AC;
+}
+
+
+#label_title{
+	font: bold 20pt &quot;나눔고딕&quot;;
+	color: #F4D160;
+}
+
+#frame_title{
+	background-color: #1D5D9B;
+}
+
+QLineEdit{
+	color: #1D5D9B;
+	font: bold 12pt &quot;나눔고딕&quot;;
+}
+</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
@@ -66,7 +108,7 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QFrame" name="frame_2">
+       <widget class="QFrame" name="frame_title">
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
         </property>
@@ -99,16 +141,16 @@
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>230</width>
+             <width>170</width>
              <height>20</height>
             </size>
            </property>
           </spacer>
          </item>
          <item alignment="Qt::AlignHCenter">
-          <widget class="QLabel" name="label">
+          <widget class="QLabel" name="label_title">
            <property name="text">
-            <string>크크오톡,채팅방 이름</string>
+            <string>크크오톡 채팅방 목록</string>
            </property>
           </widget>
          </item>
@@ -118,7 +160,7 @@
             <enum>Qt::Horizontal</enum>
            </property>
            <property name="sizeType">
-            <enum>QSizePolicy::Fixed</enum>
+            <enum>QSizePolicy::Expanding</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -223,17 +265,20 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QLabel" name="label_3">
-           <property name="minimumSize">
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
             <size>
-             <width>95</width>
-             <height>0</height>
+             <width>40</width>
+             <height>20</height>
             </size>
            </property>
-           <property name="text">
-            <string>TextLabel</string>
-           </property>
-          </widget>
+          </spacer>
          </item>
          <item>
           <widget class="QLineEdit" name="lineEdit_tkroom_search"/>
@@ -333,51 +378,93 @@
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_2">
             <item>
-             <layout class="QVBoxLayout" name="verticalLayout_10">
-              <item>
-               <widget class="QScrollArea" name="scrollArea_2">
-                <property name="widgetResizable">
-                 <bool>true</bool>
-                </property>
-                <widget class="QWidget" name="tkroom_list_area">
-                 <property name="geometry">
-                  <rect>
-                   <x>0</x>
-                   <y>0</y>
-                   <width>477</width>
-                   <height>692</height>
-                  </rect>
-                 </property>
-                 <layout class="QVBoxLayout" name="verticalLayout_4">
+             <widget class="QWidget" name="widget_scroll_area" native="true">
+              <layout class="QVBoxLayout" name="verticalLayout_10">
+               <item>
+                <widget class="QWidget" name="widget_scroll_area_2" native="true">
+                 <layout class="QVBoxLayout" name="verticalLayout_11">
                   <item>
-                   <widget class="QWidget" name="widget" native="true">
-                    <layout class="QVBoxLayout" name="verticalLayout_6"/>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QWidget" name="widget_2" native="true">
-                    <layout class="QVBoxLayout" name="verticalLayout_5">
-                     <item>
-                      <spacer name="verticalSpacer">
-                       <property name="orientation">
-                        <enum>Qt::Vertical</enum>
-                       </property>
-                       <property name="sizeHint" stdset="0">
-                        <size>
-                         <width>20</width>
-                         <height>629</height>
-                        </size>
-                       </property>
-                      </spacer>
-                     </item>
-                    </layout>
+                   <widget class="QScrollArea" name="scrollArea_2">
+                    <property name="verticalScrollBarPolicy">
+                     <enum>Qt::ScrollBarAlwaysOn</enum>
+                    </property>
+                    <property name="horizontalScrollBarPolicy">
+                     <enum>Qt::ScrollBarAlwaysOff</enum>
+                    </property>
+                    <property name="widgetResizable">
+                     <bool>true</bool>
+                    </property>
+                    <widget class="QWidget" name="friend_list_area">
+                     <property name="geometry">
+                      <rect>
+                       <x>0</x>
+                       <y>0</y>
+                       <width>442</width>
+                       <height>653</height>
+                      </rect>
+                     </property>
+                     <layout class="QVBoxLayout" name="la1">
+                      <property name="spacing">
+                       <number>0</number>
+                      </property>
+                      <property name="leftMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>0</number>
+                      </property>
+                      <item>
+                       <widget class="QWidget" name="tkroom_list_area" native="true">
+                        <layout class="QVBoxLayout" name="friend_list_layout">
+                         <property name="leftMargin">
+                          <number>0</number>
+                         </property>
+                         <property name="topMargin">
+                          <number>0</number>
+                         </property>
+                         <property name="rightMargin">
+                          <number>0</number>
+                         </property>
+                         <property name="bottomMargin">
+                          <number>0</number>
+                         </property>
+                        </layout>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QWidget" name="widget" native="true">
+                        <layout class="QVBoxLayout" name="verticalLayout_5">
+                         <item>
+                          <spacer name="verticalSpacer">
+                           <property name="orientation">
+                            <enum>Qt::Vertical</enum>
+                           </property>
+                           <property name="sizeHint" stdset="0">
+                            <size>
+                             <width>20</width>
+                             <height>662</height>
+                            </size>
+                           </property>
+                          </spacer>
+                         </item>
+                        </layout>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
                    </widget>
                   </item>
                  </layout>
                 </widget>
-               </widget>
-              </item>
-             </layout>
+               </item>
+              </layout>
+             </widget>
             </item>
            </layout>
           </widget>

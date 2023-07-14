@@ -13,6 +13,41 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">#widget {
+	background-color: #DBDFEA;
+	color: #1D5D9B;
+}
+
+
+QLabel{
+	color: #1D5D9B;
+	font: bold 16pt &quot;나눔고딕&quot;;
+}
+
+
+
+QPushButton{
+	background-color:#FFEAD2;
+	color: #1D5D9B;
+	font: bold 12pt &quot;나눔고딕&quot;;
+	border-radius: 20px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #8294C4;
+	
+}
+
+QPushButton:hover{
+	background-color:#F6F1F1;
+}
+
+QPushButton:pressed, QPushButton:checked{
+	background-color:#E7B10A;
+	color: #F7F1E5;
+}
+</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
@@ -33,16 +68,44 @@
     <widget class="QWidget" name="widget" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
        <widget class="QLabel" name="user_nickname_label">
         <property name="text">
-         <string>TextLabel</string>
+         <string>닉네임(유저아이디)</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="check_btn">
+        <property name="minimumSize">
+         <size>
+          <width>60</width>
+          <height>60</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>60</width>
+          <height>60</height>
+         </size>
+        </property>
         <property name="text">
-         <string>PushButton</string>
+         <string>초대</string>
         </property>
         <property name="checkable">
          <bool>true</bool>
@@ -54,6 +117,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../src_img/my_qrc.qrc"/>
+ </resources>
  <connections/>
 </ui>

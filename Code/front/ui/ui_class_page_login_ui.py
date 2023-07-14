@@ -14,7 +14,43 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_login_widget(object):
     def setupUi(self, login_widget):
         login_widget.setObjectName("login_widget")
-        login_widget.resize(600, 867)
+        login_widget.resize(600, 1028)
+        login_widget.setStyleSheet("#login_widget{\n"
+"    background-color: #1D5D9B\n"
+"}\n"
+"\n"
+"QLabel{\n"
+"    color: #FBEEAC\n"
+"}\n"
+"\n"
+"\n"
+"QPushButton{\n"
+"    background-color:#F4D160;\n"
+"    color: #1D5D9B;\n"
+"    font: bold 12pt \"나눔고딕\";\n"
+"}\n"
+"\n"
+"QPushButton:hover{\n"
+"    background-color:#FFFF9D;\n"
+"}\n"
+"\n"
+"QPushButton:pressed{\n"
+"    background-color:#FEF5AC;\n"
+"}\n"
+"\n"
+"\n"
+"QLineEdit{\n"
+"    color: #1D5D9B;\n"
+"    font: bold 12pt \"나눔고딕\";\n"
+"}\n"
+"\n"
+"#label_title{\n"
+"    font: bold 20pt \"나눔고딕\";\n"
+"}\n"
+"\n"
+"#frame_6{\n"
+"    background-color : #75C2F6;\n"
+"}")
         self.verticalLayout = QtWidgets.QVBoxLayout(login_widget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setSpacing(0)
@@ -28,6 +64,25 @@ class Ui_login_widget(object):
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setSpacing(0)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.widget = QtWidgets.QWidget(self.widget_3)
+        self.widget.setMinimumSize(QtCore.QSize(0, 50))
+        self.widget.setObjectName("widget")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem)
+        self.btn_close = QtWidgets.QPushButton(self.widget)
+        self.btn_close.setMinimumSize(QtCore.QSize(40, 40))
+        self.btn_close.setMaximumSize(QtCore.QSize(40, 40))
+        self.btn_close.setText("")
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/newPrefix/x.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btn_close.setIcon(icon)
+        self.btn_close.setObjectName("btn_close")
+        self.horizontalLayout.addWidget(self.btn_close)
+        self.verticalLayout_2.addWidget(self.widget)
+        spacerItem1 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.verticalLayout_2.addItem(spacerItem1)
         self.frame_2 = QtWidgets.QFrame(self.widget_3)
         self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -36,18 +91,13 @@ class Ui_login_widget(object):
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_2.setSpacing(0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        spacerItem = QtWidgets.QSpacerItem(230, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem)
+        spacerItem2 = QtWidgets.QSpacerItem(230, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem2)
         self.label_title = QtWidgets.QLabel(self.frame_2)
         self.label_title.setObjectName("label_title")
         self.horizontalLayout_2.addWidget(self.label_title, 0, QtCore.Qt.AlignHCenter)
-        spacerItem1 = QtWidgets.QSpacerItem(200, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem1)
-        self.btn_close = QtWidgets.QPushButton(self.frame_2)
-        self.btn_close.setMinimumSize(QtCore.QSize(30, 30))
-        self.btn_close.setMaximumSize(QtCore.QSize(30, 30))
-        self.btn_close.setObjectName("btn_close")
-        self.horizontalLayout_2.addWidget(self.btn_close)
+        spacerItem3 = QtWidgets.QSpacerItem(200, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem3)
         self.verticalLayout_2.addWidget(self.frame_2)
         self.frame = QtWidgets.QFrame(self.widget_3)
         self.frame.setStyleSheet("")
@@ -58,54 +108,63 @@ class Ui_login_widget(object):
         self.verticalLayout_6.setObjectName("verticalLayout_6")
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
-        spacerItem2 = QtWidgets.QSpacerItem(150, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_5.addItem(spacerItem2)
+        spacerItem4 = QtWidgets.QSpacerItem(150, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_5.addItem(spacerItem4)
         self.frame_4 = QtWidgets.QFrame(self.frame)
         self.frame_4.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_4.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_4.setObjectName("frame_4")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.frame_4)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
-        spacerItem3 = QtWidgets.QSpacerItem(20, 100, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.verticalLayout_5.addItem(spacerItem3)
+        spacerItem5 = QtWidgets.QSpacerItem(20, 60, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout_5.addItem(spacerItem5)
         self.frame_5 = QtWidgets.QFrame(self.frame_4)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.frame_5.sizePolicy().hasHeightForWidth())
         self.frame_5.setSizePolicy(sizePolicy)
-        self.frame_5.setMinimumSize(QtCore.QSize(0, 200))
+        self.frame_5.setMinimumSize(QtCore.QSize(0, 250))
         self.frame_5.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_5.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_5.setObjectName("frame_5")
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.frame_5)
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         self.label_img = QtWidgets.QLabel(self.frame_5)
+        self.label_img.setMinimumSize(QtCore.QSize(224, 230))
+        self.label_img.setMaximumSize(QtCore.QSize(224, 230))
+        self.label_img.setText("")
+        self.label_img.setPixmap(QtGui.QPixmap(":/newPrefix/logo.png"))
+        self.label_img.setScaledContents(True)
         self.label_img.setObjectName("label_img")
         self.horizontalLayout_4.addWidget(self.label_img)
         self.verticalLayout_5.addWidget(self.frame_5)
-        spacerItem4 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.verticalLayout_5.addItem(spacerItem4)
+        spacerItem6 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout_5.addItem(spacerItem6)
         self.frame_6 = QtWidgets.QFrame(self.frame_4)
         self.frame_6.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_6.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_6.setObjectName("frame_6")
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.frame_6)
-        self.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_4.setContentsMargins(9, 9, 9, 9)
         self.verticalLayout_4.setSpacing(6)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
         self.line_edit_id = QtWidgets.QLineEdit(self.frame_6)
+        self.line_edit_id.setMinimumSize(QtCore.QSize(0, 40))
         self.line_edit_id.setObjectName("line_edit_id")
         self.verticalLayout_4.addWidget(self.line_edit_id)
         self.line_edit_pw = QtWidgets.QLineEdit(self.frame_6)
+        self.line_edit_pw.setMinimumSize(QtCore.QSize(0, 40))
+        self.line_edit_pw.setEchoMode(QtWidgets.QLineEdit.Password)
         self.line_edit_pw.setObjectName("line_edit_pw")
         self.verticalLayout_4.addWidget(self.line_edit_pw)
         self.label_warning = QtWidgets.QLabel(self.frame_6)
+        self.label_warning.setMinimumSize(QtCore.QSize(0, 30))
         self.label_warning.setText("")
         self.label_warning.setObjectName("label_warning")
         self.verticalLayout_4.addWidget(self.label_warning)
-        spacerItem5 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.verticalLayout_4.addItem(spacerItem5)
+        spacerItem7 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.verticalLayout_4.addItem(spacerItem7)
         self.btn_login = QtWidgets.QPushButton(self.frame_6)
         self.btn_login.setMinimumSize(QtCore.QSize(0, 30))
         self.btn_login.setObjectName("btn_login")
@@ -116,18 +175,18 @@ class Ui_login_widget(object):
         self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_3.setSpacing(0)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        spacerItem6 = QtWidgets.QSpacerItem(48, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_3.addItem(spacerItem6)
+        spacerItem8 = QtWidgets.QSpacerItem(48, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_3.addItem(spacerItem8)
         self.btn_join = QtWidgets.QPushButton(self.widget_2)
         self.btn_join.setObjectName("btn_join")
         self.horizontalLayout_3.addWidget(self.btn_join)
         self.verticalLayout_4.addWidget(self.widget_2)
         self.verticalLayout_5.addWidget(self.frame_6)
-        spacerItem7 = QtWidgets.QSpacerItem(200, 300, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.verticalLayout_5.addItem(spacerItem7)
+        spacerItem9 = QtWidgets.QSpacerItem(200, 300, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout_5.addItem(spacerItem9)
         self.horizontalLayout_5.addWidget(self.frame_4)
-        spacerItem8 = QtWidgets.QSpacerItem(150, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_5.addItem(spacerItem8)
+        spacerItem10 = QtWidgets.QSpacerItem(150, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_5.addItem(spacerItem10)
         self.verticalLayout_6.addLayout(self.horizontalLayout_5)
         self.verticalLayout_2.addWidget(self.frame)
         self.verticalLayout_3.addLayout(self.verticalLayout_2)
@@ -139,11 +198,10 @@ class Ui_login_widget(object):
     def retranslateUi(self, login_widget):
         _translate = QtCore.QCoreApplication.translate
         login_widget.setWindowTitle(_translate("login_widget", "Form"))
-        self.label_title.setText(_translate("login_widget", "크크오톡,채팅방 이름"))
-        self.btn_close.setText(_translate("login_widget", "x"))
-        self.label_img.setText(_translate("login_widget", "이미지"))
+        self.label_title.setText(_translate("login_widget", "Going To Pro Level 크크오톡"))
         self.btn_login.setText(_translate("login_widget", "Login"))
         self.btn_join.setText(_translate("login_widget", "회원가입"))
+from Code.front.ui import my_qrc_rc
 
 
 if __name__ == "__main__":

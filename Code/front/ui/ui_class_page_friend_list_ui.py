@@ -15,6 +15,47 @@ class Ui_friend_list_widget(object):
     def setupUi(self, friend_list_widget):
         friend_list_widget.setObjectName("friend_list_widget")
         friend_list_widget.resize(600, 850)
+        friend_list_widget.setMinimumSize(QtCore.QSize(600, 850))
+        friend_list_widget.setMaximumSize(QtCore.QSize(600, 850))
+        friend_list_widget.setStyleSheet("#friend_list_widget {\n"
+"    background-color: #75C2F6;\n"
+"    color: #1D5D9B;\n"
+"}\n"
+"\n"
+"\n"
+"QLabel{\n"
+"    color: #1D5D9B;\n"
+"    font: bold 16pt \"나눔고딕\";\n"
+"}\n"
+"\n"
+"QPushButton{\n"
+"    background-color:#F4D160;\n"
+"    color: #1D5D9B;\n"
+"    font: bold 12pt \"나눔고딕\";\n"
+"}\n"
+"\n"
+"QPushButton:hover{\n"
+"    background-color:#FFFF9D;\n"
+"}\n"
+"\n"
+"QPushButton:pressed{\n"
+"    background-color:#FEF5AC;\n"
+"}\n"
+"\n"
+"\n"
+"#label_title{\n"
+"    font: bold 20pt \"나눔고딕\";\n"
+"    color: #F4D160;\n"
+"}\n"
+"\n"
+"#frame_title{\n"
+"    background-color: #1D5D9B;\n"
+"}    \n"
+"QLineEdit{\n"
+"    color: #1D5D9B;\n"
+"    font: bold 12pt \"나눔고딕\";\n"
+"}\n"
+"")
         self.verticalLayout = QtWidgets.QVBoxLayout(friend_list_widget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setSpacing(0)
@@ -27,27 +68,33 @@ class Ui_friend_list_widget(object):
         self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_3.setSpacing(0)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.frame_2 = QtWidgets.QFrame(self.frame_3)
-        self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_2.setObjectName("frame_2")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.frame_2)
+        self.frame_title = QtWidgets.QFrame(self.frame_3)
+        self.frame_title.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_title.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_title.setObjectName("frame_title")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.frame_title)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_2.setSpacing(0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        spacerItem = QtWidgets.QSpacerItem(230, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(200, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem)
-        self.label = QtWidgets.QLabel(self.frame_2)
-        self.label.setObjectName("label")
-        self.horizontalLayout_2.addWidget(self.label, 0, QtCore.Qt.AlignHCenter)
-        spacerItem1 = QtWidgets.QSpacerItem(200, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.label_title = QtWidgets.QLabel(self.frame_title)
+        self.label_title.setMinimumSize(QtCore.QSize(0, 0))
+        self.label_title.setWordWrap(False)
+        self.label_title.setObjectName("label_title")
+        self.horizontalLayout_2.addWidget(self.label_title, 0, QtCore.Qt.AlignHCenter)
+        spacerItem1 = QtWidgets.QSpacerItem(200, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem1)
-        self.btn_flist_close = QtWidgets.QPushButton(self.frame_2)
+        self.btn_flist_close = QtWidgets.QPushButton(self.frame_title)
         self.btn_flist_close.setMinimumSize(QtCore.QSize(30, 30))
         self.btn_flist_close.setMaximumSize(QtCore.QSize(30, 30))
+        self.btn_flist_close.setText("")
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/newPrefix/x.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btn_flist_close.setIcon(icon)
         self.btn_flist_close.setObjectName("btn_flist_close")
         self.horizontalLayout_2.addWidget(self.btn_flist_close)
-        self.verticalLayout_3.addWidget(self.frame_2)
+        self.verticalLayout_3.addWidget(self.frame_title)
         self.friend_page_search_bar_1 = QtWidgets.QFrame(self.frame_3)
         self.friend_page_search_bar_1.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.friend_page_search_bar_1.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -66,12 +113,10 @@ class Ui_friend_list_widget(object):
         self.friend_page_search_bar_2 = QtWidgets.QFrame(self.frame_3)
         self.friend_page_search_bar_2.setObjectName("friend_page_search_bar_2")
         self.horizontalLayout_6 = QtWidgets.QHBoxLayout(self.friend_page_search_bar_2)
-        self.horizontalLayout_6.setContentsMargins(0, 0, 0, -1)
+        self.horizontalLayout_6.setContentsMargins(9, 0, 9, -1)
         self.horizontalLayout_6.setObjectName("horizontalLayout_6")
-        self.label_2 = QtWidgets.QLabel(self.friend_page_search_bar_2)
-        self.label_2.setMinimumSize(QtCore.QSize(95, 0))
-        self.label_2.setObjectName("label_2")
-        self.horizontalLayout_6.addWidget(self.label_2)
+        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_6.addItem(spacerItem2)
         self.lineEdit_flist_search = QtWidgets.QLineEdit(self.friend_page_search_bar_2)
         self.lineEdit_flist_search.setObjectName("lineEdit_flist_search")
         self.horizontalLayout_6.addWidget(self.lineEdit_flist_search)
@@ -97,12 +142,12 @@ class Ui_friend_list_widget(object):
         self.pushButton_10.setMinimumSize(QtCore.QSize(75, 75))
         self.pushButton_10.setObjectName("pushButton_10")
         self.verticalLayout_7.addWidget(self.pushButton_10)
-        self.btn_tk_roomlist = QtWidgets.QPushButton(self.frame_12)
-        self.btn_tk_roomlist.setMinimumSize(QtCore.QSize(75, 75))
-        self.btn_tk_roomlist.setObjectName("btn_tk_roomlist")
-        self.verticalLayout_7.addWidget(self.btn_tk_roomlist)
-        spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout_7.addItem(spacerItem2)
+        self.btn_start_chat = QtWidgets.QPushButton(self.frame_12)
+        self.btn_start_chat.setMinimumSize(QtCore.QSize(75, 75))
+        self.btn_start_chat.setObjectName("btn_start_chat")
+        self.verticalLayout_7.addWidget(self.btn_start_chat)
+        spacerItem3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout_7.addItem(spacerItem3)
         self.horizontalLayout_9.addWidget(self.frame_12)
         self.frame_4 = QtWidgets.QFrame(self.frame_11)
         self.frame_4.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -110,15 +155,17 @@ class Ui_friend_list_widget(object):
         self.frame_4.setObjectName("frame_4")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.frame_4)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.verticalLayout_10 = QtWidgets.QVBoxLayout()
+        self.widget_scroll_area = QtWidgets.QWidget(self.frame_4)
+        self.widget_scroll_area.setObjectName("widget_scroll_area")
+        self.verticalLayout_10 = QtWidgets.QVBoxLayout(self.widget_scroll_area)
         self.verticalLayout_10.setObjectName("verticalLayout_10")
-        self.scrollArea_2 = QtWidgets.QScrollArea(self.frame_4)
+        self.scrollArea_2 = QtWidgets.QScrollArea(self.widget_scroll_area)
         self.scrollArea_2.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
         self.scrollArea_2.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollArea_2.setObjectName("scrollArea_2")
         self.friend_list_area = QtWidgets.QWidget()
-        self.friend_list_area.setGeometry(QtCore.QRect(0, 0, 460, 683))
+        self.friend_list_area.setGeometry(QtCore.QRect(0, 0, 444, 646))
         self.friend_list_area.setObjectName("friend_list_area")
         self.la1 = QtWidgets.QVBoxLayout(self.friend_list_area)
         self.la1.setContentsMargins(0, 0, 0, 0)
@@ -134,12 +181,12 @@ class Ui_friend_list_widget(object):
         self.widget.setObjectName("widget")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.widget)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
-        spacerItem3 = QtWidgets.QSpacerItem(20, 662, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout_5.addItem(spacerItem3)
+        spacerItem4 = QtWidgets.QSpacerItem(20, 662, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout_5.addItem(spacerItem4)
         self.la1.addWidget(self.widget)
         self.scrollArea_2.setWidget(self.friend_list_area)
         self.verticalLayout_10.addWidget(self.scrollArea_2)
-        self.verticalLayout_2.addLayout(self.verticalLayout_10)
+        self.verticalLayout_2.addWidget(self.widget_scroll_area)
         self.horizontalLayout_9.addWidget(self.frame_4)
         self.verticalLayout_3.addWidget(self.frame_11)
         self.frame = QtWidgets.QFrame(self.frame_3)
@@ -161,14 +208,13 @@ class Ui_friend_list_widget(object):
     def retranslateUi(self, friend_list_widget):
         _translate = QtCore.QCoreApplication.translate
         friend_list_widget.setWindowTitle(_translate("friend_list_widget", "Form"))
-        self.label.setText(_translate("friend_list_widget", "크크오톡,채팅방 이름"))
-        self.btn_flist_close.setText(_translate("friend_list_widget", "x"))
+        self.label_title.setText(_translate("friend_list_widget", "크크오톡 친구목록"))
         self.label_6.setText(_translate("friend_list_widget", "친구"))
         self.btn_flist_search.setText(_translate("friend_list_widget", "검색"))
-        self.label_2.setText(_translate("friend_list_widget", "TextLabel"))
         self.btn_flist_click_search.setText(_translate("friend_list_widget", "검색"))
         self.pushButton_10.setText(_translate("friend_list_widget", "친구"))
-        self.btn_tk_roomlist.setText(_translate("friend_list_widget", "채팅방"))
+        self.btn_start_chat.setText(_translate("friend_list_widget", "채팅방"))
+from Code.front.ui import my_qrc_rc
 
 
 if __name__ == "__main__":
