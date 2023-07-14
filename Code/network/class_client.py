@@ -1,6 +1,10 @@
+import datetime
 import socket
 from threading import *
+
+from Code.domain.class_message import Message
 from Code.domain.class_user import User
+from Code.domain.class_user_talk_room import UserTalkRoom
 from Common.class_json import KKODecoder
 
 
@@ -11,14 +15,15 @@ class ClientApp:
     FORMAT = "utf-8"
     HEADER_LENGTH = 30
 
-
     assert_username = "assert_username"
     join_user = "join_user"
     login = "login"
     enter_square = "enter_square"
     all_user_list = "all_user_list"
     user_talk_room_list = "user_talk_room_list"
-    invite_user_talk_room = "invite_user_talk_room"
+    talk_room_user_list_se = 'talk_room_user_list_se'
+    out_talk_room = 'out_talk_room'
+    send_msg_se = 'send_msg_se'
     send_msg_c_room = "send_msg_c_room"
     send_alarm_c_room = "send_alarm_c_room"
 
@@ -52,12 +57,11 @@ class ClientApp:
         self.client_widget = widget_
 
     def send_join_id_for_assert_same_username(self, input_username: str):
-        data_msg = f"{input_username:<{self.BUFFER-self.HEADER_LENGTH}}".encode(self.FORMAT)
+        data_msg = f"{input_username:<{self.BUFFER - self.HEADER_LENGTH}}".encode(self.FORMAT)
         data_msg_length = len(data_msg)
         request_msg = self.assert_username
         header_msg = f"{request_msg:<{self.HEADER_LENGTH}}".encode(self.FORMAT)
         self.client_socket.send(header_msg + data_msg)  # 헤더를 붙이고 보내는 동작(?)
-
 
     def send_join_id_and_pw_for_join_access(self, join_username, join_pw, join_nickname):
         join_user = User(None, join_username, join_pw, join_nickname)
@@ -96,15 +100,35 @@ class ClientApp:
         result = self.fixed_volume(request_msg, user_object_str)
         self.client_socket.send(result)
 
+    def send_talk_room_user_list_se(self, talk_room_id):
+        user_talk_room_obj = UserTalkRoom(None, self.user_id, talk_room_id)
+        user_talk_room_obj_str = user_talk_room_obj.toJSON()
+        request_msg = self.talk_room_user_list_se
+        result = self.fixed_volume(request_msg, user_talk_room_obj_str)
+        self.client_socket.send(result)
+
+    def send_out_talk_room(self, talk_room_id):
+        user_talk_room_obj = UserTalkRoom(None, self.user_id, talk_room_id)
+        user_talk_room_obj_str = user_talk_room_obj.toJSON()
+        request_msg = self.out_talk_room
+        result = self.fixed_volume(request_msg, user_talk_room_obj_str)
+        self.client_socket.send(result)
+
+    def send_send_msg_se(self, talk_room_id, msg):
+        msg_obj = Message(None, self.user_id, talk_room_id, str(datetime.datetime.now()), msg, None, User(self.user_id, self.username, self.user_pw, self.user_nickname))
+        msg_obj_str = msg_obj.toJSON()
+        request_msg = self.send_msg_se
+        result = self.fixed_volume(request_msg, msg_obj_str)
+        self.client_socket.send(result)
+
+
     # 크기 고정으로 만들어 주는 함수
     def fixed_volume(self, header, data):
         header_msg = f"{header:<{self.HEADER_LENGTH}}".encode(self.FORMAT)
         data_msg = f"{data:<{self.BUFFER - self.HEADER_LENGTH}}".encode(self.FORMAT)
         return header_msg + data_msg
 
-    def send_message_to_chat_room(self):
-        # todo: send 메시지
-        pass
+
 
     def send_file_to_chat_room(self):
         # todo: send 메시지
@@ -153,4 +177,17 @@ class ClientApp:
             # 채팅방 리스트 정보
             elif response_header == self.user_talk_room_list:
                 self.client_widget.user_talk_room_signal.emit(response_data)
+
+            # 채팅방 참여 유저 정보
+            elif response_header == self.talk_room_user_list_se:
+                if response_data == '.':
+                    print('아무도 없는 방')
+                else:
+                    self.client_widget.talk_room_user_list_se_signal.emit(response_data)
+
+            elif response_header == self.out_talk_room:
+                if response_data == 'pass':
+                    self.client_widget.out_talk_room_signal.emit(True)
+                elif response_data == '.':
+                    self.client_widget.out_talk_room_signal.emit(False)
 
