@@ -28,12 +28,24 @@ class FriendListWidget(QWidget, Ui_friend_list_widget):
         self.btn_flist_search.hide()
         pass
 
+    def set_window_drag(self):
+        self.setAttribute(Qt.WA_TranslucentBackground)
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.drag_start_position = event.globalPos() - self.frameGeometry().topLeft()
+            event.accept()
+
+    def mouseMoveEvent(self, event):
+        if event.buttons() == Qt.LeftButton:
+            self.move(event.globalPos() - self.drag_start_position)
+            event.accept()
     def page_close(self):
         self.close()
         self.client_controller.clear_widget(self.friend_list_layout_widget)
 
     def set_btn_trigger(self):
-        self.btn_tk_roomlist.clicked.connect(
+        self.btn_start_chat.clicked.connect(
             lambda x: (self.client_controller.show_talk_room_list_page(), self.page_close()))
         self.btn_flist_close.clicked.connect(self.page_close)
 

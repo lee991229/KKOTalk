@@ -14,10 +14,11 @@ font-weight: 600;
 color: rgb(0, 0, 0);
 }"""
 
-    def __init__(self, client_controller):
+    def __init__(self, client_controller, talk_room_id):
         super().__init__()
         self.setupUi(self)
         self.client_controller = client_controller
+        self.talk_room_id = talk_room_id
         self.set_btn_trigger()
         self.setGeometry(850, 95, self.width(), self.height())
 
@@ -38,4 +39,4 @@ color: rgb(0, 0, 0);
         self.btn_member_plus.clicked.connect(
             self.client_controller.show_member_plus)  # todo: 채팅방에 있는 유저 정보 저장하고 파라미터로 이거 보내
         self.widget_member_count.mousePressEvent = lambda x: (self.client_controller.show_room_member_list())
-        self.chat_input_button.clicked.connect(self.chat_line_ediet_input)
+        self.btn_chat_enter.clicked.connect(self.chat_line_ediet_input)

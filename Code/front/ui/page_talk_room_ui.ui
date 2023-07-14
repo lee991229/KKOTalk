@@ -14,9 +14,95 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true"/>
+   <string notr="true">#talk_room_widget {
+	background-color: #25316D;
+	color: #1D5D9B;
+}
+
+
+QLabel{
+	color: #1D5D9B;
+	font: bold 16pt &quot;나눔고딕&quot;;
+}
+
+QPushButton{
+	background-color:#F4D160;
+	color: #1D5D9B;
+	font: bold 12pt &quot;나눔고딕&quot;;
+}
+
+QPushButton:hover{
+	background-color:#FFFF9D;
+}
+
+QPushButton:pressed{
+	background-color:#FEF5AC;
+}
+
+#btn_member_plus,
+#btn_member_minus
+{
+	background-color:#1D5D9B;
+	border-radius:10px;
+}
+
+#btn_member_plus:hover,
+#btn_member_minus:hover
+{
+	background-color:#B0DAFF;
+}
+
+#btn_member_plus:pressed,
+#btn_member_minus:pressed
+{
+	background-color:#9AC5F4;
+}
+
+#widget_title_wrapper{
+	background-color:#F8FDCF;
+	border-radius:10px;
+}
+
+
+#widget_title_wrapper #label_member_count{
+	color: #453C67;
+}
+#header_frame #label_member_count:hover{
+	color: #FBEEAC
+}
+
+
+#label_title{
+	font: bold 20pt &quot;나눔고딕&quot;;
+	color: #7286D3;
+}
+#label_member_count{
+	font: bold 15pt &quot;나눔고딕&quot;;
+	color: #F4D160;
+}
+
+QLineEdit{
+	color: #1D5D9B;
+	font: bold 12pt &quot;나눔고딕&quot;;
+}
+</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QFrame" name="frame_3">
      <property name="frameShape">
@@ -27,7 +113,73 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
-       <widget class="QFrame" name="frame_2">
+       <widget class="QFrame" name="frame_title">
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Expanding</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>200</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn_flist_close">
+           <property name="minimumSize">
+            <size>
+             <width>30</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>30</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../src_img/my_qrc.qrc">
+             <normaloff>:/newPrefix/x.svg</normaloff>:/newPrefix/x.svg</iconset>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="header_frame">
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
         </property>
@@ -35,6 +187,51 @@
          <enum>QFrame::Raised</enum>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QWidget" name="widget_title_wrapper" native="true">
+           <property name="minimumSize">
+            <size>
+             <width>250</width>
+             <height>0</height>
+            </size>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QLabel" name="label_title">
+              <property name="text">
+               <string>테스트 1번방</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QWidget" name="widget_member_count" native="true">
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="QLabel" name="label_member_icon">
+              <property name="text">
+               <string/>
+              </property>
+              <property name="pixmap">
+               <pixmap resource="../src_img/my_qrc.qrc">:/newPrefix/user.svg</pixmap>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_member_count">
+              <property name="text">
+               <string>2</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
          <item>
           <spacer name="horizontalSpacer">
            <property name="orientation">
@@ -48,37 +245,32 @@
            </property>
           </spacer>
          </item>
-         <item alignment="Qt::AlignHCenter">
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>크크오톡,채팅방 이름</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QWidget" name="widget_member_count" native="true">
-           <layout class="QHBoxLayout" name="horizontalLayout">
-            <item>
-             <widget class="QLabel" name="label_2">
-              <property name="text">
-               <string>이미지</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_3">
-              <property name="text">
-               <string>숫자</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
          <item>
           <widget class="QPushButton" name="btn_member_plus">
+           <property name="minimumSize">
+            <size>
+             <width>60</width>
+             <height>60</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>60</width>
+             <height>60</height>
+            </size>
+           </property>
            <property name="text">
-            <string>+</string>
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../src_img/my_qrc.qrc">
+             <normaloff>:/newPrefix/user-plus.svg</normaloff>:/newPrefix/user-plus.svg</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>40</width>
+             <height>40</height>
+            </size>
            </property>
           </widget>
          </item>
@@ -99,9 +291,31 @@
           </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton">
+          <widget class="QPushButton" name="btn_member_minus">
+           <property name="minimumSize">
+            <size>
+             <width>60</width>
+             <height>60</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>60</width>
+             <height>60</height>
+            </size>
+           </property>
            <property name="text">
-            <string>x</string>
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../src_img/my_qrc.qrc">
+             <normaloff>:/newPrefix/log-out.svg</normaloff>:/newPrefix/log-out.svg</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>40</width>
+             <height>40</height>
+            </size>
            </property>
           </widget>
          </item>
@@ -145,8 +359,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>558</width>
-              <height>703</height>
+              <width>576</width>
+              <height>646</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -186,6 +400,18 @@
       </item>
       <item>
        <widget class="QFrame" name="frame_9">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>50</height>
+         </size>
+        </property>
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
         </property>
@@ -193,20 +419,75 @@
          <enum>QFrame::Raised</enum>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_10">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
          <item>
-          <widget class="QPushButton" name="pushButton_5">
+          <widget class="QPushButton" name="btn_transfer_file">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>30</height>
+            </size>
+           </property>
            <property name="text">
-            <string>PushButton</string>
+            <string>파일 첨부</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="user_chatting_lineedit"/>
+          <widget class="QLineEdit" name="user_chatting_lineedit">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>30</height>
+            </size>
+           </property>
+          </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="chat_input_button">
+          <widget class="QPushButton" name="btn_chat_enter">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>30</height>
+            </size>
+           </property>
            <property name="text">
-            <string>PushButton</string>
+            <string>입력</string>
            </property>
           </widget>
          </item>
@@ -218,6 +499,10 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../src_img/my_qrc.qrc"/>
+  <include location="../src_img/my_qrc.qrc"/>
+  <include location="../src_img/my_qrc.qrc"/>
+ </resources>
  <connections/>
 </ui>

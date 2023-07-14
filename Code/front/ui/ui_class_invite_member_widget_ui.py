@@ -15,6 +15,39 @@ class Ui_invite_member_widget(object):
     def setupUi(self, invite_member_widget):
         invite_member_widget.setObjectName("invite_member_widget")
         invite_member_widget.resize(375, 100)
+        invite_member_widget.setStyleSheet("#widget {\n"
+"    background-color: #DBDFEA;\n"
+"    color: #1D5D9B;\n"
+"}\n"
+"\n"
+"\n"
+"QLabel{\n"
+"    color: #1D5D9B;\n"
+"    font: bold 16pt \"나눔고딕\";\n"
+"}\n"
+"\n"
+"\n"
+"\n"
+"QPushButton{\n"
+"    background-color:#FFEAD2;\n"
+"    color: #1D5D9B;\n"
+"    font: bold 12pt \"나눔고딕\";\n"
+"    border-radius: 20px;\n"
+"    border-style: solid;\n"
+"    border-width: 1px;\n"
+"    border-color: #8294C4;\n"
+"    \n"
+"}\n"
+"\n"
+"QPushButton:hover{\n"
+"    background-color:#F6F1F1;\n"
+"}\n"
+"\n"
+"QPushButton:pressed, QPushButton:checked{\n"
+"    background-color:#E7B10A;\n"
+"    color: #F7F1E5;\n"
+"}\n"
+"")
         self.verticalLayout = QtWidgets.QVBoxLayout(invite_member_widget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setSpacing(0)
@@ -23,10 +56,14 @@ class Ui_invite_member_widget(object):
         self.widget.setObjectName("widget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget)
         self.horizontalLayout.setObjectName("horizontalLayout")
+        spacerItem = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem)
         self.user_nickname_label = QtWidgets.QLabel(self.widget)
         self.user_nickname_label.setObjectName("user_nickname_label")
         self.horizontalLayout.addWidget(self.user_nickname_label)
         self.check_btn = QtWidgets.QPushButton(self.widget)
+        self.check_btn.setMinimumSize(QtCore.QSize(60, 60))
+        self.check_btn.setMaximumSize(QtCore.QSize(60, 60))
         self.check_btn.setCheckable(True)
         self.check_btn.setObjectName("check_btn")
         self.horizontalLayout.addWidget(self.check_btn)
@@ -38,8 +75,9 @@ class Ui_invite_member_widget(object):
     def retranslateUi(self, invite_member_widget):
         _translate = QtCore.QCoreApplication.translate
         invite_member_widget.setWindowTitle(_translate("invite_member_widget", "Form"))
-        self.user_nickname_label.setText(_translate("invite_member_widget", "TextLabel"))
-        self.check_btn.setText(_translate("invite_member_widget", "PushButton"))
+        self.user_nickname_label.setText(_translate("invite_member_widget", "닉네임(유저아이디)"))
+        self.check_btn.setText(_translate("invite_member_widget", "초대"))
+from Code.front.ui import my_qrc_rc
 
 
 if __name__ == "__main__":

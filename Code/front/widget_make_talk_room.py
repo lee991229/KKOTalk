@@ -45,7 +45,7 @@ class InviteFriendListWidget(QWidget, Ui_make_talk_room_widget):
         '''
         새로운 채팅방 만들어서 띄워준다
         '''
-        new_talk_widget = self.client_controller.open_talk_room()
+        new_talk_widget = self.client_controller.open_talk_room_widget()
         new_talk_widget.show()
 
     def send_user_id_list(self, invite_member_list):

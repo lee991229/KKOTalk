@@ -14,35 +14,87 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_profile_page(object):
     def setupUi(self, profile_page):
         profile_page.setObjectName("profile_page")
-        profile_page.resize(284, 196)
+        profile_page.resize(363, 123)
+        profile_page.setStyleSheet("#widget_most_out {\n"
+"    background-color: #FFFFFF;\n"
+"    color: #FBEEAC;\n"
+"    border-style: solid;\n"
+"    border-width: 2px;\n"
+"    border-color: #1D5D9B;\n"
+"    border-radius: 5px;\n"
+"}\n"
+"#out_widget:hover{\n"
+"    background-color: #E6FFFD;\n"
+"}\n"
+"\n"
+"\n"
+"\n"
+"QLabel{\n"
+"    color: #1D5D9B;\n"
+"    font: bold 16pt \"나눔고딕\";\n"
+"}\n"
+"\n"
+"\n"
+"QPushButton{\n"
+"    background-color:#1D5D9B;\n"
+"    color: #FAF0D7;\n"
+"    border-radius:10px;\n"
+"    font: bold 12pt \"나눔고딕\";\n"
+"}\n"
+"\n"
+"QPushButton:hover{\n"
+"    background-color:#B0DAFF;\n"
+"\n"
+"}\n"
+"\n"
+"QPushButton:pressed{\n"
+"    background-color:#9AC5F4;\n"
+"}\n"
+"\n"
+"\n"
+"")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(profile_page)
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_2.setSpacing(0)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.verticalLayout = QtWidgets.QVBoxLayout()
+        self.widget_most_out = QtWidgets.QWidget(profile_page)
+        self.widget_most_out.setObjectName("widget_most_out")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.widget_most_out)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.widget = QtWidgets.QWidget(profile_page)
+        self.widget = QtWidgets.QWidget(self.widget_most_out)
         self.widget.setObjectName("widget")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.widget)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        spacerItem = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem)
         self.nick_name_label = QtWidgets.QLabel(self.widget)
-        self.nick_name_label.setGeometry(QtCore.QRect(80, 30, 111, 61))
-        self.nick_name_label.setStyleSheet("background-color: rgb(85, 255, 127);")
-        self.nick_name_label.setText("")
         self.nick_name_label.setObjectName("nick_name_label")
+        self.horizontalLayout_2.addWidget(self.nick_name_label)
         self.verticalLayout.addWidget(self.widget)
-        self.widget_2 = QtWidgets.QWidget(profile_page)
-        self.widget_2.setMinimumSize(QtCore.QSize(0, 40))
-        self.widget_2.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.widget_2 = QtWidgets.QWidget(self.widget_most_out)
+        self.widget_2.setMinimumSize(QtCore.QSize(0, 50))
+        self.widget_2.setMaximumSize(QtCore.QSize(16777215, 50))
         self.widget_2.setObjectName("widget_2")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget_2)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.one_on_one_chatting_btn = QtWidgets.QPushButton(self.widget_2)
-        self.one_on_one_chatting_btn.setObjectName("one_on_one_chatting_btn")
-        self.horizontalLayout.addWidget(self.one_on_one_chatting_btn)
+        self.btn_start_chat = QtWidgets.QPushButton(self.widget_2)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.btn_start_chat.sizePolicy().hasHeightForWidth())
+        self.btn_start_chat.setSizePolicy(sizePolicy)
+        self.btn_start_chat.setObjectName("btn_start_chat")
+        self.horizontalLayout.addWidget(self.btn_start_chat)
         self.close_btn = QtWidgets.QPushButton(self.widget_2)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.close_btn.sizePolicy().hasHeightForWidth())
+        self.close_btn.setSizePolicy(sizePolicy)
         self.close_btn.setObjectName("close_btn")
         self.horizontalLayout.addWidget(self.close_btn)
         self.verticalLayout.addWidget(self.widget_2)
-        self.verticalLayout_2.addLayout(self.verticalLayout)
+        self.verticalLayout_2.addWidget(self.widget_most_out)
 
         self.retranslateUi(profile_page)
         QtCore.QMetaObject.connectSlotsByName(profile_page)
@@ -50,7 +102,8 @@ class Ui_profile_page(object):
     def retranslateUi(self, profile_page):
         _translate = QtCore.QCoreApplication.translate
         profile_page.setWindowTitle(_translate("profile_page", "Form"))
-        self.one_on_one_chatting_btn.setText(_translate("profile_page", "1:1 채팅"))
+        self.nick_name_label.setText(_translate("profile_page", "닉네임"))
+        self.btn_start_chat.setText(_translate("profile_page", "1:1 채팅"))
         self.close_btn.setText(_translate("profile_page", "닫기"))
 
 

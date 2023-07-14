@@ -17,6 +17,46 @@ class Ui_tk_room_list_widget(object):
         tk_room_list_widget.resize(600, 850)
         tk_room_list_widget.setMinimumSize(QtCore.QSize(600, 850))
         tk_room_list_widget.setMaximumSize(QtCore.QSize(600, 850))
+        tk_room_list_widget.setStyleSheet("#tk_room_list_widget {\n"
+"    background-color: #75C2F6;\n"
+"    color: #1D5D9B;\n"
+"}\n"
+"\n"
+"\n"
+"QLabel{\n"
+"    color: #1D5D9B;\n"
+"    font: bold 16pt \"나눔고딕\";\n"
+"}\n"
+"\n"
+"QPushButton{\n"
+"    background-color:#F4D160;\n"
+"    color: #1D5D9B;\n"
+"    font: bold 12pt \"나눔고딕\";\n"
+"}\n"
+"\n"
+"QPushButton:hover{\n"
+"    background-color:#FFFF9D;\n"
+"}\n"
+"\n"
+"QPushButton:pressed{\n"
+"    background-color:#FEF5AC;\n"
+"}\n"
+"\n"
+"\n"
+"#label_title{\n"
+"    font: bold 20pt \"나눔고딕\";\n"
+"    color: #F4D160;\n"
+"}\n"
+"\n"
+"#frame_title{\n"
+"    background-color: #1D5D9B;\n"
+"}\n"
+"\n"
+"QLineEdit{\n"
+"    color: #1D5D9B;\n"
+"    font: bold 12pt \"나눔고딕\";\n"
+"}\n"
+"")
         self.verticalLayout = QtWidgets.QVBoxLayout(tk_room_list_widget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setSpacing(0)
@@ -29,27 +69,27 @@ class Ui_tk_room_list_widget(object):
         self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_3.setSpacing(0)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.frame_2 = QtWidgets.QFrame(self.frame_3)
-        self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_2.setObjectName("frame_2")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.frame_2)
+        self.frame_title = QtWidgets.QFrame(self.frame_3)
+        self.frame_title.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_title.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_title.setObjectName("frame_title")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.frame_title)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_2.setSpacing(0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        spacerItem = QtWidgets.QSpacerItem(230, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(170, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem)
-        self.label = QtWidgets.QLabel(self.frame_2)
-        self.label.setObjectName("label")
-        self.horizontalLayout_2.addWidget(self.label, 0, QtCore.Qt.AlignHCenter)
-        spacerItem1 = QtWidgets.QSpacerItem(200, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.label_title = QtWidgets.QLabel(self.frame_title)
+        self.label_title.setObjectName("label_title")
+        self.horizontalLayout_2.addWidget(self.label_title, 0, QtCore.Qt.AlignHCenter)
+        spacerItem1 = QtWidgets.QSpacerItem(200, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem1)
-        self.btn_tkroom_close = QtWidgets.QPushButton(self.frame_2)
+        self.btn_tkroom_close = QtWidgets.QPushButton(self.frame_title)
         self.btn_tkroom_close.setMinimumSize(QtCore.QSize(30, 30))
         self.btn_tkroom_close.setMaximumSize(QtCore.QSize(30, 30))
         self.btn_tkroom_close.setObjectName("btn_tkroom_close")
         self.horizontalLayout_2.addWidget(self.btn_tkroom_close)
-        self.verticalLayout_3.addWidget(self.frame_2)
+        self.verticalLayout_3.addWidget(self.frame_title)
         self.talk_list_page_search_bar_1 = QtWidgets.QFrame(self.frame_3)
         self.talk_list_page_search_bar_1.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.talk_list_page_search_bar_1.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -75,10 +115,8 @@ class Ui_tk_room_list_widget(object):
         self.horizontalLayout_6 = QtWidgets.QHBoxLayout(self.talk_list_page_search_bar_2)
         self.horizontalLayout_6.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_6.setObjectName("horizontalLayout_6")
-        self.label_3 = QtWidgets.QLabel(self.talk_list_page_search_bar_2)
-        self.label_3.setMinimumSize(QtCore.QSize(95, 0))
-        self.label_3.setObjectName("label_3")
-        self.horizontalLayout_6.addWidget(self.label_3)
+        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_6.addItem(spacerItem2)
         self.lineEdit_tkroom_search = QtWidgets.QLineEdit(self.talk_list_page_search_bar_2)
         self.lineEdit_tkroom_search.setObjectName("lineEdit_tkroom_search")
         self.horizontalLayout_6.addWidget(self.lineEdit_tkroom_search)
@@ -108,8 +146,8 @@ class Ui_tk_room_list_widget(object):
         self.pushButton_11.setMinimumSize(QtCore.QSize(75, 75))
         self.pushButton_11.setObjectName("pushButton_11")
         self.verticalLayout_7.addWidget(self.pushButton_11)
-        spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout_7.addItem(spacerItem2)
+        spacerItem3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout_7.addItem(spacerItem3)
         self.horizontalLayout_9.addWidget(self.frame_12)
         self.frame_4 = QtWidgets.QFrame(self.frame_11)
         self.frame_4.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -117,19 +155,43 @@ class Ui_tk_room_list_widget(object):
         self.frame_4.setObjectName("frame_4")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.frame_4)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.verticalLayout_10 = QtWidgets.QVBoxLayout()
+        self.widget_scroll_area = QtWidgets.QWidget(self.frame_4)
+        self.widget_scroll_area.setObjectName("widget_scroll_area")
+        self.verticalLayout_10 = QtWidgets.QVBoxLayout(self.widget_scroll_area)
         self.verticalLayout_10.setObjectName("verticalLayout_10")
-        self.scrollArea_2 = QtWidgets.QScrollArea(self.frame_4)
+        self.widget_scroll_area_2 = QtWidgets.QWidget(self.widget_scroll_area)
+        self.widget_scroll_area_2.setObjectName("widget_scroll_area_2")
+        self.verticalLayout_11 = QtWidgets.QVBoxLayout(self.widget_scroll_area_2)
+        self.verticalLayout_11.setObjectName("verticalLayout_11")
+        self.scrollArea_2 = QtWidgets.QScrollArea(self.widget_scroll_area_2)
+        self.scrollArea_2.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
+        self.scrollArea_2.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollArea_2.setObjectName("scrollArea_2")
-        self.tkroom_list_area = QtWidgets.QWidget()
-        self.tkroom_list_area.setGeometry(QtCore.QRect(0, 0, 477, 692))
+        self.friend_list_area = QtWidgets.QWidget()
+        self.friend_list_area.setGeometry(QtCore.QRect(0, 0, 442, 653))
+        self.friend_list_area.setObjectName("friend_list_area")
+        self.la1 = QtWidgets.QVBoxLayout(self.friend_list_area)
+        self.la1.setContentsMargins(0, 0, 0, 0)
+        self.la1.setSpacing(0)
+        self.la1.setObjectName("la1")
+        self.tkroom_list_area = QtWidgets.QWidget(self.friend_list_area)
         self.tkroom_list_area.setObjectName("tkroom_list_area")
-        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.tkroom_list_area)
-        self.verticalLayout_4.setObjectName("verticalLayout_4")
-        self.scrollArea_2.setWidget(self.tkroom_list_area)
-        self.verticalLayout_10.addWidget(self.scrollArea_2)
-        self.verticalLayout_2.addLayout(self.verticalLayout_10)
+        self.friend_list_layout = QtWidgets.QVBoxLayout(self.tkroom_list_area)
+        self.friend_list_layout.setContentsMargins(0, 0, 0, 0)
+        self.friend_list_layout.setObjectName("friend_list_layout")
+        self.la1.addWidget(self.tkroom_list_area)
+        self.widget = QtWidgets.QWidget(self.friend_list_area)
+        self.widget.setObjectName("widget")
+        self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.widget)
+        self.verticalLayout_5.setObjectName("verticalLayout_5")
+        spacerItem4 = QtWidgets.QSpacerItem(20, 662, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout_5.addItem(spacerItem4)
+        self.la1.addWidget(self.widget)
+        self.scrollArea_2.setWidget(self.friend_list_area)
+        self.verticalLayout_11.addWidget(self.scrollArea_2)
+        self.verticalLayout_10.addWidget(self.widget_scroll_area_2)
+        self.verticalLayout_2.addWidget(self.widget_scroll_area)
         self.horizontalLayout_9.addWidget(self.frame_4)
         self.verticalLayout_3.addWidget(self.frame_11)
         self.frame = QtWidgets.QFrame(self.frame_3)
@@ -151,12 +213,11 @@ class Ui_tk_room_list_widget(object):
     def retranslateUi(self, tk_room_list_widget):
         _translate = QtCore.QCoreApplication.translate
         tk_room_list_widget.setWindowTitle(_translate("tk_room_list_widget", "Form"))
-        self.label.setText(_translate("tk_room_list_widget", "크크오톡,채팅방 이름"))
+        self.label_title.setText(_translate("tk_room_list_widget", "크크오톡 채팅방 목록"))
         self.btn_tkroom_close.setText(_translate("tk_room_list_widget", "x"))
         self.label_6.setText(_translate("tk_room_list_widget", "채팅"))
         self.btn_tkroom_search.setText(_translate("tk_room_list_widget", "검색"))
         self.btn_tallk_room_make.setText(_translate("tk_room_list_widget", "방만들기"))
-        self.label_3.setText(_translate("tk_room_list_widget", "TextLabel"))
         self.btn_tkroom_click_search.setText(_translate("tk_room_list_widget", "검색"))
         self.btn_friend_list_page.setText(_translate("tk_room_list_widget", "친구"))
         self.pushButton_11.setText(_translate("tk_room_list_widget", "채팅방"))

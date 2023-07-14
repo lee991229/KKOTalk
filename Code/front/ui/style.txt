@@ -1,0 +1,146 @@
+import Code.front.myqrc_rc
+
+
+
+===================================profile_widget
+
+
+===================================tk_room list
+#tk_room_list_widget {
+	background-color: #75C2F6;
+	color: #1D5D9B;
+}
+
+
+QLabel{
+	color: #1D5D9B;
+	font: bold 16pt "나눔고딕";
+}
+
+QPushButton{
+	background-color:#F4D160;
+	color: #1D5D9B;
+	font: bold 12pt "나눔고딕";
+}
+
+QPushButton:hover{
+	background-color:#FFFF9D;
+}
+
+QPushButton:pressed{
+	background-color:#FEF5AC;
+}
+
+
+#label_title{
+	font: bold 20pt "나눔고딕";
+	color: #F4D160;
+}
+
+#frame_title{
+	background-color: #1D5D9B;
+}
+
+QLineEdit{
+	color: #1D5D9B;
+	font: bold 12pt "나눔고딕";
+}
+
+===================================friend list
+#friend_list_widget {
+	background-color: #75C2F6;
+	color: #1D5D9B;
+}
+
+
+QLabel{
+	color: #1D5D9B;
+	font: bold 16pt "나눔고딕";
+}
+
+QPushButton{
+	background-color:#F4D160;
+	color: #1D5D9B;
+	font: bold 12pt "나눔고딕";
+}
+
+#label_title{
+	font: bold 20pt "나눔고딕";
+	color: #F4D160;
+}
+
+#frame_title{
+	background-color: #1D5D9B;
+}
+===================================login
+#login_widget{
+	background-color: #1D5D9B
+}
+
+QLabel{
+	color: #FBEEAC
+}
+
+
+QPushButton{
+	background-color:#F4D160;
+	color: #1D5D9B;
+	font: bold 12pt "나눔고딕";
+}
+
+
+
+QLineEdit{
+	color: #1D5D9B;
+	font: bold 12pt "나눔고딕";
+}
+
+#label_title{
+	font: bold 20pt "나눔고딕";
+}
+
+#frame_6{
+	background-color : #75C2F6;
+}
+===================================join
+#join_widget{
+	background-color: #1D5D9B
+}
+
+QLabel{
+	color: #FBEEAC;
+	font: bold 16pt "나눔고딕";
+}
+
+#label{
+	font: bold 20pt;
+}
+
+
+QPushButton{
+	background-color:#F4D160;
+	color: #1D5D9B;
+	font: bold 12pt "나눔고딕";
+}
+
+QLineEdit{
+	color: #1D5D9B;
+	font: bold 12pt "나눔고딕";
+}
+
+#input_widget,
+#input_widget_2{
+	background-color : #75C2F6;
+}
+
+
+#input_widget QLabel,
+#input_widget_2 QLabel{
+	color: #1D5D9B;
+}
+
+#input_widget #label_id_message,
+#input_widget #label_join_warning
+{
+	color: #F2D7D9
+}

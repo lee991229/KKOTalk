@@ -1,8 +1,10 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import *
 from Code.front.ui.ui_class_page_login_ui import Ui_login_widget
 from Code.domain.class_user import User
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QSize
+
 
 class LoginWidget(QWidget, Ui_login_widget):
 
@@ -13,6 +15,19 @@ class LoginWidget(QWidget, Ui_login_widget):
         self.client_controller = client_controller
         self.set_btn_trigger()
         self.set_initial_widget()
+
+    def set_window_drag(self):
+        self.widget.setAttribute(Qt.WA_TranslucentBackground)
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.drag_start_position = event.globalPos() - self.frameGeometry().topLeft()
+            event.accept()
+
+    def mouseMoveEvent(self, event):
+        if event.buttons() == Qt.LeftButton:
+            self.move(event.globalPos() - self.drag_start_position)
+            event.accept()
 
     def set_btn_trigger(self):
         self.btn_login.clicked.connect(self.assert_login)  # 로그인 승인버튼 클릭시 assert_login메서드 발동
@@ -39,6 +54,7 @@ class LoginWidget(QWidget, Ui_login_widget):
         if isinstance(login_user_obj, User):
             self.client_controller.get_user_talk_room_list()
             self.client_controller.show_login_success()
+            self.close()
 
     def no_input_id(self):
         self.label_warning.setText("아이디를 적어주세요")
@@ -48,5 +64,3 @@ class LoginWidget(QWidget, Ui_login_widget):
 
     def no_input_pw(self):
         self.label_warning.setText("비밀번호를 적어주세요")
-
-

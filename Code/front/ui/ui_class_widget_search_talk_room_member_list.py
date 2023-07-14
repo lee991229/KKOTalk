@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_takl_room_member_widget(object):
     def setupUi(self, takl_room_member_widget):
         takl_room_member_widget.setObjectName("takl_room_member_widget")
-        takl_room_member_widget.resize(573, 300)
+        takl_room_member_widget.resize(554, 0)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(takl_room_member_widget)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.verticalLayout = QtWidgets.QVBoxLayout()
@@ -35,7 +35,7 @@ class Ui_takl_room_member_widget(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 551, 229))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 515, 16))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.verticalLayout.addWidget(self.scrollArea)

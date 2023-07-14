@@ -1,0 +1,15 @@
+<RCC>
+  <qresource prefix="newPrefix">
+    <file>log-out.svg</file>
+    <file>user-l.svg</file>
+    <file>user-minus-l.svg</file>
+    <file>user-plus-l.svg</file>
+    <file>logo.png</file>
+    <file>minus.svg</file>
+    <file>plus.svg</file>
+    <file>user.svg</file>
+    <file>user-minus.svg</file>
+    <file>user-plus.svg</file>
+    <file>x.svg</file>
+  </qresource>
+</RCC>
