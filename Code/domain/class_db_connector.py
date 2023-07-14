@@ -214,6 +214,7 @@ class DBConnector:
         for user_talk_row in user_talk_rooms:
             user_talk_room_obj = UserTalkRoom(*user_talk_row)
             users_talk_room_obj_list.append(user_talk_room_obj)
+
         self.end_conn()
         return users_talk_room_obj_list
 

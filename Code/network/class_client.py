@@ -1,56 +1,92 @@
-import datetime
-import threading
-from socket import *
+import socket
 from threading import *
+from Code.domain.class_user import User
 
 
 class ClientApp:
-    HOST = '10.10.20.115'
+    HOST = '127.0.0.1'
     PORT = 9999
     BUFFER = 1024
     FORMAT = "utf-8"
-    SERVER = (HOST, PORT)
+    HEADER_LENGTH = 30
+
+
+    assert_username = "assert_username"
+    join_user = "join_user"
+    login = "login"
+    send_msg_c_room = "send_msg_c_room"
+    send_alarm_c_room = "send_alarm_c_room"
+
+    HEADER_LIST = {
+        assert_username: assert_username.encode(FORMAT),
+        join_user: join_user.encode(FORMAT),
+        login: login.encode(FORMAT),
+        send_msg_c_room: send_msg_c_room.encode(FORMAT),
+        send_alarm_c_room: send_alarm_c_room.encode(FORMAT),
+    }
 
     def __init__(self):
-        # self.controller =  ClientController()
-        self.connected = False
-        Thread(target=self.connect_to_surver)
-        self.client = socket(AF_INET, SOCK_STREAM)
-        # self.receive_thread = Thread(target=self.receive_message)
-        # 임의로 지정
-        self.user_id = 'test1'
-        self.user_pw = 'password'
-        self.validate_user(self.user_id, self.user_pw)
+        # 서버 소켓 설정
+        self.client_socket = None
+        self.config = None
+        self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.client_socket.connect((self.HOST, self.PORT))
+        # self.client_socket.setblocking(False)
+        self.user = None
+        self.user_id = None
+        self.user_pw = None
+        self.user_nickname = None
+        self.receive_thread = Thread(target=self.receive_message)
+        self.receive_thread.start()
+        self.client_widget = None
 
-    def set_config(self, configure):
-        print('클라이언트 설정 적용됨')
+        # client function =================================
 
-    def connect_to_surver(self):
-        self.client.connect(self.SERVER)
+    def set_widget(self, widget_):
+        self.client_widget = widget_
 
-    def validate_user(self, user_id, user_pw):
-        self.client.send(user_id.encode(self.FORMAT))
-        if self.client.recv(self.BUFFER).decode(self.FORMAT) == '아이디존재':
-            print("아이디 일치")
-            self.client.send(user_pw.encode(self.FORMAT))
-        if self.client.recv(self.BUFFER).decode(self.FORMAT) == "연결됨":
-            self.connected = True
-            print("로그인 됨")
-            while True:
-                pass
+    def send_join_id_for_assert_same_username(self, input_username: str):
+        data_msg = f"{input_username:<{self.BUFFER-self.HEADER_LENGTH}}".encode(self.FORMAT)
+        data_msg_length = len(data_msg)
+        request_msg = self.assert_username
+        header_msg = f"{request_msg:<{self.HEADER_LENGTH}}".encode(self.FORMAT)
+        self.client_socket.send(header_msg + data_msg)  # 헤더를 붙이고 보내는 동작(?)
 
-            # 로그인되면 크크오톡 화면 뜨는건가? UI뜨게 변경되는 느낌인가?
-            # self.receive_thread.start()
+    def send_join_id_and_pw_for_join_access(self, join_username, join_pw, join_nickname):
+        join_user = User(None, join_username, join_pw, join_nickname)
+        user_json_str = join_user.toJSON()
+        self.client_socket.send(self.HEADER_LIST[self.join_user])
+        self.client_socket.recv(self.BUFFER)  # "." 받음
+        self.client_socket.send(user_json_str.encode())
 
-    # def send_message(self):
-    #     message = self.textEdit.toPlainText().strip()  # 이건 뭔지 아직 이해 못했음
-    #     if message:
-    #         message_date = datetime.datetime.now()
-    #         self.client.send(message.encode(self.FORMAT))
-    #         self.
+    def send_login_id_and_pw_for_login_access(self, login_username, login_pw):
+        sending_message = login_username + '%' + login_pw
+        self.client_socket.send(self.HEADER_LIST[self.login])
+        self.client_socket.recv(self.BUFFER)  # "." 받음
+        self.client_socket.send(sending_message.encode())
+        return_result = self.client_socket.recv(self.BUFFER).decode(self.FORMAT)  # 응답 받기
+        if return_result == 'pass':
+            return True
+        elif return_result == '.':
+            return False
 
-    def start(self):
-        print(f'클라이언트 프로그램 가동 시작 : {datetime.datetime.now()}')
+    def send_message_to_chat_room(self):
+        # todo: send 메시지
+        pass
 
-    def exit(self):
-        print(f'클라이언트 프로그램 종료 시작 : {datetime.datetime.now()}')
+    def send_file_to_chat_room(self):
+        # todo: send 메시지
+        pass
+
+    def receive_message(self):
+        while True:
+            print('시작')
+            # self.return_result = self.client_socket.recv(self.BUFFER).decode(self.FORMAT)
+            return_result = self.client_socket.recv(self.BUFFER).decode(self.FORMAT)
+            response_header = return_result[:self.HEADER_LENGTH].strip()
+            response_data = return_result[self.HEADER_LENGTH:].strip()
+            if response_header == self.assert_username:
+                if response_data == 'pass':
+                    self.client_widget.assert_same_id_siganl.emit(True)
+                elif response_data == '.':
+                    self.client_widget.assert_same_id_siganl.emit(False)

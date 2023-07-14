@@ -9,11 +9,15 @@ from Code.network.server_ui.ui_chat_room import Ui_prototype
 from Code.network.server_ui.ui_server_controller_widget import Ui_server_controller
 from Common.class_json import KKODecoder, KKOEncoder
 from Common.common_module import *
+from PyQt5.QtCore import pyqtSignal
 
 
 class ClientPrototypeWidget(QtWidgets.QWidget, Ui_prototype):
     ENCODED_DOT = bytes('.', 'utf-8')
     ENCODED_PASS = bytes('pass', 'utf-8')
+
+    # signal 클래스 변수
+    assert_same_id_siganl = pyqtSignal(bool)
 
     def __init__(self, client_app):
         super().__init__()
@@ -25,6 +29,12 @@ class ClientPrototypeWidget(QtWidgets.QWidget, Ui_prototype):
         self.set_init_label()
         self.encoder = KKOEncoder()
         self.decoder = KKODecoder()
+        self.set_client_know_each_other()
+        self.assert_same_id_siganl.connect(self.event_assert_same_join_id)
+
+
+    def set_client_know_each_other(self):
+        self.client_app.set_widget(self)
 
     def set_init_label(self):
         self.initialize_app()
@@ -49,9 +59,13 @@ class ClientPrototypeWidget(QtWidgets.QWidget, Ui_prototype):
         self.valid_duplication_id = False
 
     # client function =================================
+    # 클라 -> 서버 아이디 중복 체크 요청
     def assert_same_username(self):
         input_username = self.line_edit_for_join_id.text()
-        return_result = self.client_app.send_join_id_for_assert_same_username(input_username)  # 헤더를 붙이고 보내는 동작(?)
+        self.client_app.send_join_id_for_assert_same_username(input_username)  # 헤더를 붙이고 보내는 동작(?)
+
+    # 서버 -> 클라 아이디 중복 체크 결과 대응
+    def event_assert_same_join_id(self, return_result:bool):
         if return_result is True:
             self.valid_duplication_id = True
             return QtWidgets.QMessageBox.about(self, "가능", "중복 없는 아이디, 써도됌")
