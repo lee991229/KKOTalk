@@ -1,3 +1,4 @@
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import *
 from Code.front.ui.ui_class_profile_page_ui import Ui_profile_page
 
@@ -11,6 +12,8 @@ class ProfilePage(QWidget, Ui_profile_page):
         self.friend_username = None
         self.friend_password = None
         self.friend_nickname = None
+        self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
+
         self.set_btn_trigger()
         if friend_user_obj is not None:
             self.set_profile_user_data(friend_user_obj)
@@ -19,6 +22,11 @@ class ProfilePage(QWidget, Ui_profile_page):
         self.close_btn.clicked.connect(lambda state: self.close())
         self.btn_start_chat.clicked.connect(lambda state: self.open_chat_room_in_item_widget())
 
+    def mousePressEvent(self, event):
+        self.client_controller.mousePressEvent(self, event)
+
+    def mouseMoveEvent(self, event):
+        self.client_controller.mouseMoveEvent(self, event)
     def close(self):
         # 함수 실행전 하고 싶은 기능
         super().close()

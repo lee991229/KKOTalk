@@ -1,7 +1,8 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import *
-from Code.front.ui.ui_class_widget_make_talk_room_ui import Ui_make_talk_room_widget
-from Code.front.widget_invite_member import InviteMemberWidget
+from Code.front.ui.ui_class_widget_talk_room_invite_user_list_in_chat_room import Ui_make_talk_room_widget
+from Code.front.widget_invite_member import InviteUserItem
 
 
 class TalkRoomMemberPlusWidget(QWidget, Ui_make_talk_room_widget):
@@ -12,15 +13,25 @@ class TalkRoomMemberPlusWidget(QWidget, Ui_make_talk_room_widget):
         self.set_btn_trigger()
         self.friend_list = None
         self.obj_list = None
+        self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
 
+
+
+    def mousePressEvent(self, event):
+        self.client_controller.mousePressEvent(self, event)
+
+    def mouseMoveEvent(self, event):
+        self.client_controller.mouseMoveEvent(self, event)
     def show(self):
         # todo: 채팅방에 없는 유저만 있는 리스트로 바꿔
         self.friend_list = []
         self.test1()
-        self.frame.hide()
         super().show()
-
+    def close(self):
+        super().close()
     def set_btn_trigger(self):
+        self.btn_flist_close.clicked.connect(lambda state: self.close())
+        self.close_btn.clicked.connect(lambda state: self.close())
         self.decision_btn.clicked.connect(self.test2)
 
     # todo: 나중에 이름 바꿔
@@ -61,7 +72,7 @@ class TalkRoomMemberPlusWidget(QWidget, Ui_make_talk_room_widget):
         friend_list = self.friend_list
         list_ = []
         for friend in friend_list:
-            friend_profile = InviteMemberWidget(self, friend)
+            friend_profile = InviteUserItem(self, friend)
             list_.append(friend_profile)
             self.invite_member_choice_layout.addWidget(friend_profile)
         self.obj_list = list_

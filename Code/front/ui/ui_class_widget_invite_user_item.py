@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'invite_member_widget_ui.ui'
+# Form implementation generated from reading ui file 'widget_invite_user_item.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #

@@ -3,7 +3,7 @@ from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import *
 from Code.front.ui.ui_class_page_login_ui import Ui_login_widget
 from Code.domain.class_user import User
-from PyQt5.QtCore import Qt, QSize
+from PyQt5.QtCore import Qt
 
 
 class LoginWidget(QWidget, Ui_login_widget):
@@ -11,23 +11,16 @@ class LoginWidget(QWidget, Ui_login_widget):
     def __init__(self, client_controller):
         super().__init__()
         self.setupUi(self)
-        self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
         self.client_controller = client_controller
         self.set_btn_trigger()
         self.set_initial_widget()
-
-    def set_window_drag(self):
-        self.widget.setAttribute(Qt.WA_TranslucentBackground)
+        self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint)
 
     def mousePressEvent(self, event):
-        if event.button() == Qt.LeftButton:
-            self.drag_start_position = event.globalPos() - self.frameGeometry().topLeft()
-            event.accept()
+        self.client_controller.mousePressEvent(self,event)
 
     def mouseMoveEvent(self, event):
-        if event.buttons() == Qt.LeftButton:
-            self.move(event.globalPos() - self.drag_start_position)
-            event.accept()
+        self.client_controller.mouseMoveEvent(self,event)
 
     def set_btn_trigger(self):
         self.btn_login.clicked.connect(self.assert_login)  # 로그인 승인버튼 클릭시 assert_login메서드 발동

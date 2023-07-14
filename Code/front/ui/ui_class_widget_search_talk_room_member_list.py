@@ -11,50 +11,99 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_takl_room_member_widget(object):
-    def setupUi(self, takl_room_member_widget):
-        takl_room_member_widget.setObjectName("takl_room_member_widget")
-        takl_room_member_widget.resize(554, 0)
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(takl_room_member_widget)
+class Ui_talk_room_member_list_widget(object):
+    def setupUi(self, talk_room_member_list_widget):
+        talk_room_member_list_widget.setObjectName("talk_room_member_list_widget")
+        talk_room_member_list_widget.resize(554, 147)
+        talk_room_member_list_widget.setStyleSheet("#talk_room_member_list_widget {\n"
+"    background-color: #75C2F6;\n"
+"    color: #1D5D9B;\n"
+"}\n"
+"\n"
+"\n"
+"QLabel{\n"
+"    color: #1D5D9B;\n"
+"    font: bold 16pt \"나눔고딕\";\n"
+"}\n"
+"\n"
+"QPushButton{\n"
+"    background-color:#F4D160;\n"
+"    color: #1D5D9B;\n"
+"    font: bold 12pt \"나눔고딕\";\n"
+"}\n"
+"\n"
+"QPushButton:hover{\n"
+"    background-color:#FFFF9D;\n"
+"}\n"
+"\n"
+"QPushButton:pressed{\n"
+"    background-color:#FEF5AC;\n"
+"}\n"
+"\n"
+"\n"
+"#label_title{\n"
+"    font: bold 20pt \"나눔고딕\";\n"
+"    color: #F4D160;\n"
+"}\n"
+"\n"
+"#frame_title{\n"
+"    background-color: #1D5D9B;\n"
+"}    \n"
+"QLineEdit{\n"
+"    color: #1D5D9B;\n"
+"    font: bold 12pt \"나눔고딕\";\n"
+"}\n"
+"")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(talk_room_member_list_widget)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
-        self.frame = QtWidgets.QFrame(takl_room_member_widget)
+        self.frame = QtWidgets.QFrame(talk_room_member_list_widget)
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.frame)
         self.horizontalLayout.setObjectName("horizontalLayout")
+        self.label = QtWidgets.QLabel(self.frame)
+        self.label.setObjectName("label")
+        self.horizontalLayout.addWidget(self.label)
         spacerItem = QtWidgets.QSpacerItem(449, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem)
-        self.pushButton = QtWidgets.QPushButton(self.frame)
-        self.pushButton.setObjectName("pushButton")
-        self.horizontalLayout.addWidget(self.pushButton)
+        self.btn_flist_close = QtWidgets.QPushButton(self.frame)
+        self.btn_flist_close.setMinimumSize(QtCore.QSize(30, 30))
+        self.btn_flist_close.setMaximumSize(QtCore.QSize(30, 30))
+        self.btn_flist_close.setText("")
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/newPrefix/x.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btn_flist_close.setIcon(icon)
+        self.btn_flist_close.setObjectName("btn_flist_close")
+        self.horizontalLayout.addWidget(self.btn_flist_close)
         self.verticalLayout.addWidget(self.frame)
-        self.scrollArea = QtWidgets.QScrollArea(takl_room_member_widget)
+        self.scrollArea = QtWidgets.QScrollArea(talk_room_member_list_widget)
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 515, 16))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 532, 69))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.verticalLayout.addWidget(self.scrollArea)
         self.verticalLayout_2.addLayout(self.verticalLayout)
 
-        self.retranslateUi(takl_room_member_widget)
-        QtCore.QMetaObject.connectSlotsByName(takl_room_member_widget)
+        self.retranslateUi(talk_room_member_list_widget)
+        QtCore.QMetaObject.connectSlotsByName(talk_room_member_list_widget)
 
-    def retranslateUi(self, takl_room_member_widget):
+    def retranslateUi(self, talk_room_member_list_widget):
         _translate = QtCore.QCoreApplication.translate
-        takl_room_member_widget.setWindowTitle(_translate("takl_room_member_widget", "Form"))
-        self.pushButton.setText(_translate("takl_room_member_widget", "PushButton"))
+        talk_room_member_list_widget.setWindowTitle(_translate("talk_room_member_list_widget", "Form"))
+        self.label.setText(_translate("talk_room_member_list_widget", "참여 인원 목록"))
+from Code.front.ui import my_qrc_rc
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    takl_room_member_widget = QtWidgets.QWidget()
-    ui = Ui_takl_room_member_widget()
-    ui.setupUi(takl_room_member_widget)
-    takl_room_member_widget.show()
+    talk_room_member_list_widget = QtWidgets.QWidget()
+    ui = Ui_talk_room_member_list_widget()
+    ui.setupUi(talk_room_member_list_widget)
+    talk_room_member_list_widget.show()
     sys.exit(app.exec_())

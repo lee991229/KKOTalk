@@ -1,17 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>takl_room_member_widget</class>
- <widget class="QWidget" name="takl_room_member_widget">
+ <class>talk_room_member_list_widget</class>
+ <widget class="QWidget" name="talk_room_member_list_widget">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>554</width>
-    <height>0</height>
+    <height>147</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">#talk_room_member_list_widget {
+	background-color: #75C2F6;
+	color: #1D5D9B;
+}
+
+
+QLabel{
+	color: #1D5D9B;
+	font: bold 16pt &quot;나눔고딕&quot;;
+}
+
+QPushButton{
+	background-color:#F4D160;
+	color: #1D5D9B;
+	font: bold 12pt &quot;나눔고딕&quot;;
+}
+
+QPushButton:hover{
+	background-color:#FFFF9D;
+}
+
+QPushButton:pressed{
+	background-color:#FEF5AC;
+}
+
+
+#label_title{
+	font: bold 20pt &quot;나눔고딕&quot;;
+	color: #F4D160;
+}
+
+#frame_title{
+	background-color: #1D5D9B;
+}	
+QLineEdit{
+	color: #1D5D9B;
+	font: bold 12pt &quot;나눔고딕&quot;;
+}
+</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -26,6 +67,13 @@
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>참여 인원 목록</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <spacer name="horizontalSpacer">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -39,9 +87,25 @@
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton">
+         <widget class="QPushButton" name="btn_flist_close">
+          <property name="minimumSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
           <property name="text">
-           <string>PushButton</string>
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="../src_img/my_qrc.qrc">
+            <normaloff>:/newPrefix/x.svg</normaloff>:/newPrefix/x.svg</iconset>
           </property>
          </widget>
         </item>
@@ -58,8 +122,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>515</width>
-          <height>16</height>
+          <width>532</width>
+          <height>69</height>
          </rect>
         </property>
        </widget>
@@ -69,6 +133,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../src_img/my_qrc.qrc"/>
+ </resources>
  <connections/>
 </ui>
