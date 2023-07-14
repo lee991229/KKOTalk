@@ -75,7 +75,7 @@ class JoinWidget(QWidget, Ui_join_widget):
             self.show_label_join_warning('이름을 확인하세요')
         else:
             self.client_controller.join_pw = self.lineedit_join_pw.text()
-            self.client_controller.join_ninkname = self.lineedit_join_user_name.text()
+            self.client_controller.join_nickname = self.lineedit_join_user_name.text()
             self.client_controller.join_success()
             # todo: '유저 가입 만들기 '
             self.close()

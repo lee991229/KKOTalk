@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_join_widget(object):
     def setupUi(self, join_widget):
         join_widget.setObjectName("join_widget")
-        join_widget.resize(611, 472)
+        join_widget.resize(611, 421)
         self.verticalLayout = QtWidgets.QVBoxLayout(join_widget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setSpacing(0)

@@ -22,8 +22,8 @@ color: rgb(0, 0, 0);
         self.setGeometry(850, 95, self.width(), self.height())
 
     # def
-    def chat_lineediet_input(self):
-        user_chat = self.lineEdit_4.text()
+    def chat_line_ediet_input(self):
+        user_chat = self.user_chatting_lineedit.text()
         self.chatting_label(user_chat)
         pass
 
@@ -38,4 +38,4 @@ color: rgb(0, 0, 0);
         self.btn_member_plus.clicked.connect(
             self.client_controller.show_member_plus)  # todo: 채팅방에 있는 유저 정보 저장하고 파라미터로 이거 보내
         self.widget_member_count.mousePressEvent = lambda x: (self.client_controller.show_room_member_list())
-        self.input_button.clicked.connect(self.chat_lineediet_input)
+        self.chat_input_button.clicked.connect(self.chat_line_ediet_input)

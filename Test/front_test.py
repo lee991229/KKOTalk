@@ -19,10 +19,14 @@ if __name__ == '__main__':
     conn = DBConnector()
     conn.create_tables()
     # talkroom_1 = TalkRoom(None, 'room1', '1237')
-    talkroom_1 = conn.create_talk_room('room1', '1237')
-    talkroom_2 = conn.create_talk_room('room2', '1237')
-    talkroom_3 = conn.create_talk_room('room3', '1237')
-    talkroom_4 = conn.create_talk_room('room4', '1237')
+    talkroom_1 = TalkRoom(None, 'room1', '1237')
+    talkroom_2 = TalkRoom(None, 'room2', '1237')
+    talkroom_3 = TalkRoom(None, 'room3', '1237')
+    talkroom_4 = TalkRoom(None, 'room4', '1237')
+    talkroom_1 = conn.insert_talk_room(talkroom_1)
+    talkroom_2 = conn.insert_talk_room(talkroom_2)
+    talkroom_3 = conn.insert_talk_room(talkroom_3)
+    talkroom_4 = conn.insert_talk_room(talkroom_4)
 
     user_a = User(None, '1', '123', '뿡뿡이')
     user_b = User(None, '2', '123', '짱구')
@@ -66,16 +70,16 @@ if __name__ == '__main__':
     conn.insert_user_talk_room(UserTalkRoom(None, 2, 2))
     conn.insert_user_talk_room(UserTalkRoom(None, 3, 2))
 
-    users = conn.find_all_user()
-    for u in users:
-        print(u)
+    # users = conn.find_all_user()
+    # for u in users:
+        # print(u)
 
-    print("="*30)
+    # print("="*30)
     # talkrooms = conn.()
     # for u in users:
     #     print(u)
 
-    print("="*30)
+    # print("="*30)
     # user_talk_room_list = conn.find_user
 
     client_controller = WindowController(conn)

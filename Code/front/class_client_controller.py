@@ -29,14 +29,21 @@ class WindowController:
         self.member_plus = TalkRoomMemberPlusWidget(self)
         self.profile_page = ProfilePage(self)
         # self.profilewidget = ProfileWidget(self, self.db_connector)
-        self.all_user = None
-        self.friend_list = None
-        self.login_user_obj = None
-        self.join_id = None
-        self.join_pw = None
-        self.join_ninkname = None
-        self.get_all_user_list()
+        self.all_user = None  # 가입되어있는 모든 유저의 정보
+        self.friend_list = None  # 로그인한 유저의 친구 리스트
+        self.login_user_obj = None  # 로그인한 유저의 정보
+        self.join_id = None  # 회원가입에서 적힌 아이디
+        self.join_pw = None  # 회원가입에서 적힌 비밀번호
+        self.join_nickname = None  # 회원가입에서 적힌 닉네임
+        self.login_user_talk_room = None
+        self.get_all_user_list()  # 유저 정보 가져오는 함수
         self.open_talk_room_widget = list()
+
+    def send_make_talk_room_user_id(self, invite_member_list):
+        # self.db_connector.
+        # todo: 채팅방을 만들때 초대할 유저의 정보, 토크룸의 이름을 보낸다
+        # 토크룸의 아이디를 받아온다
+        pass
 
     def open_talk_room(self):
         # print(TalkRoomWidget(self))
@@ -49,7 +56,8 @@ class WindowController:
         회원가입 성공시
         :return:
         """
-        join_user = User(None, str(self.join_id), str(self.join_pw), str(self.join_ninkname))
+        # 유저가 입력안 id,pw,ninkname
+        join_user = User(None, str(self.join_id), str(self.join_pw), str(self.join_nickname))
         self.db_connector.insert_user(join_user)
         pass
 
@@ -159,7 +167,10 @@ class WindowController:
                 item = widget.layout().takeAt(0)
                 if item.widget():
                     item.widget().deleteLater()
-
+    def get_user_talk_room_list(self, ):
+        login_user_talk_room = self.db_connector.find_user_talk_room_by_user_id(self.login_user_obj.user_id)
+        print(login_user_talk_room)
+        self.login_user_talk_room = login_user_talk_room
     def get_all_user_list(self):
         result_list = self.db_connector.find_all_user()
         self.all_user = result_list

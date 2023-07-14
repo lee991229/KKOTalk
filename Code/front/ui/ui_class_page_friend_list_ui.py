@@ -15,6 +15,8 @@ class Ui_friend_list_widget(object):
     def setupUi(self, friend_list_widget):
         friend_list_widget.setObjectName("friend_list_widget")
         friend_list_widget.resize(600, 850)
+        friend_list_widget.setMinimumSize(QtCore.QSize(600, 850))
+        friend_list_widget.setMaximumSize(QtCore.QSize(600, 850))
         self.verticalLayout = QtWidgets.QVBoxLayout(friend_list_widget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setSpacing(0)
@@ -118,7 +120,7 @@ class Ui_friend_list_widget(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollArea_2.setObjectName("scrollArea_2")
         self.friend_list_area = QtWidgets.QWidget()
-        self.friend_list_area.setGeometry(QtCore.QRect(0, 0, 460, 683))
+        self.friend_list_area.setGeometry(QtCore.QRect(0, 0, 460, 681))
         self.friend_list_area.setObjectName("friend_list_area")
         self.la1 = QtWidgets.QVBoxLayout(self.friend_list_area)
         self.la1.setContentsMargins(0, 0, 0, 0)

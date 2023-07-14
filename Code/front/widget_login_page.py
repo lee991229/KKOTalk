@@ -37,6 +37,7 @@ class LoginWidget(QWidget, Ui_login_widget):
         login_user_obj = self.client_controller.assert_login_data(login_id, login_pw)
 
         if isinstance(login_user_obj, User):
+            self.client_controller.get_user_talk_room_list()
             self.client_controller.show_login_success()
 
     def no_input_id(self):

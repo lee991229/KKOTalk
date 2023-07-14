@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QFrame" name="frame_3">
@@ -149,6 +152,9 @@
             <layout class="QVBoxLayout" name="verticalLayout_2">
              <item>
               <widget class="QWidget" name="widget" native="true">
+               <property name="styleSheet">
+                <string notr="true"/>
+               </property>
                <layout class="QVBoxLayout" name="verticalLayout_4"/>
               </widget>
              </item>
@@ -195,10 +201,10 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_4"/>
+          <widget class="QLineEdit" name="user_chatting_lineedit"/>
          </item>
          <item>
-          <widget class="QPushButton" name="input_button">
+          <widget class="QPushButton" name="chat_input_button">
            <property name="text">
             <string>PushButton</string>
            </property>

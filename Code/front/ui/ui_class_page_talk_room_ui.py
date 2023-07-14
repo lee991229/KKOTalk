@@ -15,6 +15,7 @@ class Ui_talk_room_widget(object):
     def setupUi(self, talk_room_widget):
         talk_room_widget.setObjectName("talk_room_widget")
         talk_room_widget.resize(600, 850)
+        talk_room_widget.setStyleSheet("")
         self.verticalLayout = QtWidgets.QVBoxLayout(talk_room_widget)
         self.verticalLayout.setObjectName("verticalLayout")
         self.frame_3 = QtWidgets.QFrame(talk_room_widget)
@@ -75,6 +76,7 @@ class Ui_talk_room_widget(object):
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.chatting_area)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.widget = QtWidgets.QWidget(self.chatting_area)
+        self.widget.setStyleSheet("")
         self.widget.setObjectName("widget")
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.widget)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
@@ -98,12 +100,12 @@ class Ui_talk_room_widget(object):
         self.pushButton_5 = QtWidgets.QPushButton(self.frame_9)
         self.pushButton_5.setObjectName("pushButton_5")
         self.horizontalLayout_10.addWidget(self.pushButton_5)
-        self.lineEdit_4 = QtWidgets.QLineEdit(self.frame_9)
-        self.lineEdit_4.setObjectName("lineEdit_4")
-        self.horizontalLayout_10.addWidget(self.lineEdit_4)
-        self.input_button = QtWidgets.QPushButton(self.frame_9)
-        self.input_button.setObjectName("input_button")
-        self.horizontalLayout_10.addWidget(self.input_button)
+        self.user_chatting_lineedit = QtWidgets.QLineEdit(self.frame_9)
+        self.user_chatting_lineedit.setObjectName("user_chatting_lineedit")
+        self.horizontalLayout_10.addWidget(self.user_chatting_lineedit)
+        self.chat_input_button = QtWidgets.QPushButton(self.frame_9)
+        self.chat_input_button.setObjectName("chat_input_button")
+        self.horizontalLayout_10.addWidget(self.chat_input_button)
         self.verticalLayout_3.addWidget(self.frame_9)
         self.verticalLayout.addWidget(self.frame_3)
 
@@ -119,7 +121,7 @@ class Ui_talk_room_widget(object):
         self.btn_member_plus.setText(_translate("talk_room_widget", "+"))
         self.pushButton.setText(_translate("talk_room_widget", "x"))
         self.pushButton_5.setText(_translate("talk_room_widget", "PushButton"))
-        self.input_button.setText(_translate("talk_room_widget", "PushButton"))
+        self.chat_input_button.setText(_translate("talk_room_widget", "PushButton"))
 
 
 if __name__ == "__main__":
