@@ -435,11 +435,14 @@ class DBConnector:
     # 회원가입용 함수(insert_user함수 호출)
     def user_sign_up(self, insert_id, insert_pw, nickname):
         useable_id = self.assert_same_login_id(insert_id)
-        if useable_id == False:
+        if useable_id is False:
             return False
         c = self.start_conn()
         last_user_row = c.execute('select * from user order by user_id desc limit 1').fetchone()
-        user_id = last_user_row[0] + 1
+        if last_user_row is None:
+            user_id = 1
+        else:
+            user_id = last_user_row[0] + 1
         sign_up_user_obj = User(user_id, insert_id, insert_pw, nickname)
         self.end_conn()
         sing_up_obj = self.insert_user(sign_up_user_obj)
