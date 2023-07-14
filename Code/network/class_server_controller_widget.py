@@ -13,16 +13,18 @@ from Code.network.server_ui.ui_server_controller_widget import Ui_server_control
 class ServerControllerWidget(QtWidgets.QWidget, Ui_server_controller):
     ENCODED_DOT = bytes('.', 'utf-8')
     ENCODED_PASS = bytes('pass', 'utf-8')
-    LOG_PATH = """C:\\Users\\KDT107\\Desktop\\KKOTalk\\log.txt"""
-    SERVER_STATUS_PATH = """C:\\Users\\KDT107\\Desktop\\KKOTalk\\server_status.txt"""
+
+    LOG_PATH = """C:\\Users\\KDT115\\Desktop\\KKOTalk\\log.txt"""
+    SERVER_STATUS_PATH = """C:\\Users\\KDT115\\Desktop\\KKOTalk\\server_status.txt"""
 
     @staticmethod
     def save_server_log():
-        os.system("""C:\\Users\\KDT107\\Desktop\\KKOTalk\\Code\\network\\server_logger.bat""")
+        os.system("""C:\\Users\\KDT115\\Desktop\\KKOTalk\\Code\\network\\server_logger.bat""")
 
     @staticmethod
     def check_netstat_via_cmd():
-        os.system("""C:\\Users\\KDT107\\Desktop\\KKOTalk\\Code\\network\\check_server_on.bat""")
+        os.system("""C:\\Users\\KDT115\\Desktop\\KKOTalk\\Code\\network\\check_server_on.bat""")
+
 
     def __init__(self, server_obj, db_connector):
         super().__init__()
@@ -144,7 +146,6 @@ class ServerControllerWidget(QtWidgets.QWidget, Ui_server_controller):
         print(log_msg)
         self.get_last_time_server_and_set_label()
         self.label_start_time.setText("-")
-        # temp_time = QtCore.QTimer(self)s self.task_server_kill())
 
     def task_server_kill(self):
         last_line = None
@@ -152,6 +153,7 @@ class ServerControllerWidget(QtWidgets.QWidget, Ui_server_controller):
         with open(self.SERVER_STATUS_PATH, "r", encoding="utf-8") as file:
             last_line = file.readline().split("\n")[0].split(' ')[-2].strip()
             os.system(f"taskkill /pid {last_line}")
+
 
     def assert_same_join_id(self, input_username):
         return self.db_conn.assert_same_login_id(input_username)

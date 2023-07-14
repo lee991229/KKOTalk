@@ -2,6 +2,9 @@ import os
 from multiprocessing import Process
 from socket import *
 from threading import Thread, Event
+from Common.class_json import *
+
+
 
 import select
 
@@ -17,11 +20,15 @@ class Server:
 
     assert_username = f"{'assert_username':<{HEADER_LENGTH}}"
     join_user = f"{'join_user':<{HEADER_LENGTH}}"
-    login = "login"
+    login = f"{'login':<{HEADER_LENGTH}}"
+    enter_square = f"{'enter_square':<{HEADER_LENGTH}}"
+    all_user_list = f"{'all_user_list':<{HEADER_LENGTH}}"
+    user_talk_room_list = f"{'user_talk_room_list':<{HEADER_LENGTH}}"
     send_msg_c_room = "send_msg_c_room"
     send_alarm_c_room = "send_alarm_c_room"
-    pass_encoded = f"{'pass':<{1024-HEADER_LENGTH}}".encode(FORMAT)
-    dot_encoded = f"{'.':<{1024-HEADER_LENGTH}}".encode(FORMAT)
+    pass_encoded = f"{'pass':<{BUFFER-HEADER_LENGTH}}".encode(FORMAT)
+    dot_encoded = f"{'.':<{BUFFER-HEADER_LENGTH}}".encode(FORMAT)
+
 
     HEADER_LIST = {
         assert_username: assert_username.encode(FORMAT),
@@ -40,6 +47,10 @@ class Server:
         self.clients = dict()
         self.thread_for_run = None
         self.run_signal = True
+
+        self.decoder = KKODecoder()
+        self.encoder = KKOEncoder()
+
 
     def set_config(self, configure):
         self.config = configure
@@ -61,7 +72,6 @@ class Server:
         self.run_signal = False
         if self.thread_for_run is not None:
             self.thread_for_run.join()
-        # if self.server_socket.
         self.server_socket.close()
         self.thread_for_run = None
 
@@ -106,8 +116,72 @@ class Server:
                 if result is True:
                     response_header = self.assert_username.encode(self.FORMAT)
                     client_socket.send(response_header + self.pass_encoded)
+                elif result is False:
+                    response_header = self.assert_username.encode(self.FORMAT)
+                    client_socket.send(response_header + self.dot_encoded)
             # 회원가입
             elif request_header == self.join_user.strip():
-                result = self.db_conn.user_sign_up()
+                object_ = self.decoder.decode_any(request_data)
+                result = self.db_conn.user_sign_up(object_.username, object_.password, object_.nickname)
+                if result is False:
+                    response_header = self.join_user.encode(self.FORMAT)
+                    client_socket.send(response_header + self.dot_encoded)
+                else:
+                    response_header = self.join_user.encode(self.FORMAT)
+                    client_socket.send(response_header + self.pass_encoded)
+            # 로그인
+            elif request_header == self.login.strip():
+                print('로그인 버튼시')
+                object_ = self.decoder.decode_any(request_data)
+                result = self.db_conn.user_log_in(object_.username, object_.password)
+                if result is False:
+                    response_header = self.login.encode(self.FORMAT)
+                    client_socket.send(response_header + self.dot_encoded)
+                else:
+                    response_header = self.login.encode(self.FORMAT)
+                    result_str = result.toJSON()
+                    result_data = f"{result_str:<{self.BUFFER - self.HEADER_LENGTH}}".encode(self.FORMAT)
+                    client_socket.send(response_header + result_data)
+            # 필수 단톡방 입장
+            elif request_header == self.enter_square.strip():
+                room = self.db_conn.find_user_by_talk_room_id(1)
+                object_ = self.decoder.decode_any(request_data)
+                # 해당 톡방에 유저가 이미 존재하는지 확인
+                # 리스트가 None값이면 자동으로 유저를 insert되게 한다
+                response_header = self.enter_square.encode(self.FORMAT)
+                if room is None:
+                    object_user_talk_room = UserTalkRoom(None, object_.user_id, 1)
+                    self.db_conn.insert_user_talk_room(object_user_talk_room)
+                # 최초 입장인지 아닌지
+                elif object_ not in room:
+                    objcet_ = self.decoder.decode_any(request_data)
+                    object_user_talk_room = UserTalkRoom(None, objcet_.user_id, 1)
+                    self.db_conn.insert_user_talk_room(object_user_talk_room)
+                client_socket.send(response_header + self.pass_encoded)
+            # 본인 제외 모든 유저 보내기
+            elif request_header == self.all_user_list.strip():
+                response_header = self.all_user_list.encode(self.FORMAT)
+                object_ = self.decoder.decode_any(request_data)
+                result = self.db_conn.find_all_user()
+                if result is None:
+                    client_socket.send(response_header + self.dot_encoded)
+                else:
+                    result.remove(object_)
+                    result_str = self.encoder.encode(result)
+                    return_result = result_str.encode(self.FORMAT)
+                    client_socket.send(response_header + return_result)
+            # 채팅방 리스트 보내기
+            elif request_header == self.user_talk_room_list.strip():
+                response_header = self.user_talk_room_list.encode(self.FORMAT)
+                object_ = self.decoder.decode_any(request_data)
+                result = self.db_conn.find_user_talk_room_by_user_id(object_.user_id)
+                for i in result:
+                    room_list = list()
+                    room_list.append(self.db_conn.find_talk_room_by_talk_room_id(i.talk_room_id))
+                room_list_str = self.encoder.encode(room_list)
+                return_result = room_list_str.encode(self.FORMAT)
+                client_socket.send(response_header + return_result)
+
+
         except:
             return False
