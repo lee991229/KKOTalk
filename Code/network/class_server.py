@@ -4,8 +4,6 @@ from socket import *
 from threading import Thread, Event
 from Common.class_json import *
 
-
-
 import select
 
 from Code.domain.class_db_connector import DBConnector
@@ -24,11 +22,13 @@ class Server:
     enter_square = f"{'enter_square':<{HEADER_LENGTH}}"
     all_user_list = f"{'all_user_list':<{HEADER_LENGTH}}"
     user_talk_room_list = f"{'user_talk_room_list':<{HEADER_LENGTH}}"
+    talk_room_user_list_se = f"{'talk_room_user_list_se':<{HEADER_LENGTH}}"
+    out_talk_room = f"{'out_talk_room':<{HEADER_LENGTH}}"
+    send_msg_se = f"{'send_msg_se':<{HEADER_LENGTH}}"
     send_msg_c_room = "send_msg_c_room"
     send_alarm_c_room = "send_alarm_c_room"
-    pass_encoded = f"{'pass':<{BUFFER-HEADER_LENGTH}}".encode(FORMAT)
-    dot_encoded = f"{'.':<{BUFFER-HEADER_LENGTH}}".encode(FORMAT)
-
+    pass_encoded = f"{'pass':<{BUFFER - HEADER_LENGTH}}".encode(FORMAT)
+    dot_encoded = f"{'.':<{BUFFER - HEADER_LENGTH}}".encode(FORMAT)
 
     HEADER_LIST = {
         assert_username: assert_username.encode(FORMAT),
@@ -38,7 +38,7 @@ class Server:
         send_alarm_c_room: send_alarm_c_room.encode(FORMAT),
     }
 
-    def __init__(self, db_conn:DBConnector):
+    def __init__(self, db_conn: DBConnector):
         # 서버 소켓 설정
         self.db_conn = db_conn
         self.server_socket = None
@@ -50,7 +50,6 @@ class Server:
 
         self.decoder = KKODecoder()
         self.encoder = KKOEncoder()
-
 
     def set_config(self, configure):
         self.config = configure
@@ -100,12 +99,11 @@ class Server:
                         del self.clients[notified_socket]
                         continue
 
-
             for notified_socket in exception_sockets:
                 self.sockets_list.remove(notified_socket)
                 del self.clients[notified_socket]
 
-    def receive_message(self, client_socket:socket):
+    def receive_message(self, client_socket: socket):
         try:
             recv_message = client_socket.recv(self.BUFFER)
             request_header = recv_message[:self.HEADER_LENGTH].strip().decode(self.FORMAT)
@@ -175,13 +173,52 @@ class Server:
                 response_header = self.user_talk_room_list.encode(self.FORMAT)
                 object_ = self.decoder.decode_any(request_data)
                 result = self.db_conn.find_user_talk_room_by_user_id(object_.user_id)
+                room_list = list()
                 for i in result:
-                    room_list = list()
                     room_list.append(self.db_conn.find_talk_room_by_talk_room_id(i.talk_room_id))
                 room_list_str = self.encoder.encode(room_list)
                 return_result = room_list_str.encode(self.FORMAT)
                 client_socket.send(response_header + return_result)
 
+            # 톡방에 참여하고 있는 유저 객체 보내기
+            elif request_header == self.talk_room_user_list_se.strip():
+                response_header = self.talk_room_user_list_se.encode(self.FORMAT)
+                obj_ = self.decoder.decode_any(request_data)
+                # 확인 후 인자 지워
+                user_obj_list = self.db_conn.find_user_by_talk_room_id(obj_.talk_room_id)
+                if user_obj_list is None:
+                    client_socket.send(response_header + self.dot_encoded)
+                else:
+                    user_obj_list_str = self.encoder.encode(user_obj_list)
+                    return_result = user_obj_list_str.encode(self.FORMAT)
+                    client_socket.send(response_header + return_result)
 
+            # 채팅방 나가기
+            elif request_header == self.out_talk_room.strip():
+                response_header = self.out_talk_room.encode(self.FORMAT)
+                obj_ = self.decoder.decode_any(request_data)
+                self.db_conn.delete_user_talk_room_by_user_id_and_talk_room_id(obj_.user_id, obj_.talk_room_id)
+                client_socket.send(response_header + self.pass_encoded)
+
+            # 발신자 제외한 해당 채팅방에 있는 모든 클라이언트에게 메시지 전송
+            # 메시지 db 저장
+            elif request_header == self.send_msg_se.strip():
+                response_header = self.send_msg_se.encode(self.FORMAT)
+                obj_ = self.decoder.decode_any(request_data)
+                print(obj_.message_id)
+                print(obj_.sender_user_id)
+                print(obj_.talk_room_id)
+                print(obj_.send_time_stamp)
+                print(obj_.contents)
+                print(obj_.long_contents_id)
+                print(type(obj_.contents))
+                print(obj_.user_obj)
+                # 메시지 내용 db에 저장
+                self.db_conn.insert_message(obj_.user_id, obj_.talk_room_id, obj_.send_time_stamp, obj_.contents, obj_.long_contents_id)
+                print(1)
+                result = self.db_conn.find_user_by_talk_room_id(obj_.talk_room_id)
+                result.remove(obj_.user_obj)
+                for i in result:
+                    print(type(i))
         except:
             return False
