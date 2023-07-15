@@ -43,7 +43,7 @@ class KKODecoder(JSONDecoder):
     def __init__(self):
         super().__init__()
 
-    def decode_any(self, o):
+    def decode_any(self, o, **kwargs):
         o: str
         if o.startswith("["):  # list type
             list_type_obj = json.loads(o)
@@ -54,13 +54,12 @@ class KKODecoder(JSONDecoder):
             return temp_list
 
         else:
-            print(o)
-            return self.decode_obj(o)
+            return self.decode_obj(o, **kwargs)
 
-    def decode_obj(self, o):
+    def decode_obj(self, o, **kwargs):
         try:
-            dict_obj = self.decode(o)
-        except Exception:
+            dict_obj = super().decode(o, **kwargs)
+        except:
             dict_obj = o
         if 'user_talk_room_id' in dict_obj.keys():
             return UserTalkRoom(dict_obj['user_talk_room_id'], dict_obj['user_id'], dict_obj['talk_room_id'])
