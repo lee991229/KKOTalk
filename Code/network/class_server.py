@@ -165,9 +165,7 @@ class Server:
                 else:
                     result.remove(object_)
                     result_str = self.encoder.encode(result)
-                    print('전' , len(result_str))
                     return_result = result_str.encode(self.FORMAT)
-                    print('후', len(return_result))
                     client_socket.send(response_header + return_result)
 
             # 채팅방 리스트 보내기
@@ -207,8 +205,10 @@ class Server:
             elif request_header == self.send_msg_se.strip():
                 response_header = self.send_msg_se.encode(self.FORMAT)
                 obj_ = self.decoder.decode_any(request_data)
+                print(obj_)
                 # 메시지 내용 db에 저장
-                self.db_conn.insert_message(obj_.sender_user_id, obj_.talk_room_id, obj_.send_time_stamp, obj_.contents, obj_.long_contents_id)
+                self.db_conn.insert_message(obj_.sender_user_id, obj_.talk_room_id, obj_.send_time_stamp, obj_.contents,
+                                            obj_.long_contents_id)
                 socket_list = self.sockets_list.copy()
                 socket_list.remove(self.server_socket)
                 return_result = request_data.encode(self.FORMAT)

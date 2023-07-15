@@ -29,6 +29,7 @@ class ClientPrototypeWidget(QtWidgets.QWidget, Ui_prototype):
     send_msg_se_signal = pyqtSignal(str)
     invite_user_talk_room_signal = pyqtSignal(bool)
     make_talk_room_signal = pyqtSignal(bool)
+    talk_room_msg_signal = pyqtSignal(str)
 
     def __init__(self, client_app):
         super().__init__()
@@ -53,6 +54,7 @@ class ClientPrototypeWidget(QtWidgets.QWidget, Ui_prototype):
         self.send_msg_se_signal.connect(self.send_msg_se_res)
         self.invite_user_talk_room_signal.connect(self.invite_user_talk_room_res)
         self.make_talk_room_signal.connect(self.make_talk_room_res)
+        self.talk_room_msg_signal.connect(self.talk_room_msg_res)
 
     def set_client_know_each_other(self):
         self.client_app.set_widget(self)
@@ -217,13 +219,17 @@ class ClientPrototypeWidget(QtWidgets.QWidget, Ui_prototype):
     def make_talk_room_res(self, return_result: bool):
         print('개설완료')
         # 단톡방 리스트 갱신하는 파일 만들기
-    
-    # 채팅방 입장시 클라 -> 서버 내용 전송
+
+    # 채팅방 입장시 클라 -> 서버 이전 message 내용 전송
     def talk_room_msg(self):
         self.client_app.send_talk_room_msg(talk_room_id=1)
-
-    def talk_room_msg_res(self, return_result: list):
-        pass
+    
+    # 서버 -> 클라 message obj 내용 받기
+    def talk_room_msg_res(self, return_result: str):
+        room_msg = self.decoder.decode_any(return_result)
+        # 오브젝트들 잘 나오는지 확인
+        for i in room_msg:
+            print(i)
 
     def send_file_to_chat_room(self):
         save_excel_dialog = QtWidgets.QMessageBox.question(self, "파일 업로드", "파일을 업로드합니까?")
@@ -231,4 +237,3 @@ class ClientPrototypeWidget(QtWidgets.QWidget, Ui_prototype):
             save_path_file_name, _, = QtWidgets.QFileDialog.getSaveFileName(self, '파일 저장', './')
             print(f"{save_path_file_name} send 로직 실행")
         # todo: send 메시지
-
