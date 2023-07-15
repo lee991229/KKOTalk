@@ -16,8 +16,9 @@ class ChatRoomItemWidget(QWidget, Ui_chat_room_item_widget):
 
 
     def press_signal(self):
-        # todo: 해당 프로필 유저 id보내기
+
         self.profile.mouseDoubleClickEvent = lambda x: self.talk_room_list_widget.client_controller.show_talk_room(self.talk_room_id)
+        # , self.talk_room_list_widget.client_controller.uninvited_friend_list(self.talk_room_id))
 
     def set_label_text(self):
         self.profile_name_label.setText(f'채팅방 아이디: {self.talk_room_id}')

@@ -21,6 +21,7 @@ color: rgb(0, 0, 0);
         self.client_controller = client_controller
         self.talk_room_id = talk_room_id
         self.talk_room_member_user_list = list()
+
         self.set_btn_trigger()
         self.setGeometry(850, 95, self.width(), self.height())
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
@@ -64,8 +65,8 @@ color: rgb(0, 0, 0);
             self.widget.layout().addWidget(chat)
 
     def set_btn_trigger(self):
-        self.btn_member_plus.clicked.connect(
-            self.client_controller.show_member_plus)  # todo: 채팅방에 있는 유저 정보 저장하고 파라미터로 이거 보내
+        self.btn_member_plus.clicked.connect(lambda state:
+            self.client_controller.show_member_plus())  # todo: 채팅방에 있는 유저 정보 저장하고 파라미터로 이거 보내
         self.widget_member_count.mouseDoubleClickEvent = lambda x: (self.client_controller.show_room_member_list())
         self.btn_chat_enter.clicked.connect(self.chat_line_edit_input)
         self.btn_flist_close.clicked.connect(lambda state: self.close())

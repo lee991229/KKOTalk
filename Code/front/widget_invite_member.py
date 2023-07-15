@@ -14,8 +14,9 @@ class InviteUserItem(QWidget, Ui_invite_member_widget):
         self.nickname = friend_data.nickname
         self.name = friend_data.username
         self.set_label_text()
+
     def set_btn_trigger(self):
-        self.check_btn.clicked.connect(lambda state: self.refresh_count_label())
+        self.check_btn.clicked.connect(lambda state: (self.refresh_count_label(),self.refresh_user_nickname_list_label()))
     def refresh_count_label(self):
         result_number = self.invite_talk_room_widget.count_checked_user()
         self.invite_talk_room_widget.label_user_count.setText(f"{result_number}명")
@@ -25,6 +26,15 @@ class InviteUserItem(QWidget, Ui_invite_member_widget):
         # else:
         #     self.invite_talk_room_widget.btn_is_chacked_check_false(self)
         #     #클릭이아니면
+    def refresh_user_nickname_list_label(self):
+        result_nickname = self.invite_talk_room_widget.refresh_user_nickname_list_label()
+        result_str = ', '.join(result_nickname)
+        if len(result_str) < 12:
+            self.invite_talk_room_widget.label_invite_user_nickname_list.setText(f"닉네임 리스트:{result_str[:12]}")
+        elif len(result_str) >= 12:
+            self.invite_talk_room_widget.label_invite_user_nickname_list.setText(f"닉네임 리스트:{result_str[:12]} ..")
+        # self.invite_talk_room_widget.label_invite_user_nickname_list.setText(format("닉네임 리스트:{}"), (*result_nickname))
+    #
     def set_label_text(self):
         self.user_nickname_label.setText(self.nickname)
 

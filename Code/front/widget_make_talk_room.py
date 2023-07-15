@@ -30,6 +30,14 @@ class InviteFriendListWidget(QWidget, Ui_make_talk_room_widget):
                 count += 1
         return count
 
+    def refresh_user_nickname_list_label(self):
+        invite_user_nickname_list = list()
+        for w in self.user_item_widget_list:
+            if w.is_btn_checked():
+                user_nickname = w.get_nickname()
+                invite_user_nickname_list.append(user_nickname)
+        return invite_user_nickname_list
+
     def mousePressEvent(self, event):
         self.client_controller.mousePressEvent(self, event)
 
@@ -42,7 +50,7 @@ class InviteFriendListWidget(QWidget, Ui_make_talk_room_widget):
         super().show()
 
     def set_friend_list(self):
-        #todo : 친구 리스트 갱신해서 집어넣기
+        # todo : 친구 리스트 갱신해서 집어넣기
         self.friend_list = self.client_controller.friend_list
 
     def close(self):

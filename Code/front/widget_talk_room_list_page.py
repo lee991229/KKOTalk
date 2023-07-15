@@ -16,34 +16,32 @@ class TalkRoomListWidget(QWidget, Ui_tk_room_list_widget):
         self.setGeometry(250, 95, self.width(), self.height())
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
 
-
-
     def mousePressEvent(self, event):
         self.client_controller.mousePressEvent(self, event)
 
     def mouseMoveEvent(self, event):
         self.client_controller.mouseMoveEvent(self, event)
+
     def show(self):
         self.set_initial_widget()
         self.get_chat_room_list()
         super().show()
+
     def set_initial_widget(self):
         self.talk_list_page_search_bar_2.hide()
         self.btn_tkroom_search.hide()
         self.talk_list_page_search_bar_2.hide()
         # self.talk_list_page_search_bar_1.hide()
+
     def close(self):
         self.client_controller.clear_widget(self.tkroom_list_area)
 
         super().close()
 
-
-
     def set_btn_trigger(self):
-        self.btn_friend_list_page.clicked.connect(lambda x: (self.client_controller.show_friend_list(), self.page_close()))
+        self.btn_friend_list_page.clicked.connect(lambda x: (self.client_controller.show_friend_list(), self.close()))
         self.btn_tallk_room_make.clicked.connect(self.client_controller.show_make_talk_room)
         self.btn_tkroom_close.clicked.connect(lambda state: self.close())
-
 
     def get_chat_room_list(self):
         talk_room_list = self.client_controller.saved_talk_room_list.copy()
