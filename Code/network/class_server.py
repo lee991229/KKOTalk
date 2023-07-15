@@ -25,7 +25,7 @@ class Server:
     talk_room_user_list_se = f"{'talk_room_user_list_se':<{HEADER_LENGTH}}"
     out_talk_room = f"{'out_talk_room':<{HEADER_LENGTH}}"
     send_msg_se = f"{'send_msg_se':<{HEADER_LENGTH}}"
-    invite_user_talk_room = f"{'invite_user_talk_room_res':<{HEADER_LENGTH}}"
+    invite_user_talk_room = f"{'invite_user_talk_room':<{HEADER_LENGTH}}"
     make_talk_room = f"{'make_talk_room':<{HEADER_LENGTH}}"
     talk_room_msg = f"{'talk_room_msg':<{HEADER_LENGTH}}"
     pass_encoded = f"{'pass':<{BUFFER - HEADER_LENGTH}}".encode(FORMAT)
@@ -222,11 +222,20 @@ class Server:
                 client_socket.send(response_header + self.pass_encoded)
 
             # 방 만들기 요처
+            # json converting 안됨..
             elif request_header == self.make_talk_room.strip():
                 response_header = self.make_talk_room.encode(self.FORMAT)
                 obj_ = self.decoder.decode_any(request_data)
-                self.db_conn.insert_talk_room(obj_)
-                client_socket.send(response_header + self.pass_encoded)
+                created_talk_room_obj = self.db_conn.insert_talk_room(obj_)
+                created_talk_room_obj_str = created_talk_room_obj.toJSON()
+                print(created_talk_room_obj_str)
+                header_bytearray = bytearray(self.HEADER_LENGTH)
+                response_bytearray = bytearray(self.BUFFER - self.HEADER_LENGTH)
+                header_bytearray.extend(response_header)
+                response_bytearray.extend(created_talk_room_obj_str)
+                result = header_bytearray + response_bytearray
+                print(result)
+                client_socket.send(result)
 
             # 이전 메시지 불러오기
             elif request_header == self.talk_room_msg.strip():
@@ -238,3 +247,19 @@ class Server:
                 client_socket.send(response_header + return_result)
         except:
             return False
+
+    def fixed_volume(self, header, data):
+        header_msg = f"{header:<{self.HEADER_LENGTH}}".encode(self.FORMAT)
+        data_msg = f"{data:<{self.BUFFER - self.HEADER_LENGTH}}".encode(self.FORMAT)
+        return header_msg + data_msg
+
+if __name__ == '__main__':
+    header = 'some_header'.encode('utf-8')
+    data = 'data'.encode('utf-8')
+    fix_length = 30
+    sample_bytearray= bytearray(fix_length)
+    sample_bytearray2= bytearray(fix_length)
+    sample_bytearray.extend(header)
+    sample_bytearray2.extend(data)
+
+    print(sample_bytearray+sample_bytearray2)

@@ -18,7 +18,10 @@ def get_now_time_str():
 
 
 def get_subtract_time(str_start_timestamp):
-    parsed_datetime = datetime.strptime(str_start_timestamp, "%Y-%m-%d %H:%M:%S")
+    try:
+        parsed_datetime = datetime.strptime(str_start_timestamp, "%Y-%m-%d %H:%M:%S")
+    except:
+        return '알수 없는 시간'
     now_time = datetime.now()
     result_time_delta = now_time - parsed_datetime
     return f"{result_time_delta.min}"

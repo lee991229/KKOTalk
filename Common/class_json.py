@@ -61,6 +61,7 @@ class KKODecoder(JSONDecoder):
             dict_obj = super().decode(o, **kwargs)
         except:
             dict_obj = o
+
         if 'user_talk_room_id' in dict_obj.keys():
             return UserTalkRoom(dict_obj['user_talk_room_id'], dict_obj['user_id'], dict_obj['talk_room_id'])
         elif 'user_id' in dict_obj.keys():

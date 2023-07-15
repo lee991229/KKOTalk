@@ -12,11 +12,11 @@ from PyQt5.QtCore import Qt
 class TalkRoomWidget(QWidget, Ui_talk_room_widget):
 
     def __init__(self, client_controller, talk_room_id):
+        assert isinstance(talk_room_id, int)
         super().__init__()
         self.setupUi(self)
         self.client_controller = client_controller
         self.talk_room_id = talk_room_id
-        self.talk_room_member_user_list = list()
         self.talk_room = None
         self.set_btn_trigger()
         self.setGeometry(850, 95, self.width(), self.height())
@@ -27,18 +27,25 @@ class TalkRoomWidget(QWidget, Ui_talk_room_widget):
 
     def set_chat_room_title(self):
         # todo: talk_room 방 이름 갱신 로직
-        self.talk_room = self.client_controller.get_talk_by_room_id(self.talk_room_id)
+        self.talk_room = self.client_controller.get_talk_room_by_room_id(self.talk_room_id)
         self.label_title.setText(f"{self.talk_room.talk_room_name}")
 
     def show(self):
         # todo: talk_room 메시지를 갱신하는 로직
         # todo: talk_room 멤버를 갱신하는 로직
         self.set_chat_room_title()
+        self.client_controller.clear_widget(self.widget)
+        self.set_messages_on_scroll()
         super().show()
+
+    def set_messages_on_scroll(self):
+        message_list = self.client_controller.get_message_list(self.talk_room_id)
+        for msg in message_list:
+            self.insert_chatting_label_in_scroll_page(msg)
+
 
     def close(self):
         self.talk_room_id = None
-        self.talk_room_member_user_list.clear()
         super().close()
 
     def mousePressEvent(self, event):
@@ -55,7 +62,7 @@ class TalkRoomWidget(QWidget, Ui_talk_room_widget):
         user_id = self.client_controller.client_app.user_id
         now_time_str = Common.common_module.get_now_time_str()
         message_obj = Message(None, user_id, self.talk_room_id, now_time_str, user_chat, None)
-        self.insert_chatting_label_in_scroll_page(message_obj)
+        # self.insert_chatting_label_in_scroll_page(message_obj)
         self.client_controller.send_msg_se(self.talk_room_id, user_chat)
 
     def insert_chatting_label_in_scroll_page(self, message_obj: Message):

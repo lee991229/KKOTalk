@@ -20,7 +20,8 @@ class ChatRoomItemWidget(QWidget, Ui_chat_room_item_widget):
         self.profile_name_label.setText(self.talk_room_obj.talk_room_name)
 
     def press_signal(self):
-        self.profile.mouseDoubleClickEvent = lambda x: self.talk_room_list_widget.client_controller.show_talk_room(self.talk_room_obj)
+        self.profile.mouseDoubleClickEvent = lambda x: self.talk_room_list_widget.client_controller.show_talk_room(
+            self.talk_room_obj.talk_room_id)
         # , self.talk_room_list_widget.client_controller.uninvited_friend_list(self.talk_room_id))
 
     # def set_label_text(self):

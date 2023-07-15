@@ -28,7 +28,7 @@ class ClientPrototypeWidget(QtWidgets.QWidget, Ui_prototype):
     out_talk_room_signal = pyqtSignal(bool)
     send_msg_se_signal = pyqtSignal(str)
     invite_user_talk_room_signal = pyqtSignal(bool)
-    make_talk_room_signal = pyqtSignal(bool)
+    make_talk_room_signal = pyqtSignal(int)
     talk_room_msg_signal = pyqtSignal(str)
 
     def __init__(self, client_app):

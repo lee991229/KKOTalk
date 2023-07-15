@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtGui import QIcon, QPixmap, QCursor
 from PyQt5.QtWidgets import *
 from Code.front.ui.ui_class_page_login_ui import Ui_login_widget
 from Code.domain.class_user import User
@@ -26,6 +26,12 @@ class LoginWidget(QWidget, Ui_login_widget):
         self.btn_login.clicked.connect(self.assert_login)  # 로그인 승인버튼 클릭시 assert_login메서드 발동
         self.btn_join.clicked.connect(self.assert_join)
         self.btn_close.clicked.connect(lambda state: self.close())
+
+        self.line_edit_id.returnPressed.connect(lambda : self.move_cursor())
+        self.line_edit_pw.returnPressed.connect(lambda : self.assert_login())
+
+    def move_cursor(self):
+        self.line_edit_pw.setFocus()
 
     def set_initial_widget(self):
         self.label_warning.hide()

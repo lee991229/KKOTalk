@@ -12,14 +12,14 @@ class TalkRoomMemberPlusWidget(QWidget, Ui_make_talk_room_widget):
         self.client_controller = client_controller
         self.set_btn_trigger()
         self.friend_list = None
-        self.talk_room_uninvite_user_list = list()
+        self.not_invited_user_list = list()
         self.user_item_widget_list = None
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
 
-    def set_talk_room_uninvite_user_list(self):
-        self.talk_room_uninvite_user_list = self.client_controller.talk_room_uninvite_user_list
-        print(self.talk_room_uninvite_user_list, '여기야 2')
-        # self.talk_room_uninvite_user_list = uninvited_user_list
+    def set_not_invited_user_list(self):
+        self.not_invited_user_list.clear()
+        all_user_list = self.client_controller.get_all_user_list()
+        # invited_user_list =
 
     def count_checked_user(self):
         count = 0
@@ -36,7 +36,7 @@ class TalkRoomMemberPlusWidget(QWidget, Ui_make_talk_room_widget):
 
     def show(self):
         # todo: 채팅방에 없는 유저만 있는 리스트로 바꿔
-        self.set_talk_room_uninvite_user_list()
+        self.set_not_invited_user_list()
         self.set_user_item_widget_to_scroll_layout()
         super().show()
 
@@ -94,7 +94,7 @@ class TalkRoomMemberPlusWidget(QWidget, Ui_make_talk_room_widget):
     def set_user_item_widget_to_scroll_layout(self):
         self.client_controller.clear_widget(self.invite_member_choice)  # 위젯 비우기
 
-        talk_room_uninvite_user_list = self.talk_room_uninvite_user_list
+        talk_room_uninvite_user_list = self.not_invited_user_list
         list_ = []
         for uninvite_user in talk_room_uninvite_user_list:
             user_profile = InviteUserItem(self, uninvite_user)

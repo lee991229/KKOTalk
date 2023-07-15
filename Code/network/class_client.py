@@ -1,5 +1,6 @@
 import datetime
 import socket
+import time
 from threading import *
 
 from Code.domain.class_message import Message
@@ -30,6 +31,7 @@ class ClientApp:
     talk_room_msg = 'talk_room_msg'
     send_msg_c_room = "send_msg_c_room"
     send_alarm_c_room = "send_alarm_c_room"
+    send_ = "send_alarm_c_room"
 
     HEADER_LIST = {
         assert_username: assert_username.encode(FORMAT),
@@ -55,11 +57,12 @@ class ClientApp:
         self.receive_thread = Thread(target=self.receive_message)
         self.receive_thread.daemon = True
         self.receive_thread.start()
-        self.talk_room_list = list()
+        self.talk_room_list_in_memory = list()
         self.client_widget = None
         self.decoder = KKODecoder()
         self.all_user_list_in_memory = list()
-
+        self.selected_talk_room_id = 1
+        self.buffer_guest_list = None
 
         #
 
@@ -73,13 +76,22 @@ class ClientApp:
 
     def get_user_by_id(self, user_id):
         find_list = [x for x in self.all_user_list_in_memory if x.user_id == user_id]
-        found_user= find_list[0]
+        found_user = find_list[0]
         return found_user
 
-    def get_talk_by_room_id(self, talk_room_id):
-        find_list = [x for x in self.talk_room_list if x.talk_room_id == talk_room_id]
-        found_talk_room = find_list[0]
+    def get_talk_room_by_room_id(self, talk_room_id: int):
+        assert isinstance(talk_room_id, int)
+        result = None
+        for talk_room in self.talk_room_list_in_memory:
+            temp_num = talk_room.talk_room_id
+            if temp_num == talk_room_id:
+                result = talk_room
+                break
+        if result is None:
+            raise '결과 찾기 실패'
+        found_talk_room = result
         return found_talk_room
+
     def send_join_id_for_assert_same_username(self, input_username: str):
         data_msg = f"{input_username:<{self.BUFFER - self.HEADER_LENGTH}}".encode(self.FORMAT)
         data_msg_length = len(data_msg)
@@ -125,6 +137,12 @@ class ClientApp:
         self.client_socket.send(result)
 
     def send_talk_room_user_list_se(self, talk_room_id):
+        """
+        해당 방 정보 유저 갱신
+        :param talk_room_id:
+        :return:
+        """
+        self.selected_talk_room_id = talk_room_id  # 해당 선택된 톡방 저장
         user_talk_room_obj = UserTalkRoom(None, self.user_id, talk_room_id)
         user_talk_room_obj_str = user_talk_room_obj.toJSON()
         request_msg = self.talk_room_user_list_se
@@ -141,6 +159,7 @@ class ClientApp:
     def send_send_msg_se(self, talk_room_id, msg):
         msg_obj = Message(None, self.user_id, talk_room_id, str(datetime.datetime.now()), msg, None,
                           User(self.user_id, self.username, self.user_pw, self.user_nickname))
+        # self.store_message(msg_obj)
         msg_obj_str = msg_obj.toJSON()
         request_msg = self.send_msg_se
         result = self.fixed_volume(request_msg, msg_obj_str)
@@ -153,12 +172,23 @@ class ClientApp:
         result = self.fixed_volume(request_msg, user_talk_room_obj_str)
         self.client_socket.send(result)
 
-    def send_make_talk_room(self, room_name, guest_list, open_time_stmp):
-        create_room = TalkRoom(room_name, guest_list, open_time_stmp)
+    def send_make_talk_room(self, room_name, guest_list: list[User], open_time_stmp):
+        """2번에 나눠서 로직 구성됨, 1) 방 개설 / 2) 방 입장시키기"""
+        self.buffer_guest_list = guest_list
+        create_room = TalkRoom(None, room_name, open_time_stmp)
         create_room_str = create_room.toJSON()
         reqeust_msg = self.make_talk_room
         result = self.fixed_volume(reqeust_msg, create_room_str)
         self.client_socket.send(result)
+
+    def invite_guest_user(self, talk_room_id):
+        # 방 아이디를 부여받아야함. talk_room_id 부여 받고 스레드상에서 발동됨
+        guest_list = self.buffer_guest_list
+        for guest in guest_list:
+            self.send_invite_user_talk_room(talk_room_id, guest.user_id)
+        self.send_talk_room_user_list_se(talk_room_id)
+        self.buffer_guest_list.clear()
+
 
     def send_talk_room_msg(self, talk_room_id):
         user_talk_room_obj = UserTalkRoom(None, self.user_id, talk_room_id)
@@ -234,7 +264,8 @@ class ClientApp:
                     self.client_widget.all_user_list_signal.emit(response_data)
             # 채팅방 리스트 정보
             elif response_header == self.user_talk_room_list:
-                self.talk_room_list = self.decoder.decode_any(response_data)
+                self.talk_room_list_in_memory = self.decoder.decode_any(response_data)
+                print('채팅방 리스트 추가됨')
                 self.client_widget.user_talk_room_signal.emit(response_data)
 
             # 채팅방 참여 유저 정보
@@ -242,6 +273,8 @@ class ClientApp:
                 if response_data == '.':
                     print('아무도 없는 방')
                 else:
+                    if len(self.talk_room_list_in_memory) == 0:
+                        time.sleep(0.05)  # 정보가 받아질 때까지 대기
                     self.client_widget.talk_room_user_list_se_signal.emit(response_data)
             # 방나가기
             elif response_header == self.out_talk_room:
@@ -252,10 +285,11 @@ class ClientApp:
             # 메시지 받기
             elif response_header == self.send_msg_se:
                 msg_obj = self.decoder.decode_any(response_data)
-                if msg_obj.sender_user_id == self.user_id:
-                    pass
-                else:
-                    self.client_widget.send_msg_se_signal.emit(response_data)
+                # if msg_obj.sender_user_id == self.user_id:
+                #     pass
+                # else:
+                #     self.client_widget.send_msg_se_signal.emit(response_data)
+                self.client_widget.send_msg_se_signal.emit(response_data)
 
             # 상대방 초대
             elif response_header == self.invite_user_talk_room:
@@ -263,15 +297,14 @@ class ClientApp:
                     self.client_widget.invite_user_talk_room_signal.emit(True)
                 elif response_data == '.':
                     self.client_widget.invite_user_talk_room_signal.emit(False)
-
             # 방 만들기
             elif response_header == self.make_talk_room:
-                if response_data == 'pass':
-                    self.client_widget.make_talk_room_signal.emit(True)
-                elif response_data == '.':
-                    self.client_widget.make_talk_room_signal.emit(False)
+                print(response_data)
+                talk_room_obj = self.decoder.decode_any(response_data)
+                self.invite_guest_user(talk_room_obj.talk_room_id)
+                self.talk_room_list_in_memory.append(talk_room_obj)
+                self.client_widget.make_talk_room_signal.emit(talk_room_obj.talk_room_id)
 
             # 메시지 받아보기
             elif response_header == self.talk_room_msg:
                 self.client_widget.talk_room_msg_signal.emit(response_data)
-

@@ -6,17 +6,18 @@
   <component name="ChangeListManager">
     <list default="true" id="527acd99-9b06-4f8a-a238-1261aca8592d" name="Changes" comment="server를 합침">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Code/domain/class_talk_room.py" beforeDir="false" afterPath="$PROJECT_DIR$/Code/domain/class_talk_room.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Code/front/class_client_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Code/front/class_client_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Code/front/widget_chatroom_item.py" beforeDir="false" afterPath="$PROJECT_DIR$/Code/front/widget_chatroom_item.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Code/front/widget_login_page.py" beforeDir="false" afterPath="$PROJECT_DIR$/Code/front/widget_login_page.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Code/front/widget_talk_room_list_page.py" beforeDir="false" afterPath="$PROJECT_DIR$/Code/front/widget_talk_room_list_page.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Code/front/widget_talk_room_member_plus_page.py" beforeDir="false" afterPath="$PROJECT_DIR$/Code/front/widget_talk_room_member_plus_page.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Code/front/widget_talk_room_page.py" beforeDir="false" afterPath="$PROJECT_DIR$/Code/front/widget_talk_room_page.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Code/network/class_client.py" beforeDir="false" afterPath="$PROJECT_DIR$/Code/network/class_client.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Code/network/class_client_2.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Code/network/class_client_3.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Code/network/class_client_p.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Code/network/class_client_p_fix_head.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Code/network/class_client_prototype.py" beforeDir="false" afterPath="$PROJECT_DIR$/Code/network/class_client_prototype.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Code/network/class_server.py" beforeDir="false" afterPath="$PROJECT_DIR$/Code/network/class_server.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Code/network/class_server_2.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Code/network/class_server_fix_head.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/s_client_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/Test/s_client_test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/s_server_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/Test/s_server_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Common/class_json.py" beforeDir="false" afterPath="$PROJECT_DIR$/Common/class_json.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Common/common_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/Common/common_module.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,10 +40,74 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "last_opened_file_path": "C:/Users/KDT107/Downloads/Desktop/Code/network/class_server_fix_head_3.py",
+    "settings.editor.selected.configurable": "preferences.keymap",
     "two.files.diff.last.used.file": "C:/Users/KDT107/Downloads/Desktop/Code/network/class_server_fix_head_3.py"
   }
 }]]></component>
-  <component name="RunManager" selected="Python.s_client_test">
+  <component name="RunManager" selected="Python.class_server">
+    <configuration name="class_server" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="KKOTalk" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Code/network" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Code/network/class_server.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="front_test_client" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="KKOTalk" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Test" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Test/front_test_client.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="front_test_server" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="KKOTalk" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Test" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Test/front_test_server.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="s_client_test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="KKOTalk" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -87,6 +152,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.class_server" />
+        <item itemvalue="Python.front_test_client" />
+        <item itemvalue="Python.front_test_server" />
         <item itemvalue="Python.s_client_test" />
         <item itemvalue="Python.s_server_test" />
       </list>
