@@ -201,7 +201,7 @@ QLineEdit{
               <x>0</x>
               <y>0</y>
               <width>522</width>
-              <height>239</height>
+              <height>264</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="layout">
@@ -299,7 +299,7 @@ QLineEdit{
                    <widget class="QWidget" name="widget_6" native="true">
                     <layout class="QHBoxLayout" name="horizontalLayout_6">
                      <item>
-                      <widget class="QLabel" name="label">
+                      <widget class="QLabel" name="label_invite_user_nickname_list">
                        <property name="text">
                         <string>닉네임 리스트</string>
                        </property>

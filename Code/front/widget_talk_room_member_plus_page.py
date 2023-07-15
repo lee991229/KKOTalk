@@ -18,7 +18,7 @@ class TalkRoomMemberPlusWidget(QWidget, Ui_make_talk_room_widget):
 
     def set_talk_room_uninvite_user_list(self):
         self.talk_room_uninvite_user_list = self.client_controller.talk_room_uninvite_user_list
-        print(self.talk_room_uninvite_user_list,'여기야 2')
+        print(self.talk_room_uninvite_user_list, '여기야 2')
         # self.talk_room_uninvite_user_list = uninvited_user_list
 
     def count_checked_user(self):
@@ -82,6 +82,14 @@ class TalkRoomMemberPlusWidget(QWidget, Ui_make_talk_room_widget):
         for i in invite_member_list:
             print(i.user_id)
         pass
+
+    def refresh_user_nickname_list_label(self):
+        invite_user_nickname_list = list()
+        for w in self.user_item_widget_list:
+            if w.is_btn_checked():
+                user_nickname = w.get_nickname()
+                invite_user_nickname_list.append(user_nickname)
+        return invite_user_nickname_list
 
     def set_user_item_widget_to_scroll_layout(self):
         self.client_controller.clear_widget(self.invite_member_choice)  # 위젯 비우기
