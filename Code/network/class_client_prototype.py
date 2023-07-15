@@ -127,6 +127,7 @@ class ClientPrototypeWidget(QtWidgets.QWidget, Ui_prototype):
             self.user_talk_room_list()
             self.talk_room_user_list_se()
             # self.out_talk_room()
+            self.talk_room_msg()
             return QtWidgets.QMessageBox.about(self, "성공", "login 성공")
         elif return_result is False:
             return QtWidgets.QMessageBox.about(self, "실패", "login 실패")
@@ -161,7 +162,8 @@ class ClientPrototypeWidget(QtWidgets.QWidget, Ui_prototype):
     # 클라 -> 서버 채팅방 관련 유저 정보 요청
     # 방 아이디를 넘겨줘야 할듯 하다.
     def talk_room_user_list_se(self):
-        self.client_app.send_talk_room_user_list_se(talk_room_id)
+        # self.client_app.send_talk_room_user_list_se(talk_room_id)
+        pass
 
     # 서버 -> 클라 톡방 유저 객체 정보 획득
     def talk_room_user_list_se_res(self, return_result: str):
@@ -171,7 +173,8 @@ class ClientPrototypeWidget(QtWidgets.QWidget, Ui_prototype):
     # 클라 -> 서버 채팅방 나가기 요청
     # 방 아이디를 넘겨줘야 할듯 하다
     def out_talk_room(self):
-        self.client_app.send_out_talk_room(talk_room_id)
+        # self.client_app.send_out_talk_room(talk_room_id)
+        pass
 
     # 채팅방 나가기 결과 반환
     # 메세지 박스를 화면 전환 해주세요
@@ -198,7 +201,8 @@ class ClientPrototypeWidget(QtWidgets.QWidget, Ui_prototype):
 
     # 클라 -> 서버 단톡방 초대 요청
     def invite_user_talk_room(self):
-        self.client_app.send_invite_user_talk_room(talk_room_id, invite_user)
+        # self.client_app.send_invite_user_talk_room(talk_room_id, invite_user)
+        pass
 
     # 서버 -> 클라 단톡방 초대 완료
     def invite_user_talk_room_res(self, return_result: bool):
@@ -207,11 +211,19 @@ class ClientPrototypeWidget(QtWidgets.QWidget, Ui_prototype):
     # 채팅방 개설하기
     def make_talk_room(self):
         # 시간은 어떻게 받을 지몰라서 그대로 둠. user_id도 같인 이유
-        self.client_app.send_make_talk_room(room_name, guest_list, open_time_stmp)
+        # self.client_app.send_make_talk_room(room_name, guest_list, open_time_stmp)
+        pass
 
     def make_talk_room_res(self, return_result: bool):
         print('개설완료')
         # 단톡방 리스트 갱신하는 파일 만들기
+    
+    # 채팅방 입장시 클라 -> 서버 내용 전송
+    def talk_room_msg(self):
+        self.client_app.send_talk_room_msg(talk_room_id=1)
+
+    def talk_room_msg_res(self, return_result: list):
+        pass
 
     def send_file_to_chat_room(self):
         save_excel_dialog = QtWidgets.QMessageBox.question(self, "파일 업로드", "파일을 업로드합니까?")
@@ -219,3 +231,4 @@ class ClientPrototypeWidget(QtWidgets.QWidget, Ui_prototype):
             save_path_file_name, _, = QtWidgets.QFileDialog.getSaveFileName(self, '파일 저장', './')
             print(f"{save_path_file_name} send 로직 실행")
         # todo: send 메시지
+

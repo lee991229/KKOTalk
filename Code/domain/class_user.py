@@ -17,7 +17,7 @@ class User:
         return f"{self.__dict__}"
 
     def toJSON(self) -> str:
-        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
+        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True)
 
     def __eq__(self, other):
         if isinstance(other, User) and \

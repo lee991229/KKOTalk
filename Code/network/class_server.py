@@ -12,7 +12,7 @@ from Code.domain.class_db_connector import DBConnector
 class Server:
     HOST = '127.0.0.1'
     PORT = 9999
-    BUFFER = 1024
+    BUFFER = 50000
     FORMAT = "utf-8"
     HEADER_LENGTH = 30
 
@@ -27,6 +27,7 @@ class Server:
     send_msg_se = f"{'send_msg_se':<{HEADER_LENGTH}}"
     invite_user_talk_room = f"{'invite_user_talk_room_res':<{HEADER_LENGTH}}"
     make_talk_room = f"{'make_talk_room':<{HEADER_LENGTH}}"
+    talk_room_msg = f"{'talk_room_msg':<{HEADER_LENGTH}}"
     pass_encoded = f"{'pass':<{BUFFER - HEADER_LENGTH}}".encode(FORMAT)
     dot_encoded = f"{'.':<{BUFFER - HEADER_LENGTH}}".encode(FORMAT)
 
@@ -34,8 +35,6 @@ class Server:
         assert_username: assert_username.encode(FORMAT),
         join_user: join_user.encode(FORMAT),
         login: login.encode(FORMAT),
-        send_msg_c_room: send_msg_c_room.encode(FORMAT),
-        send_alarm_c_room: send_alarm_c_room.encode(FORMAT),
     }
 
     def __init__(self, db_conn: DBConnector):
@@ -166,8 +165,11 @@ class Server:
                 else:
                     result.remove(object_)
                     result_str = self.encoder.encode(result)
+                    print('전' , len(result_str))
                     return_result = result_str.encode(self.FORMAT)
+                    print('후', len(return_result))
                     client_socket.send(response_header + return_result)
+
             # 채팅방 리스트 보내기
             elif request_header == self.user_talk_room_list.strip():
                 response_header = self.user_talk_room_list.encode(self.FORMAT)
@@ -227,6 +229,13 @@ class Server:
                 self.db_conn.insert_talk_room(obj_)
                 client_socket.send(response_header + self.pass_encoded)
 
-
+            # 이전 메시지 불러오기
+            elif request_header == self.talk_room_msg.strip():
+                response_header = self.talk_room_msg.encode(self.FORMAT)
+                obj_ = self.decoder.decode_any(request_data)
+                result = self.db_conn.find_message_by_talk_room_id(obj_.talk_room_id)
+                result_str = self.encoder.encode(result)
+                return_result = result_str.encode(self.FORMAT)
+                client_socket.send(response_header + return_result)
         except:
             return False

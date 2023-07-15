@@ -12,7 +12,7 @@ from Common.class_json import KKODecoder
 class ClientApp:
     HOST = '127.0.0.1'
     PORT = 9999
-    BUFFER = 1024
+    BUFFER = 50000
     FORMAT = "utf-8"
     HEADER_LENGTH = 30
 
@@ -27,6 +27,7 @@ class ClientApp:
     send_msg_se = 'send_msg_se'
     invite_user_talk_room = 'invite_user_talk_room'
     make_talk_room = 'make_talk_room'
+    talk_room_msg = 'talk_room_msg'
     send_msg_c_room = "send_msg_c_room"
     send_alarm_c_room = "send_alarm_c_room"
 
@@ -49,8 +50,12 @@ class ClientApp:
         self.user_id = None
         self.user_pw = None
         self.user_nickname = None
+        self.stored_talk_message = dict()
+
         self.receive_thread = Thread(target=self.receive_message)
         self.receive_thread.start()
+        self.talk_room_list = list()
+        self.all_user_list_in_memory = list()
         self.client_widget = None
         self.decoder = KKODecoder()
 
@@ -139,11 +144,32 @@ class ClientApp:
         result = self.fixed_volume(reqeust_msg, create_room_str)
         self.client_socket.send(result)
 
+    def send_talk_room_msg(self, talk_room_id):
+        user_talk_room_obj = UserTalkRoom(None, self.user_id, talk_room_id)
+        user_talk_room_obj_str = user_talk_room_obj.toJSON()
+        reqeust_msg = self.talk_room_msg
+        result = self.fixed_volume(reqeust_msg, user_talk_room_obj_str)
+        self.client_socket.send(result)
+
     # 크기 고정으로 만들어 주는 함수
     def fixed_volume(self, header, data):
         header_msg = f"{header:<{self.HEADER_LENGTH}}".encode(self.FORMAT)
         data_msg = f"{data:<{self.BUFFER - self.HEADER_LENGTH}}".encode(self.FORMAT)
         return header_msg + data_msg
+
+    def store_message(self, message_obj):
+        """
+        클라이언트 stored_talk_message 변수에 메시지를 저장하는 함수
+        :param message_obj:
+        :return:
+        """
+        talk_room_id = message_obj.talk_room_id
+
+        if talk_room_id not in self.stored_talk_message.keys():
+            self.stored_talk_message.update(talk_room_id, list())
+
+        target_message_list = self.stored_talk_message[talk_room_id]
+        target_message_list.append(message_obj)
 
     def send_file_to_chat_room(self):
         # todo: send 메시지
@@ -226,4 +252,8 @@ class ClientApp:
                     self.client_widget.make_talk_room_signal(True)
                 elif response_data == '.':
                     self.client_widget.make_talk_room_signal(False)
+
+            # 메시지 받아보기
+            elif response_header == self.talk_room_msg:
+                pass
 
