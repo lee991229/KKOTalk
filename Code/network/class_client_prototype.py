@@ -26,6 +26,9 @@ class ClientPrototypeWidget(QtWidgets.QWidget, Ui_prototype):
     user_talk_room_signal = pyqtSignal(str)
     talk_room_user_list_se_signal = pyqtSignal(str)
     out_talk_room_signal = pyqtSignal(bool)
+    send_msg_se_signal = pyqtSignal(str)
+    invite_user_talk_room_signal = pyqtSignal(bool)
+    make_talk_room_signal = pyqtSignal(bool)
 
     def __init__(self, client_app):
         super().__init__()
@@ -47,6 +50,9 @@ class ClientPrototypeWidget(QtWidgets.QWidget, Ui_prototype):
         self.user_talk_room_signal.connect(self.user_talk_room_list_res)
         self.talk_room_user_list_se_signal.connect(self.talk_room_user_list_se_res)
         self.out_talk_room_signal.connect(self.out_talk_room_res)
+        self.send_msg_se_signal.connect(self.send_msg_se_res)
+        self.invite_user_talk_room_signal.connect(self.invite_user_talk_room_res)
+        self.make_talk_room_signal.connect(self.make_talk_room_res)
 
     def set_client_know_each_other(self):
         self.client_app.set_widget(self)
@@ -134,38 +140,38 @@ class ClientPrototypeWidget(QtWidgets.QWidget, Ui_prototype):
         # 화면 띄우기? 화면전환?
         print("초기방 입장 완료")
 
-    # 클라 -> 서버 친구 리스트 요청, 로그인시 할 수도있음
+    # 클라 -> 서버 유저 리스트 요청, 로그인시 할 수도있음
     def all_user_list(self):
         self.client_app.send_all_user_list()
 
-    # 서버 -> 클라 친구 리스트 정보 받음
+    # 서버 -> 클라 유저 리스트 정보 받음
     def all_user_list_res(self, return_result: str):
         all_user_list = self.decoder.decode(return_result)
-        print(all_user_list)
+        print('가입한 유저 정보', all_user_list)
 
     # 클라 -> 서버 채팅방 리스트 요청
     def user_talk_room_list(self):
         self.client_app.send_user_talk_room_list()
 
-    # 서버 -> 클라 채팅 리스트 정보 받음
+    # 서버 -> 클라 채팅방 리스트 정보 받음
     def user_talk_room_list_res(self, return_result: str):
         talk_room_list = self.decoder.decode(return_result)
-        print(1, talk_room_list)
+        print('존재하는 방 리스트', talk_room_list)
 
     # 클라 -> 서버 채팅방 관련 유저 정보 요청
     # 방 아이디를 넘겨줘야 할듯 하다.
     def talk_room_user_list_se(self):
-        self.client_app.send_talk_room_user_list_se(1)
+        self.client_app.send_talk_room_user_list_se(talk_room_id)
 
     # 서버 -> 클라 톡방 유저 객체 정보 획득
     def talk_room_user_list_se_res(self, return_result: str):
         user_list = self.decoder.decode(return_result)
-        print(user_list)
+        print('방에 존재하는 유저 정보', user_list)
 
     # 클라 -> 서버 채팅방 나가기 요청
     # 방 아이디를 넘겨줘야 할듯 하다
     def out_talk_room(self):
-        self.client_app.send_out_talk_room(1)
+        self.client_app.send_out_talk_room(talk_room_id)
 
     # 채팅방 나가기 결과 반환
     # 메세지 박스를 화면 전환 해주세요
@@ -183,7 +189,29 @@ class ClientPrototypeWidget(QtWidgets.QWidget, Ui_prototype):
         self.text_edit_chat_room.appendPlainText(txt_message)
         self.client_app.send_send_msg_se(1, txt_message)
 
+    # 서버 -> 클라 메시지 받기
+    def send_msg_se_res(self, return_result: str):
+        message = self.decoder.decode_any(return_result)
+        self.text_edit_chat_room.appendPlainText(
+            f"{message.user_obj.nickname} : {message.contents} > {message.send_time_stamp}")
         # todo: send 메시지
+
+    # 클라 -> 서버 단톡방 초대 요청
+    def invite_user_talk_room(self):
+        self.client_app.send_invite_user_talk_room(talk_room_id, invite_user)
+
+    # 서버 -> 클라 단톡방 초대 완료
+    def invite_user_talk_room_res(self, return_result: bool):
+        print('초대완료')
+
+    # 채팅방 개설하기
+    def make_talk_room(self):
+        # 시간은 어떻게 받을 지몰라서 그대로 둠. user_id도 같인 이유
+        self.client_app.send_make_talk_room(room_name, guest_list, open_time_stmp)
+
+    def make_talk_room_res(self, return_result: bool):
+        print('개설완료')
+        # 단톡방 리스트 갱신하는 파일 만들기
 
     def send_file_to_chat_room(self):
         save_excel_dialog = QtWidgets.QMessageBox.question(self, "파일 업로드", "파일을 업로드합니까?")

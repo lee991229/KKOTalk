@@ -25,8 +25,8 @@ class Server:
     talk_room_user_list_se = f"{'talk_room_user_list_se':<{HEADER_LENGTH}}"
     out_talk_room = f"{'out_talk_room':<{HEADER_LENGTH}}"
     send_msg_se = f"{'send_msg_se':<{HEADER_LENGTH}}"
-    send_msg_c_room = "send_msg_c_room"
-    send_alarm_c_room = "send_alarm_c_room"
+    invite_user_talk_room = f"{'invite_user_talk_room_res':<{HEADER_LENGTH}}"
+    make_talk_room = f"{'make_talk_room':<{HEADER_LENGTH}}"
     pass_encoded = f"{'pass':<{BUFFER - HEADER_LENGTH}}".encode(FORMAT)
     dot_encoded = f"{'.':<{BUFFER - HEADER_LENGTH}}".encode(FORMAT)
 
@@ -205,20 +205,28 @@ class Server:
             elif request_header == self.send_msg_se.strip():
                 response_header = self.send_msg_se.encode(self.FORMAT)
                 obj_ = self.decoder.decode_any(request_data)
-                print(obj_.message_id)
-                print(obj_.sender_user_id)
-                print(obj_.talk_room_id)
-                print(obj_.send_time_stamp)
-                print(obj_.contents)
-                print(obj_.long_contents_id)
-                print(type(obj_.contents))
-                print(obj_.user_obj)
                 # 메시지 내용 db에 저장
-                self.db_conn.insert_message(obj_.user_id, obj_.talk_room_id, obj_.send_time_stamp, obj_.contents, obj_.long_contents_id)
-                print(1)
-                result = self.db_conn.find_user_by_talk_room_id(obj_.talk_room_id)
-                result.remove(obj_.user_obj)
-                for i in result:
-                    print(type(i))
+                self.db_conn.insert_message(obj_.sender_user_id, obj_.talk_room_id, obj_.send_time_stamp, obj_.contents, obj_.long_contents_id)
+                socket_list = self.sockets_list.copy()
+                socket_list.remove(self.server_socket)
+                return_result = request_data.encode(self.FORMAT)
+                for i in socket_list:
+                    i.send(response_header + return_result)
+
+            # 유대 초대 요청
+            elif request_header == self.invite_user_talk_room.strip():
+                response_header = self.invite_user_talk_room.encode(self.FORMAT)
+                obj_ = self.decoder.decode_any(request_data)
+                self.db_conn.insert_user_talk_room(obj_)
+                client_socket.send(response_header + self.pass_encoded)
+
+            # 방 만들기 요처
+            elif request_header == self.make_talk_room.strip():
+                response_header = self.make_talk_room.encode(self.FORMAT)
+                obj_ = self.decoder.decode_any(request_data)
+                self.db_conn.insert_talk_room(obj_)
+                client_socket.send(response_header + self.pass_encoded)
+
+
         except:
             return False

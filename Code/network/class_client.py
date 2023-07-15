@@ -3,6 +3,7 @@ import socket
 from threading import *
 
 from Code.domain.class_message import Message
+from Code.domain.class_talk_room import TalkRoom
 from Code.domain.class_user import User
 from Code.domain.class_user_talk_room import UserTalkRoom
 from Common.class_json import KKODecoder
@@ -24,6 +25,8 @@ class ClientApp:
     talk_room_user_list_se = 'talk_room_user_list_se'
     out_talk_room = 'out_talk_room'
     send_msg_se = 'send_msg_se'
+    invite_user_talk_room = 'invite_user_talk_room'
+    make_talk_room = 'make_talk_room'
     send_msg_c_room = "send_msg_c_room"
     send_alarm_c_room = "send_alarm_c_room"
 
@@ -115,20 +118,32 @@ class ClientApp:
         self.client_socket.send(result)
 
     def send_send_msg_se(self, talk_room_id, msg):
-        msg_obj = Message(None, self.user_id, talk_room_id, str(datetime.datetime.now()), msg, None, User(self.user_id, self.username, self.user_pw, self.user_nickname))
+        msg_obj = Message(None, self.user_id, talk_room_id, msg, str(datetime.datetime.now()), None,
+                          User(self.user_id, self.username, self.user_pw, self.user_nickname))
         msg_obj_str = msg_obj.toJSON()
         request_msg = self.send_msg_se
         result = self.fixed_volume(request_msg, msg_obj_str)
         self.client_socket.send(result)
 
+    def send_invite_user_talk_room(self, talk_room_id, invite_user):
+        user_talk_room_obj = UserTalkRoom(None, invite_user, talk_room_id)
+        user_talk_room_obj_str = user_talk_room_obj.toJSON()
+        request_msg = self.invite_user_talk_room
+        result = self.fixed_volume(request_msg, user_talk_room_obj_str)
+        self.client_socket.send(result)
+
+    def send_make_talk_room(self, room_name, guest_list, open_time_stmp):
+        create_room = TalkRoom(room_name, guest_list, open_time_stmp)
+        create_room_str = create_room.toJSON()
+        reqeust_msg = self.make_talk_room
+        result = self.fixed_volume(reqeust_msg, create_room_str)
+        self.client_socket.send(result)
 
     # 크기 고정으로 만들어 주는 함수
     def fixed_volume(self, header, data):
         header_msg = f"{header:<{self.HEADER_LENGTH}}".encode(self.FORMAT)
         data_msg = f"{data:<{self.BUFFER - self.HEADER_LENGTH}}".encode(self.FORMAT)
         return header_msg + data_msg
-
-
 
     def send_file_to_chat_room(self):
         # todo: send 메시지
@@ -184,10 +199,31 @@ class ClientApp:
                     print('아무도 없는 방')
                 else:
                     self.client_widget.talk_room_user_list_se_signal.emit(response_data)
-
+            # 방나가기
             elif response_header == self.out_talk_room:
                 if response_data == 'pass':
                     self.client_widget.out_talk_room_signal.emit(True)
                 elif response_data == '.':
                     self.client_widget.out_talk_room_signal.emit(False)
+            # 메시지 받기
+            elif response_header == self.send_msg_se:
+                msg_obj = self.decoder.decode_any(response_data)
+                if msg_obj.sender_user_id == self.user_id:
+                    pass
+                else:
+                    self.client_widget.send_msg_se_signal.emit(response_data)
+
+            # 상대방 초대
+            elif response_header == self.invite_user_talk_room:
+                if response_data == 'pass':
+                    self.client_widget.invite_user_talk_room_signal(True)
+                elif response_data == '.':
+                    self.client_widget.invite_user_talk_room_signal(False)
+
+            # 방 만들기
+            elif response_header == self.make_talk_room:
+                if response_data == 'pass':
+                    self.client_widget.make_talk_room_signal(True)
+                elif response_data == '.':
+                    self.client_widget.make_talk_room_signal(False)
 
