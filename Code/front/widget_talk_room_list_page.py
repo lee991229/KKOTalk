@@ -25,6 +25,7 @@ class TalkRoomListWidget(QWidget, Ui_tk_room_list_widget):
 
     def show(self):
         self.set_initial_widget()
+        self.client_controller.clear_widget(self.tkroom_list_area)
         self.refresh_chat_room_list()
         super().show()
 
@@ -37,7 +38,6 @@ class TalkRoomListWidget(QWidget, Ui_tk_room_list_widget):
         # self.talk_list_page_search_bar_1.hide()
 
     def close(self):
-        self.talk_room_list.clear()
         self.client_controller.clear_widget(self.tkroom_list_area)
         super().close()
 

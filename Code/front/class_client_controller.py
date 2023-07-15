@@ -76,6 +76,12 @@ class WindowController(QtWidgets.QWidget):
             widget.move(event.globalPos() - self.drag_start_position)
             event.accept()
 
+    def get_user_self(self):
+        return self.client_app.get_user_self()
+
+    def get_user_by_id(self, user_id):
+        return self.client_app.get_user_by_id(user_id)
+
     def send_make_talk_room_user_id(self, invite_member_list):
         # self.db_connector.
         # todo: 채팅방을 만들때 초대할 유저의 정보, 토크룸의 이름을 보낸다
@@ -88,28 +94,12 @@ class WindowController(QtWidgets.QWidget):
         :param talk_room_id:
         :return:
         """
-        # print(talk_room_id)
-        # uninvited_user_list = list()
-        # self.client_app.send_all_user_list()  # 전체 회원 갱신 요청
-        # self.___ # user all list - self.talk_room_list
-        # # #
-        #
-        # self.talk_room_uninvite_user_list = uninvited_user_list
-        # print(self.talk_room_uninvite_user_list, '여기야')
-
-    def try_join(self):
-        """
-        회원가입 성공시
-        :return:
-        """
-        # 유저가 입력안 id,pw,ninkname
-        join_user = User(None, self.join_id, self.join_pw, self.join_nickname)
-        self.db_connector.insert_user(join_user)
-        pass
 
     def show_profile_page(self, user_id):
-        friend_profile = self.db_connector.find_user_by_user_id(user_id)
-        self.widget_profile_window.set_profile_user_data(friend_profile)
+        self.client_app: ClientApp
+        selected_user = [x for x in self.client_app.all_user_list_in_memory if x.user_id == user_id]
+        selected_user = selected_user[0]
+        self.widget_profile_window.set_profile_user_data(selected_user)
         self.widget_profile_window.show()
 
     def show_talk_room(self, talk_room_id):
@@ -308,13 +298,14 @@ class WindowController(QtWidgets.QWidget):
 
     def all_user_list_res(self, return_result: str):
         user_list = self.decoder.decode_any(return_result)
-        print(type(user_list))
-        print(type(user_list[0]))
         self.widget_login_page.close()
         self.client_app.all_user_list_in_memory = user_list
         self.widget_friend_list_page.friend_list = user_list.copy()
         self.widget_friend_list_page.show()
         # 클라 -> 서버 채팅방 리스트 요청
+
+    def get_talk_by_room_id(self, talk_room_id):
+        return self.client_app.get_talk_by_room_id(talk_room_id)
 
     def user_talk_room_list(self):
         self.client_app.send_user_talk_room_list()
@@ -322,7 +313,9 @@ class WindowController(QtWidgets.QWidget):
         # 서버 -> 클라 채팅방 리스트 정보 받음
 
     def user_talk_room_list_res(self, return_result: str):
-        self.client_app.talk_room_list = self.decoder.decode(return_result)
+        result_list = self.decoder.decode_any(return_result)
+        self.client_app.talk_room_list = result_list
+        self.widget_talk_room_list.talk_room_list.clear()
         self.widget_talk_room_list.talk_room_list = self.client_app.talk_room_list.copy()
         self.widget_talk_room_list.refresh_chat_room_list()
 
@@ -335,8 +328,8 @@ class WindowController(QtWidgets.QWidget):
         # 서버 -> 클라 톡방 유저 객체 정보 획득
 
     def talk_room_user_list_se_res(self, return_result: str):
-        user_list = self.decoder.decode(return_result)
-        print('방에 존재하는 유저 정보', user_list)
+        user_list = self.decoder.decode_any(return_result)
+        # print('방에 존재하는 유저 정보', user_list)
 
         # 클라 -> 서버 채팅방 나가기 요청
         # 방 아이디를 넘겨줘야 할듯 하다
@@ -356,11 +349,8 @@ class WindowController(QtWidgets.QWidget):
 
         # 클라 -> 서버 메시지 전달
 
-    def send_msg_se(self):
-        txt_message = self.text_edit_for_send_chat.toPlainText()
-        self.text_edit_for_send_chat.clear()
-        self.text_edit_chat_room.appendPlainText(txt_message)
-        self.client_app.send_send_msg_se(1, txt_message)
+    def send_msg_se(self, talk_room_id, txt_message):
+        self.client_app.send_send_msg_se(talk_room_id, txt_message)
 
         # 서버 -> 클라 메시지 받기
 

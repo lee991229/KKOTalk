@@ -56,10 +56,8 @@ class ClientApp:
         self.receive_thread.daemon = True
         self.receive_thread.start()
         self.talk_room_list = list()
-        self.all_user_list_in_memory = list()
         self.client_widget = None
         self.decoder = KKODecoder()
-        self.talk_room_list = list()
         self.all_user_list_in_memory = list()
 
 
@@ -70,6 +68,18 @@ class ClientApp:
     def set_widget(self, widget_):
         self.client_widget = widget_
 
+    def get_user_self(self):
+        return User(self.user_id, self.username, self.user_pw, self.user_nickname)
+
+    def get_user_by_id(self, user_id):
+        find_list = [x for x in self.all_user_list_in_memory if x.user_id == user_id]
+        found_user= find_list[0]
+        return found_user
+
+    def get_talk_by_room_id(self, talk_room_id):
+        find_list = [x for x in self.talk_room_list if x.talk_room_id == talk_room_id]
+        found_talk_room = find_list[0]
+        return found_talk_room
     def send_join_id_for_assert_same_username(self, input_username: str):
         data_msg = f"{input_username:<{self.BUFFER - self.HEADER_LENGTH}}".encode(self.FORMAT)
         data_msg_length = len(data_msg)
@@ -220,9 +230,11 @@ class ClientApp:
                 if response_data == '.':
                     print('오류?')
                 else:
+                    self.all_user_list_in_memory = self.decoder.decode_any(response_data)
                     self.client_widget.all_user_list_signal.emit(response_data)
             # 채팅방 리스트 정보
             elif response_header == self.user_talk_room_list:
+                self.talk_room_list = self.decoder.decode_any(response_data)
                 self.client_widget.user_talk_room_signal.emit(response_data)
 
             # 채팅방 참여 유저 정보

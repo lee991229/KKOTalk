@@ -1,5 +1,5 @@
 # 공통적으로 사용할 함수나 상수를 등록 or 선언하도록 합니다.
-
+from datetime import datetime
 
 from PyQt5 import QtWidgets
 
@@ -14,3 +14,5 @@ def show_error_message(message, traceback):
     traceback.print_exc()
 
 
+def get_now_time_str():
+    return datetime.now().strftime("'%Y-%m-%d %H:%M:%S'")

@@ -43,7 +43,7 @@ class KKODecoder(JSONDecoder):
     def __init__(self):
         super().__init__()
 
-    def decode_any(self, o, **kwargs):
+    def decode_any(self, o):
         o: str
         if o.startswith("["):  # list type
             list_type_obj = json.loads(o)
@@ -54,11 +54,14 @@ class KKODecoder(JSONDecoder):
             return temp_list
 
         else:
-            return self.decode_obj(o, **kwargs)
+            print(o)
+            return self.decode_obj(o)
 
-    def decode_obj(self, o, **kwargs):
-
-        dict_obj = super().decode(o, **kwargs)
+    def decode_obj(self, o):
+        try:
+            dict_obj = self.decode(o)
+        except Exception:
+            dict_obj = o
         if 'user_talk_room_id' in dict_obj.keys():
             return UserTalkRoom(dict_obj['user_talk_room_id'], dict_obj['user_id'], dict_obj['talk_room_id'])
         elif 'user_id' in dict_obj.keys():
@@ -66,7 +69,7 @@ class KKODecoder(JSONDecoder):
         elif 'message_id' in dict_obj.keys():
             temp_user = User(*dict_obj['user_obj'].values())
             return Message(dict_obj['message_id'], dict_obj['sender_user_id'], dict_obj['talk_room_id'],
-                           dict_obj['contents'], dict_obj['send_time_stamp'], dict_obj['long_contents_id'], temp_user)
+                           dict_obj['send_time_stamp'], dict_obj['contents'], dict_obj['long_contents_id'], temp_user)
         elif 'talk_room_id' in dict_obj.keys():
             return TalkRoom(dict_obj['talk_room_id'], dict_obj['talk_room_name'], dict_obj['open_time_stamp'])
         elif 'contents_id' in dict_obj.keys():

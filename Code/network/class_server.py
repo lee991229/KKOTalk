@@ -163,7 +163,6 @@ class Server:
                 if result is None:
                     client_socket.send(response_header + self.dot_encoded)
                 else:
-                    result.remove(object_)
                     result_str = self.encoder.encode(result)
                     print('전' , len(result_str))
                     return_result = result_str.encode(self.FORMAT)

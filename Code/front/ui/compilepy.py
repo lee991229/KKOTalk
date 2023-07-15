@@ -8,7 +8,7 @@ if __name__ == '__main__':
            'widget_talk_room_invite_user_list', 'widget_search_talk_room_member_list',
            'widget_profile_item_ui', 'widget_chat_room_item_ui', 'profile_page_ui',
            'widget_invite_user_item','widget_talk_room_invite_user_list_in_chat_room',
-           "widget_custom_message_box"]
+           "widget_custom_message_box", 'message_label']
     for ui in uis:
         # os.system(f'python  -m PyQt5.uic.pyuic --from-imports -x {ui}.ui -o ui_class_{ui}.py')
         os.system(f'python  -m PyQt5.uic.pyuic --import-from=Code.front.ui -x {ui}.ui -o ui_class_{ui}.py')
