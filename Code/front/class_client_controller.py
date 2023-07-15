@@ -1,7 +1,8 @@
-from PyQt5 import QtWidgets
-from PyQt5.QtCore import QPoint, Qt
+from PyQt5 import QtWidgets, QtCore
+from PyQt5.QtCore import QPoint, Qt, pyqtSignal
 
 from Code.domain.class_db_connector import DBConnector
+from Code.front.class_custom_message_box import NoFrameMessageBox
 from Code.front.widget_friend_list_page import FriendListWidget
 from Code.front.widget_join_page import JoinWidget
 from Code.front.widget_login_page import LoginWidget
@@ -13,13 +14,30 @@ from Code.front.widget_talk_room_member_plus_page import TalkRoomMemberPlusWidge
 from Code.front.widget_profile_page import ProfilePage
 
 from Code.domain.class_user import User
+from Code.network.class_client import ClientApp
+from Common.class_json import KKOEncoder, KKODecoder
 
 
-class WindowController():
-    def __init__(self, db_connector=DBConnector):
+class WindowController(QtWidgets.QWidget):
+    # signal 클래스 변수
+    assert_same_id_signal = pyqtSignal(bool)
+    sign_up_signal = pyqtSignal(bool)
+    log_in_signal = pyqtSignal(bool)
+    enter_square_signal = pyqtSignal(bool)
+    all_user_list_signal = pyqtSignal(str)
+    user_talk_room_signal = pyqtSignal(str)
+    talk_room_user_list_se_signal = pyqtSignal(str)
+    out_talk_room_signal = pyqtSignal(bool)
+    send_msg_se_signal = pyqtSignal(str)
+    invite_user_talk_room_signal = pyqtSignal(bool)
+    make_talk_room_signal = pyqtSignal(bool)
+
+    def __init__(self, client_app=ClientApp):
         # assert isinstance(db_connector, DBConnector)
         super().__init__()
-        self.db_connector = db_connector  # db연결 인스턴스
+        self.client_app = client_app  # db연결 인스턴스
+        self.client_app.set_widget(self)
+        self.db_connector = None
         # Domain 인스턴스
         self.widget_login_page = LoginWidget(self)  # 로그인 화면 ui 클래스 함수화
         self.widget_friend_list_page = FriendListWidget(self)  # 친구창 ui 클래스 함수화
@@ -30,16 +48,19 @@ class WindowController():
         self.widget_add_member_in_chat_room = TalkRoomMemberPlusWidget(self)
         self.widget_profile_window = ProfilePage(self)
         self.widget_talk_room = TalkRoomWidget(self, 1)
-        self.all_user = None  # 가입되어있는 모든 유저의 정보
-        self.friend_list = None  # 로그인한 유저의 친구 리스트
-        self.login_user_obj = None
-        self.talk_room_uninvite_user_list = list()
+        self.stored_user_list = list()  # 가입되어있는 모든 유저의 정보
+        self.stored_talk_room_id_list = list()  # 로그인한 유저의 친구 리스트
+        self.talk_room_related_user_id_list = list()
+        self.stored_user_obj = None
+        self.valid_duplication_id = None  # 중복 체크 여부 확인 변수 -> 기초 false set / 중복확인 후 결과 따라 True 됨
         self.join_id = None  # 회원가입에서 적힌 아이디
         self.join_pw = None  # 회원가입에서 적힌 비밀번호
         self.join_nickname = None  # 회원가입에서 적힌 닉네임
-        self.saved_talk_room_list = list()  # todo : 클라이언트 합칠 때 변경
-        self.get_all_user_list()  # 유저 정보 가져오는 함수 # todo : 클라이언트 합칠 때 변경
-        self.get_user_talk_room_list()  # 유저 정보 가져오는 함수 # todo : 클라이언트 합칠 때 변경
+        self.encoder = KKOEncoder()
+        self.decoder = KKODecoder()
+        self.initial_trigger_setting()
+
+        # ui 동작 관련 변수
         self.list_widget_geometry_x = None
         self.list_widget_geometry_y = None
         self.drag_start_position = QPoint(0, 0)
@@ -62,10 +83,19 @@ class WindowController():
         pass
 
     def uninvited_user_list(self, talk_room_id):
+        """
+        todo: 만일 채팅방에서 초대되지 않은 인원을 파악하고자 할 때 유저 리스트를 반환함
+        :param talk_room_id:
+        :return:
+        """
         # print(talk_room_id)
-        uninvited_user_list = self.db_connector.uninvited_users_from_talk_room(talk_room_id)
-        self.talk_room_uninvite_user_list = uninvited_user_list
-        print(self.talk_room_uninvite_user_list,'여기야')
+        # uninvited_user_list = list()
+        # self.client_app.send_all_user_list()  # 전체 회원 갱신 요청
+        # self.___ # user all list - self.talk_room_list
+        # # #
+        #
+        # self.talk_room_uninvite_user_list = uninvited_user_list
+        # print(self.talk_room_uninvite_user_list, '여기야')
 
     def try_join(self):
         """
@@ -76,16 +106,6 @@ class WindowController():
         join_user = User(None, self.join_id, self.join_pw, self.join_nickname)
         self.db_connector.insert_user(join_user)
         pass
-
-    def id_duplicate_check(self):  # 아이디 중복
-        all_user = self.all_user
-        coice_id = self.join_id
-
-        for user_id in all_user:
-            if user_id.username == coice_id:
-                self.join_id = None
-                return False
-        return True
 
     def show_profile_page(self, user_id):
         friend_profile = self.db_connector.find_user_by_user_id(user_id)
@@ -166,27 +186,6 @@ class WindowController():
         """
         self.widget_login_page.show()
 
-    def assert_login_data(self, login_id, login_pw):
-        """
-        기능1:
-        로그인 화면에서 로그인 승인 버튼에 시그널을 주면 DB에 ID,PW가 저장 되있고 일치 하는지
-        확인하는 메서드
-        """
-        login_user_obj = self.db_connector.user_log_in(login_id=login_id, login_pw=login_pw)
-
-        if len(login_id) == 0:  # 아이디 칸이 비어 있거나 잘못 적었을때
-            self.widget_login_page.no_input_id()
-        elif len(login_pw) == 0:  # 비밀 번호 칸이 비어 있거나 잘못 적었을때
-            self.widget_login_page.no_input_pw()
-        elif isinstance(login_user_obj, User) is False:  # 아이디와 비밀번호가 틀렸을때
-            self.widget_login_page.none_id_pw()
-        elif isinstance(login_user_obj, User):
-            self.login_user_obj = login_user_obj  # 컨트롤러 로그인 유저 인스턴스 저장
-            self.get_all_user_list()
-            self.get_friend_list()
-            return login_user_obj
-
-        self.widget_login_page.label_warning.show()
 
     def show_login_success(self):
         # todo: 친구창과 채팅방을 띄울때 본인의 정보를 따로 처리해야한다
@@ -231,3 +230,181 @@ class WindowController():
                 friend_list.append(friend)
 
         self.friend_list = friend_list
+
+    # ==== 클라이언트 response 함수 ================================================================
+    def initial_trigger_setting(self):
+        self.valid_duplication_id = False
+        self.assert_same_id_signal.connect(self.assert_same_name_res)
+        self.sign_up_signal.connect(self.sign_up_res)
+        self.log_in_signal.connect(self.log_in_res)
+        self.enter_square_signal.connect(self.enter_square_res)
+        self.all_user_list_signal.connect(self.all_user_list_res)
+        self.user_talk_room_signal.connect(self.user_talk_room_list_res)
+        self.talk_room_user_list_se_signal.connect(self.talk_room_user_list_se_res)
+        self.out_talk_room_signal.connect(self.out_talk_room_res)
+        self.send_msg_se_signal.connect(self.send_msg_se_res)
+        self.invite_user_talk_room_signal.connect(self.invite_user_talk_room_res)
+        self.make_talk_room_signal.connect(self.make_talk_room_res)
+
+    # client function =================================
+    # 클라 -> 서버 아이디 중복 체크 요청
+
+    def assert_same_username(self, join_username):  # 아이디 중복
+        self.client_app.send_join_id_for_assert_same_username(join_username)
+
+    def assert_same_name_res(self, return_result: bool):
+        if return_result is True:
+            self.valid_duplication_id = True
+            return NoFrameMessageBox(self, "가능", "중복 없는 아이디, 써도됌", "about")
+        elif return_result is False:
+            return NoFrameMessageBox(self, "불가능", "중복 아이디, 새로 쓰기", "about")
+
+        # 클라 -> 서버 회원가입 요청
+
+    def join_access(self):
+        join_username = self.widget_join.lineEdit_join_username.text()
+        join_pw = self.widget_join.lineedit_join_pw.text()
+        join_nickname = self.widget_join.lineedit_join_user_nickname.text()
+        self.client_app.send_join_id_and_pw_for_join_access(join_username, join_pw, join_nickname)
+
+        # 서버 -> 클라 회원가입 결과 체크 결과 대응
+
+    def sign_up_res(self, return_result: bool):
+        if return_result is True:
+            result = NoFrameMessageBox(self, "성공", "회원가입 성공", "about")
+            self.widget_join.close()
+            return
+        elif return_result is False:
+            return NoFrameMessageBox(self, "실패", "회원가입 실패", "about")
+
+        #  클라 -> 서버 로그인 요청
+
+    def assert_login_data(self, login_id, login_pw):
+        """
+        기능1:
+        로그인 화면에서 로그인 승인 버튼에 시그널을 주면 서버에 ID,PW가 저장 되있고 일치여부 요청
+        """
+        self.client_app.user_id = None
+        self.client_app.username = login_id
+        self.client_app.user_pw = login_pw
+        self.client_app.user_nickname = None
+        self.client_app.send_login_id_and_pw_for_login_access(login_id, login_pw)
+
+    def log_in_res(self, return_result: bool):
+        if return_result is True:
+            # 모든건 로그인 버튼을 누르면 시작한다. 나중에 수정
+            # 받아와야할 정보 : 전체 회원 리스트, 본인이 포함된 톡방 리스트
+            self.all_user_list()
+
+            self.user_talk_room_list()
+            # self.talk_room_user_list_se()
+            # self.out_talk_room()
+            return NoFrameMessageBox(self, "성공", "login 성공", "about")
+        elif return_result is False:
+            return NoFrameMessageBox(self, "실패", "login 실패", "about")
+
+        # 클라 -> 서버 초기 체팅방 입장, 로그인시 실행
+
+    def enter_square(self):
+        self.client_app.send_enter_square()
+        # 전체 회원방 메시지 요청
+
+        # 서버 -> 클라 초기 체팅방 입장 결과 체크
+
+    def enter_square_res(self):
+        # 화면 띄우기? 화면전환?
+        # 전체 회원방 메시지 저장
+        print("초기방 입장 완료")
+
+        # 클라 -> 서버 유저 리스트 요청, 로그인시 할 수도있음
+
+    def all_user_list(self):
+        self.client_app.send_all_user_list()
+
+        # 서버 -> 클라 유저 리스트 정보 받음
+
+    def all_user_list_res(self, return_result: str):
+        self.client_app.all_user_list = self.decoder.decode(return_result)
+
+
+        # 클라 -> 서버 채팅방 리스트 요청
+
+    def user_talk_room_list(self):
+        self.client_app.send_user_talk_room_list()
+
+        # 서버 -> 클라 채팅방 리스트 정보 받음
+
+    def user_talk_room_list_res(self, return_result: str):
+        talk_room_list = self.decoder.decode(return_result)
+        print('존재하는 방 리스트', talk_room_list)
+
+        # 클라 -> 서버 채팅방 관련 유저 정보 요청
+        # 방 아이디를 넘겨줘야 할듯 하다.
+
+    def talk_room_user_list_se(self):
+        self.client_app.send_talk_room_user_list_se(talk_room_id)
+
+        # 서버 -> 클라 톡방 유저 객체 정보 획득
+
+    def talk_room_user_list_se_res(self, return_result: str):
+        user_list = self.decoder.decode(return_result)
+        print('방에 존재하는 유저 정보', user_list)
+
+        # 클라 -> 서버 채팅방 나가기 요청
+        # 방 아이디를 넘겨줘야 할듯 하다
+
+    def out_talk_room(self):
+        self.client_app.send_out_talk_room(talk_room_id)
+
+        # 채팅방 나가기 결과 반환
+        # 메세지 박스를 화면 전환 해주세요
+
+    def out_talk_room_res(self, return_result: bool):
+        if return_result is True:
+            return NoFrameMessageBox(self, "성공", "방탈출 성공", "about")
+        elif return_result is False:
+            return NoFrameMessageBox(self.widget_join, "실패", "방탈출 실패", "about")
+        # 화면 전환후 채팅방 목록 불러오기
+
+        # 클라 -> 서버 메시지 전달
+
+    def send_msg_se(self):
+        txt_message = self.text_edit_for_send_chat.toPlainText()
+        self.text_edit_for_send_chat.clear()
+        self.text_edit_chat_room.appendPlainText(txt_message)
+        self.client_app.send_send_msg_se(1, txt_message)
+
+        # 서버 -> 클라 메시지 받기
+
+    def send_msg_se_res(self, return_result: str):
+        message = self.decoder.decode_any(return_result)
+        self.text_edit_chat_room.appendPlainText(
+            f"{message.user_obj.nickname} : {message.contents} > {message.send_time_stamp}")
+        # todo: send 메시지
+
+        # 클라 -> 서버 단톡방 초대 요청
+
+    def invite_user_talk_room(self):
+        self.client_app.send_invite_user_talk_room(talk_room_id, invite_user)
+
+        # 서버 -> 클라 단톡방 초대 완료
+
+    def invite_user_talk_room_res(self, return_result: bool):
+        print('초대완료')
+
+        # 채팅방 개설하기
+
+    def make_talk_room(self):
+        # 시간은 어떻게 받을 지몰라서 그대로 둠. user_id도 같인 이유
+        self.client_app.send_make_talk_room(room_name, guest_list, open_time_stmp)
+
+    def make_talk_room_res(self, return_result: bool):
+        print('개설완료')
+        # 단톡방 리스트 갱신하는 파일 만들기
+
+    def send_file_to_chat_room(self):
+        save_excel_dialog = NoFrameMessageBox(self, "파일 업로드", "파일을 업로드합니까?", "question").result
+        if save_excel_dialog is True:
+            save_path_file_name, _, = QtWidgets.QFileDialog.getSaveFileName(self, '파일 저장', './')
+            print(f"{save_path_file_name} send 로직 실행")
+        # todo: send 메시지

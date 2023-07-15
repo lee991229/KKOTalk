@@ -45,14 +45,20 @@ class ClientApp:
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client_socket.connect((self.HOST, self.PORT))
         # self.client_socket.setblocking(False)
-        self.username = None
         self.user_id = None
         self.user_pw = None
+        self.username = None
         self.user_nickname = None
         self.receive_thread = Thread(target=self.receive_message)
+        self.receive_thread.daemon = True
         self.receive_thread.start()
         self.client_widget = None
         self.decoder = KKODecoder()
+        self.talk_room_list = list()
+        self.all_user_list_in_memory = list()
+
+
+        #
 
         # client function =================================
 

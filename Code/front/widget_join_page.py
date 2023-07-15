@@ -23,12 +23,12 @@ class JoinWidget(QWidget, Ui_join_widget):
     # 회원 가입 창 버튼 시그널 메서드
     def set_btn_trigger(self):
         self.btn_join_cancel.clicked.connect(lambda state: self.close())
-        self.btn_flist_close.clicked.connect(lambda state: self.close())
+        self.btn_first_close.clicked.connect(lambda state: self.close())
         self.btn_join_register.clicked.connect(self.register_event)
-        self.btn_join_duplicatecheck.clicked.connect(self.duplicate_check_id)
+        self.btn_join_duplicatecheck.clicked.connect(self.duplicate_check_username)
 
-    def nickname_examine(self):
-        choice_nickname = self.lineedit_join_user_name.text()
+    def assert_not_blank_nickname(self):
+        choice_nickname = self.lineedit_join_user_nickname.text()
         if choice_nickname != "":
             return True
         else:
@@ -36,20 +36,12 @@ class JoinWidget(QWidget, Ui_join_widget):
         #   todo: '닉네임 생성 조건 만들어'
 
     # 아이디 중복 체크 메서드
-    def duplicate_check_id(self):
-        self.client_controller.join_id = self.lineEdit_join_id_1.text()
-        # self.client_controller.id_duplicate_check()
-        if self.client_controller.id_duplicate_check() is True:  # 아이디 중복이 없으면
-        #     self.client_controller.join_id = self.lineEdit_join_id_1.text()
-            self.show_label_id_message('사용 가능한 아이디 입니다')  # 아이디 중복여부 메세지 보여주기
-            self.hide_label_condition()  # 하단 경고 라벨이 아이디 중복체크면 하이드
-        else:
-            self.show_label_id_message('아이디가 중복 됩니다')
-
-    def duplicate_check_pw(self):
+    def duplicate_check_username(self):
+        join_username = self.lineEdit_join_username.text()
+        self.client_controller.assert_same_username(join_username)
+    def assert_same_password(self):
         reconfirm_pw = self.lineedit_join_pw_2.text()
         pw = self.lineedit_join_pw.text()
-        # todo:'비밀번호 특문 조건 넣나?'
         if pw == reconfirm_pw and pw != "":  # 비밀 번호와 비밀 번호 확인이 일치하면
             return True
         else:
@@ -75,24 +67,25 @@ class JoinWidget(QWidget, Ui_join_widget):
 
     # 회원 가입 승인 메서드
     def register_event(self):
-        if self.client_controller.join_id is None:
+        if self.client_controller.valid_duplication_id is False:
             self.show_label_join_warning('아이디 중복체크를 해주세요')
-        elif self.duplicate_check_pw() is False:  # 비밀번호 비밀번호 확인 비교
+            return
+        elif self.assert_same_password() is False:  # 비밀번호 비밀번호 확인 비교
             self.show_label_join_warning('비밀번호를 확인 하세요')
-        elif self.nickname_examine() is False:  # 사용 가능 닉네임 검사
+            return
+        elif self.assert_not_blank_nickname() is False:  # 사용 가능 닉네임 검사
             self.show_label_join_warning('이름을 확인하세요')
+            return
         else:
-            self.client_controller.join_pw = self.lineedit_join_pw.text()
-            self.client_controller.join_nickname = self.lineedit_join_user_name.text()
-            self.client_controller.try_join()
+            self.client_controller.join_access()
             # todo: '유저 가입 만들기 '
             self.close()
 
     def line_edit_clear(self):
-        self.lineEdit_join_id_1.clear()
+        self.lineEdit_join_username.clear()
         self.lineedit_join_pw.clear()
         self.lineedit_join_pw_2.clear()
-        self.lineedit_join_user_name.clear()
+        self.lineedit_join_user_nickname.clear()
 
     def show(self):
         self.line_edit_clear()

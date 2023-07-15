@@ -34,8 +34,6 @@ class Server:
         assert_username: assert_username.encode(FORMAT),
         join_user: join_user.encode(FORMAT),
         login: login.encode(FORMAT),
-        send_msg_c_room: send_msg_c_room.encode(FORMAT),
-        send_alarm_c_room: send_alarm_c_room.encode(FORMAT),
     }
 
     def __init__(self, db_conn: DBConnector):

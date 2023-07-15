@@ -42,12 +42,16 @@ class LoginWidget(QWidget, Ui_login_widget):
     def assert_login(self):
         login_id = self.line_edit_id.text()
         login_pw = self.line_edit_pw.text()
-        login_user_obj = self.client_controller.assert_login_data(login_id, login_pw)
 
-        if isinstance(login_user_obj, User):
-            self.client_controller.get_user_talk_room_list()
-            self.client_controller.show_login_success()
-            self.close()
+        if len(login_id) == 0:  # 아이디 칸이 비어 있거나 잘못 적었을때
+            self.no_input_id()
+            return
+        elif len(login_pw) == 0:  # 비밀 번호 칸이 비어 있거나 잘못 적었을때
+            self.no_input_pw()
+            return
+
+        self.client_controller.assert_login_data(login_id, login_pw)
+
 
     def no_input_id(self):
         self.label_warning.setText("아이디를 적어주세요")

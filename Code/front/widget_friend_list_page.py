@@ -19,14 +19,10 @@ class FriendListWidget(QWidget, Ui_friend_list_widget):
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
 
     def mousePressEvent(self, event):
-        if event.button() == Qt.LeftButton:
-            self.drag_start_position = event.globalPos() - self.frameGeometry().topLeft()
-            event.accept()
+        self.client_controller.mousePressEvent(self, event)
 
     def mouseMoveEvent(self, event):
-        if event.buttons() == Qt.LeftButton:
-            self.move(event.globalPos() - self.client_controller.drag_start_position)
-            event.accept()
+        self.client_controller.mouseMoveEvent(self, event)
 
     def show(self):
         self.login_user_obj = self.client_controller.login_user_obj
