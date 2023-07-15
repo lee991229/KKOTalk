@@ -20,8 +20,9 @@ if __name__ == '__main__':
     # square_talkroom = TalkRoom(1, 'square', f'{datetime.now()}')
     # db_conn.insert_talk_room(square_talkroom)
     server = Server(db_conn)
-    proto_widget = ServerControllerWidget(server, db_conn)
-    proto_widget.show()
+    server.start()
+    # proto_widget = ServerControllerWidget(server, db_conn)
+    # proto_widget.show()
 
     sys.excepthook = lambda exctype, value, traceback: show_error_message(str(value), traceback)
 

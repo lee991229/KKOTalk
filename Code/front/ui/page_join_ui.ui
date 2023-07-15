@@ -120,7 +120,7 @@ QLineEdit{
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="btn_flist_close">
+       <widget class="QPushButton" name="btn_first_close">
         <property name="minimumSize">
          <size>
           <width>30</width>
@@ -261,7 +261,7 @@ QLineEdit{
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_join_id_1">
+          <widget class="QLineEdit" name="lineEdit_join_username">
            <property name="minimumSize">
             <size>
              <width>0</width>
@@ -599,7 +599,7 @@ QLineEdit{
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineedit_join_user_name"/>
+          <widget class="QLineEdit" name="lineedit_join_user_nickname"/>
          </item>
          <item>
           <spacer name="horizontalSpacer_7">
