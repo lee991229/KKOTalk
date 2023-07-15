@@ -42,7 +42,7 @@ class InviteFriendListWidget(QWidget, Ui_make_talk_room_widget):
         super().show()
 
     def set_friend_list(self):
-        #todo : 친구 리스트 갱신해서 집어넣기
+        # todo : 친구 리스트 갱신해서 집어넣기
         self.friend_list = self.client_controller.friend_list
 
     def close(self):

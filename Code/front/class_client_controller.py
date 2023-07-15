@@ -33,7 +33,7 @@ class WindowController():
         self.all_user = None  # 가입되어있는 모든 유저의 정보
         self.friend_list = None  # 로그인한 유저의 친구 리스트
         self.login_user_obj = None
-
+        self.talk_room_uninvite_user_list = list()
         self.join_id = None  # 회원가입에서 적힌 아이디
         self.join_pw = None  # 회원가입에서 적힌 비밀번호
         self.join_nickname = None  # 회원가입에서 적힌 닉네임
@@ -60,6 +60,12 @@ class WindowController():
         # todo: 채팅방을 만들때 초대할 유저의 정보, 토크룸의 이름을 보낸다
         # 토크룸의 아이디를 받아온다
         pass
+
+    def uninvited_user_list(self, talk_room_id):
+        # print(talk_room_id)
+        uninvited_user_list = self.db_connector.uninvited_users_from_talk_room(talk_room_id)
+        self.talk_room_uninvite_user_list = uninvited_user_list
+        print(self.talk_room_uninvite_user_list,'여기야')
 
     def try_join(self):
         """
@@ -89,8 +95,10 @@ class WindowController():
     def show_talk_room(self, talk_room_id):
         """
         채팅방 보여주는 메서드
+        채팅방에 초대 되어있지 않은 유저 목록 저장
         :return:
         """
+        self.uninvited_user_list(talk_room_id)
         self.widget_talk_room.set_talk_room_id(talk_room_id)
         self.widget_talk_room.show()
 
@@ -205,7 +213,7 @@ class WindowController():
 
     def get_user_talk_room_list(self):
         talk_room_list = self.db_connector.find_user_talk_room_by_user_id(1)
-        print(talk_room_list)
+        # print(talk_room_list)
         self.saved_talk_room_list = talk_room_list
 
     def get_all_user_list(self):

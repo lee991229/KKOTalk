@@ -100,7 +100,7 @@ class Ui_make_talk_room_widget(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.widget_3 = QtWidgets.QWidget()
-        self.widget_3.setGeometry(QtCore.QRect(0, 0, 522, 264))
+        self.widget_3.setGeometry(QtCore.QRect(0, 0, 522, 239))
         self.widget_3.setObjectName("widget_3")
         self.layout = QtWidgets.QVBoxLayout(self.widget_3)
         self.layout.setContentsMargins(0, 0, 0, 0)

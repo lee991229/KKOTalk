@@ -62,25 +62,14 @@ if __name__ == '__main__':
     user_p = conn.insert_user(user_p)
 
     conn.insert_user_talk_room(UserTalkRoom(None, 1, 1))
+    conn.insert_user_talk_room(UserTalkRoom(None, 1, 2))
+    conn.insert_user_talk_room(UserTalkRoom(None, 1, 3))
     conn.insert_user_talk_room(UserTalkRoom(None, 2, 1))
     conn.insert_user_talk_room(UserTalkRoom(None, 3, 1))
     conn.insert_user_talk_room(UserTalkRoom(None, 4, 1))
     conn.insert_user_talk_room(UserTalkRoom(None, 5, 1))
-    conn.insert_user_talk_room(UserTalkRoom(None, 1, 2))
     conn.insert_user_talk_room(UserTalkRoom(None, 2, 2))
     conn.insert_user_talk_room(UserTalkRoom(None, 3, 2))
-
-    # users = conn.find_all_user()
-    # for u in users:
-        # print(u)
-
-    # print("="*30)
-    # talkrooms = conn.()
-    # for u in users:
-    #     print(u)
-
-    # print("="*30)
-    # user_talk_room_list = conn.find_user
 
     client_controller = WindowController(conn)
     client_controller.run()
