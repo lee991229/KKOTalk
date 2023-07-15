@@ -12,7 +12,7 @@ from Code.domain.class_db_connector import DBConnector
 class Server:
     HOST = '127.0.0.1'
     PORT = 9999
-    BUFFER = 1024
+    BUFFER = 50000
     FORMAT = "utf-8"
     HEADER_LENGTH = 30
 
@@ -164,6 +164,7 @@ class Server:
                 else:
                     result.remove(object_)
                     result_str = self.encoder.encode(result)
+                    print(len(result_str))
                     return_result = result_str.encode(self.FORMAT)
                     client_socket.send(response_header + return_result)
             # 채팅방 리스트 보내기

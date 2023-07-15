@@ -24,7 +24,7 @@ class ProfileItemWidget(QWidget, Ui_profile_widget):
     def set_label_text(self):
         self.profile_name_label.setText(self.nickname)
     # def set_friend_widget(self):
-    #     friend_list = self.client_controller.get_friend_list()
+    #     friend_list = self.client_controller.set_widget_user_list()
     #
     #     print(friend_list)
     #     print(id(friend_list))

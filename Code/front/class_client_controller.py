@@ -186,7 +186,6 @@ class WindowController(QtWidgets.QWidget):
         """
         self.widget_login_page.show()
 
-
     def show_login_success(self):
         # todo: 친구창과 채팅방을 띄울때 본인의 정보를 따로 처리해야한다
         self.widget_friend_list_page.show()  # 친구창 띄우는 함수
@@ -209,27 +208,6 @@ class WindowController(QtWidgets.QWidget):
         # 만약 이미 열려있는 대화창이라면, 다시 열어야할까? 톡방을 열때
         # talk_room_id = 1
         self.widget_talk_room.show()
-
-    def get_user_talk_room_list(self):
-        talk_room_list = self.db_connector.find_user_talk_room_by_user_id(1)
-        # print(talk_room_list)
-        self.saved_talk_room_list = talk_room_list
-
-    def get_all_user_list(self):
-        result_list = self.db_connector.find_all_user()
-        self.all_user = result_list
-
-    # 모든 유저 정보와 친구리스트 저장
-    def get_friend_list(self):
-        friend_list = list()
-        result_list = self.all_user
-        login_user_id = self.login_user_obj.user_id
-
-        for friend in result_list:
-            if friend.user_id != login_user_id:
-                friend_list.append(friend)
-
-        self.friend_list = friend_list
 
     # ==== 클라이언트 response 함수 ================================================================
     def initial_trigger_setting(self):
@@ -294,10 +272,15 @@ class WindowController(QtWidgets.QWidget):
         if return_result is True:
             # 모든건 로그인 버튼을 누르면 시작한다. 나중에 수정
             # 받아와야할 정보 : 전체 회원 리스트, 본인이 포함된 톡방 리스트
+            user_id = self.client_app.user_id
+            username = self.client_app.username
+            user_pw = self.client_app.user_pw
+            user_nickname = self.client_app.user_nickname
+            self.widget_friend_list_page.login_user_obj = User(user_id, username, user_pw, user_nickname)
             self.all_user_list()
 
             self.user_talk_room_list()
-            # self.talk_room_user_list_se()
+            self.talk_room_user_list_se()
             # self.out_talk_room()
             return NoFrameMessageBox(self, "성공", "login 성공", "about")
         elif return_result is False:
@@ -324,9 +307,13 @@ class WindowController(QtWidgets.QWidget):
         # 서버 -> 클라 유저 리스트 정보 받음
 
     def all_user_list_res(self, return_result: str):
-        self.client_app.all_user_list = self.decoder.decode(return_result)
-
-
+        user_list = self.decoder.decode_any(return_result)
+        print(type(user_list))
+        print(type(user_list[0]))
+        self.widget_login_page.close()
+        self.client_app.all_user_list_in_memory = user_list
+        self.widget_friend_list_page.friend_list = user_list.copy()
+        self.widget_friend_list_page.show()
         # 클라 -> 서버 채팅방 리스트 요청
 
     def user_talk_room_list(self):
@@ -335,14 +322,15 @@ class WindowController(QtWidgets.QWidget):
         # 서버 -> 클라 채팅방 리스트 정보 받음
 
     def user_talk_room_list_res(self, return_result: str):
-        talk_room_list = self.decoder.decode(return_result)
-        print('존재하는 방 리스트', talk_room_list)
+        self.client_app.talk_room_list = self.decoder.decode(return_result)
+        self.widget_talk_room_list.talk_room_list = self.client_app.talk_room_list.copy()
+        self.widget_talk_room_list.refresh_chat_room_list()
 
         # 클라 -> 서버 채팅방 관련 유저 정보 요청
         # 방 아이디를 넘겨줘야 할듯 하다.
 
     def talk_room_user_list_se(self):
-        self.client_app.send_talk_room_user_list_se(talk_room_id)
+        self.client_app.send_talk_room_user_list_se(1)
 
         # 서버 -> 클라 톡방 유저 객체 정보 획득
 

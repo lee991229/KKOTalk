@@ -12,7 +12,7 @@ from Common.class_json import KKODecoder
 class ClientApp:
     HOST = '127.0.0.1'
     PORT = 9999
-    BUFFER = 1024
+    BUFFER = 50000
     FORMAT = "utf-8"
     HEADER_LENGTH = 30
 
@@ -160,7 +160,7 @@ class ClientApp:
             # self.return_result = self.client_socket.recv(self.BUFFER).decode(self.FORMAT)
             return_result = self.client_socket.recv(self.BUFFER).decode(self.FORMAT)
             response_header = return_result[:self.HEADER_LENGTH].strip()
-            print(response_header)
+            # print(response_header)
             response_data = return_result[self.HEADER_LENGTH:].strip()
             # 아이디 중복 확인 결과
             if response_header == self.assert_username:

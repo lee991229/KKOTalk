@@ -25,16 +25,16 @@ class LoginWidget(QWidget, Ui_login_widget):
     def set_btn_trigger(self):
         self.btn_login.clicked.connect(self.assert_login)  # 로그인 승인버튼 클릭시 assert_login메서드 발동
         self.btn_join.clicked.connect(self.assert_join)
-        self.btn_close.clicked.connect(self.close_event)
+        self.btn_close.clicked.connect(lambda state: self.close())
 
     def set_initial_widget(self):
         self.label_warning.hide()
 
-    def close_event(self):
-        """
-        로그인 화면을 닫는 메서드
-        """
-        self.close()
+    def close(self):
+        self.line_edit_id.clear()
+        self.line_edit_pw.clear()
+        super().close()
+
 
     def assert_join(self):
         self.client_controller.show_join_page()  # 클라이언트 컨트롤에 있는 회원가입창을 띄우는 메서드

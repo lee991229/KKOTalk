@@ -15,6 +15,7 @@ class TalkRoomListWidget(QWidget, Ui_tk_room_list_widget):
         self.set_btn_trigger()
         self.setGeometry(250, 95, self.width(), self.height())
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
+        self.talk_room_list = list()
 
     def mousePressEvent(self, event):
         self.client_controller.mousePressEvent(self, event)
@@ -24,8 +25,10 @@ class TalkRoomListWidget(QWidget, Ui_tk_room_list_widget):
 
     def show(self):
         self.set_initial_widget()
-        self.get_chat_room_list()
+        self.refresh_chat_room_list()
         super().show()
+
+
 
     def set_initial_widget(self):
         self.talk_list_page_search_bar_2.hide()
@@ -34,8 +37,8 @@ class TalkRoomListWidget(QWidget, Ui_tk_room_list_widget):
         # self.talk_list_page_search_bar_1.hide()
 
     def close(self):
+        self.talk_room_list.clear()
         self.client_controller.clear_widget(self.tkroom_list_area)
-
         super().close()
 
     def set_btn_trigger(self):
@@ -43,8 +46,7 @@ class TalkRoomListWidget(QWidget, Ui_tk_room_list_widget):
         self.btn_tallk_room_make.clicked.connect(self.client_controller.show_make_talk_room)
         self.btn_tkroom_close.clicked.connect(lambda state: self.close())
 
-    def get_chat_room_list(self):
-        talk_room_list = self.client_controller.saved_talk_room_list.copy()
-        for talk_room in talk_room_list:
-            talk_room_item = ChatRoomItemWidget(self, talk_room.talk_room_id)
+    def refresh_chat_room_list(self):
+        for talk_room in self.talk_room_list:
+            talk_room_item = ChatRoomItemWidget(self, talk_room)
             self.tkroom_list_area.layout().addWidget(talk_room_item)

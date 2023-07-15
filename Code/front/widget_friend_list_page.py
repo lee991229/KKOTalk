@@ -25,9 +25,7 @@ class FriendListWidget(QWidget, Ui_friend_list_widget):
         self.client_controller.mouseMoveEvent(self, event)
 
     def show(self):
-        self.login_user_obj = self.client_controller.login_user_obj
-        self.friend_list = self.client_controller.friend_list
-        self.get_friend_list()
+        self.set_widget_user_list()
         super().show()
 
     def set_initial_widget(self):
@@ -44,21 +42,21 @@ class FriendListWidget(QWidget, Ui_friend_list_widget):
     def mouseMoveEvent(self, event):
         self.client_controller.mouseMoveEvent(self, event)
 
-    def page_close(self):
-        self.close()
+    def close(self):
         self.client_controller.clear_widget(self.friend_list_layout_widget)
+        super().close()
 
     def set_btn_trigger(self):
         self.btn_start_chat.clicked.connect(
-            lambda x: (self.client_controller.show_talk_room_list_page(), self.page_close()))
-        self.btn_flist_close.clicked.connect(self.page_close)
+            lambda x: (self.client_controller.show_talk_room_list_page(), self.close()))
+        self.btn_flist_close.clicked.connect(lambda state: self.close())
 
     def profile_press(self, user_id):
         self.client_controller.show_profile_page(user_id)
 
     # 친구 위젯 레이아웃에 넣기
-    def get_friend_list(self):
+    def set_widget_user_list(self):
         friend_list = self.friend_list
-        for friend in friend_list:
-            friend_profile = ProfileItemWidget(self, friend)
+        for user in friend_list:
+            friend_profile = ProfileItemWidget(self, user)
             self.friend_list_layout.addWidget(friend_profile)
