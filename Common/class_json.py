@@ -1,4 +1,3 @@
-
 import json
 
 from Code.domain.class_long_contents import LongContents
@@ -10,12 +9,10 @@ from json import JSONEncoder, JSONDecoder
 from Code.domain.class_user_talk_room import UserTalkRoom
 
 
-
 class KKOEncoder(JSONEncoder):
 
     def __init__(self):
         super().__init__()
-
 
     def encode(self, o) -> str:
         if isinstance(o, list) and isinstance(o[0], User):
@@ -33,7 +30,6 @@ class KKOEncoder(JSONEncoder):
             return json.dumps(temp_list)
 
         return json.dumps(o, default=lambda o: o.__dict__)
-
 
     def default(self, o):
         return o.__dict__
@@ -57,8 +53,10 @@ class KKODecoder(JSONDecoder):
             return self.decode_obj(o, **kwargs)
 
     def decode_obj(self, o, **kwargs):
-
-        dict_obj = super().decode(o, **kwargs)
+        try:
+            dict_obj = super().decode(o, **kwargs)
+        except:
+            dict_obj = o
         if 'user_talk_room_id' in dict_obj.keys():
             return UserTalkRoom(dict_obj['user_talk_room_id'], dict_obj['user_id'], dict_obj['talk_room_id'])
         elif 'user_id' in dict_obj.keys():
@@ -66,7 +64,7 @@ class KKODecoder(JSONDecoder):
         elif 'message_id' in dict_obj.keys():
             temp_user = User(*dict_obj['user_obj'].values())
             return Message(dict_obj['message_id'], dict_obj['sender_user_id'], dict_obj['talk_room_id'],
-                           dict_obj['contents'], dict_obj['send_time_stamp'], dict_obj['long_contents_id'], temp_user)
+                           dict_obj['send_time_stamp'], dict_obj['contents'], dict_obj['long_contents_id'], temp_user)
         elif 'talk_room_id' in dict_obj.keys():
             return TalkRoom(dict_obj['talk_room_id'], dict_obj['talk_room_name'], dict_obj['open_time_stamp'])
         elif 'contents_id' in dict_obj.keys():
@@ -146,4 +144,3 @@ if __name__ == '__main__':
     list_obj = decoder.decode_any(list_str_obj)
     print(type(list_obj))
     print(type(list_obj[0]))
-

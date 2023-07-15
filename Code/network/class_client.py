@@ -129,7 +129,7 @@ class ClientApp:
         self.client_socket.send(result)
 
     def send_send_msg_se(self, talk_room_id, msg):
-        msg_obj = Message(None, self.user_id, talk_room_id, msg, str(datetime.datetime.now()), None,
+        msg_obj = Message(None, self.user_id, talk_room_id, str(datetime.datetime.now()), msg, None,
                           User(self.user_id, self.username, self.user_pw, self.user_nickname))
         msg_obj_str = msg_obj.toJSON()
         request_msg = self.send_msg_se
@@ -248,18 +248,18 @@ class ClientApp:
             # 상대방 초대
             elif response_header == self.invite_user_talk_room:
                 if response_data == 'pass':
-                    self.client_widget.invite_user_talk_room_signal(True)
+                    self.client_widget.invite_user_talk_room_signal.emit(True)
                 elif response_data == '.':
-                    self.client_widget.invite_user_talk_room_signal(False)
+                    self.client_widget.invite_user_talk_room_signal.emit(False)
 
             # 방 만들기
             elif response_header == self.make_talk_room:
                 if response_data == 'pass':
-                    self.client_widget.make_talk_room_signal(True)
+                    self.client_widget.make_talk_room_signal.emit(True)
                 elif response_data == '.':
-                    self.client_widget.make_talk_room_signal(False)
+                    self.client_widget.make_talk_room_signal.emit(False)
 
             # 메시지 받아보기
             elif response_header == self.talk_room_msg:
-                pass
+                self.client_widget.talk_room_msg_signal.emit(response_data)
 
