@@ -1,7 +1,11 @@
+import datetime
+
 from Code.domain.class_message import Message
 from Code.domain.class_user import User
 from Code.front.ui.ui_class_message_label import Ui_widget_message
 from PyQt5.QtWidgets import *
+
+from Common.common_module import get_subtract_time
 
 
 class MessageLabel(QWidget, Ui_widget_message):
@@ -63,5 +67,7 @@ class MessageLabel(QWidget, Ui_widget_message):
         else:
             self.spacer_left.hide()
             self.setStyleSheet(self.CHAT_MESSAGE_STYLESHEET_OTHER)
-
+        timestamp = self.message_obj.send_time_stamp
+        onset_time = get_subtract_time(timestamp)
+        # self.label_from_time.setText(onset_time)
 

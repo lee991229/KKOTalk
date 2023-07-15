@@ -54,7 +54,7 @@ class TalkRoomWidget(QWidget, Ui_talk_room_widget):
         self.user_chatting_lineedit.clear()
         user_id = self.client_controller.client_app.user_id
         now_time_str = Common.common_module.get_now_time_str()
-        message_obj = Message(None, user_id, self.talk_room_id, user_chat, now_time_str, None)
+        message_obj = Message(None, user_id, self.talk_room_id, now_time_str, user_chat, None)
         self.insert_chatting_label_in_scroll_page(message_obj)
         self.client_controller.send_msg_se(self.talk_room_id, user_chat)
 

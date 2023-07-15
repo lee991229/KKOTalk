@@ -4,7 +4,6 @@ from datetime import datetime
 from PyQt5 import QtWidgets
 
 
-
 def show_error_message(message, traceback):
     msg_box = QtWidgets.QMessageBox()
     msg_box.setIcon(QtWidgets.QMessageBox.Critical)
@@ -15,4 +14,11 @@ def show_error_message(message, traceback):
 
 
 def get_now_time_str():
-    return datetime.now().strftime("'%Y-%m-%d %H:%M:%S'")
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+
+def get_subtract_time(str_start_timestamp):
+    parsed_datetime = datetime.strptime(str_start_timestamp, "%Y-%m-%d %H:%M:%S")
+    now_time = datetime.now()
+    result_time_delta = now_time - parsed_datetime
+    return f"{result_time_delta.min}"
