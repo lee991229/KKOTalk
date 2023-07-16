@@ -1,8 +1,11 @@
 import sys
 
+from PyQt5.QtWidgets import QApplication
+
 from Code.domain.class_db_connector import DBConnector
 from Code.domain.class_user_talk_room import UserTalkRoom
 from Code.network.class_server import Server
+from Code.network.class_server_controller_widget import ServerControllerWidget
 from Common.common_module import *
 from Code.domain.class_user import User
 from Code.domain.class_talk_room import TalkRoom
@@ -62,6 +65,10 @@ if __name__ == '__main__':
     conn.insert_user_talk_room(UserTalkRoom(None, 5, 1))
     conn.insert_user_talk_room(UserTalkRoom(None, 2, 2))
     conn.insert_user_talk_room(UserTalkRoom(None, 3, 2))
-
+    app = QApplication(sys.argv)
     server = Server(conn)
-    server.start()
+    proto_widget = ServerControllerWidget(server, conn)
+    proto_widget.show()
+    sys.excepthook = lambda exctype, value, traceback: show_error_message(str(value), traceback)
+
+    sys.exit(app.exec_())

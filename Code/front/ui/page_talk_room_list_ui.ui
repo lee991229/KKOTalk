@@ -137,11 +137,11 @@ QLineEdit{
             <enum>Qt::Horizontal</enum>
            </property>
            <property name="sizeType">
-            <enum>QSizePolicy::Fixed</enum>
+            <enum>QSizePolicy::Minimum</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>170</width>
+             <width>100</width>
              <height>20</height>
             </size>
            </property>
@@ -399,8 +399,8 @@ QLineEdit{
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>442</width>
-                       <height>653</height>
+                       <width>426</width>
+                       <height>644</height>
                       </rect>
                      </property>
                      <layout class="QVBoxLayout" name="la1">

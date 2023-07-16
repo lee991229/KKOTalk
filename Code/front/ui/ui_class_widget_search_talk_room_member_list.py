@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_talk_room_member_list_widget(object):
     def setupUi(self, talk_room_member_list_widget):
         talk_room_member_list_widget.setObjectName("talk_room_member_list_widget")
-        talk_room_member_list_widget.resize(554, 147)
+        talk_room_member_list_widget.resize(554, 296)
         talk_room_member_list_widget.setStyleSheet("#talk_room_member_list_widget {\n"
 "    background-color: #75C2F6;\n"
 "    color: #1D5D9B;\n"
@@ -82,10 +82,23 @@ class Ui_talk_room_member_list_widget(object):
         self.scrollArea = QtWidgets.QScrollArea(talk_room_member_list_widget)
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
-        self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 532, 69))
-        self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
-        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+        self.widget_user_list = QtWidgets.QWidget()
+        self.widget_user_list.setGeometry(QtCore.QRect(0, 0, 532, 218))
+        self.widget_user_list.setObjectName("widget_user_list")
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.widget_user_list)
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.widget_to_add_item = QtWidgets.QWidget(self.widget_user_list)
+        self.widget_to_add_item.setObjectName("widget_to_add_item")
+        self.verticalLayout_3.addWidget(self.widget_to_add_item)
+        self.widget_to_spacer = QtWidgets.QWidget(self.widget_user_list)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.widget_to_spacer.sizePolicy().hasHeightForWidth())
+        self.widget_to_spacer.setSizePolicy(sizePolicy)
+        self.widget_to_spacer.setObjectName("widget_to_spacer")
+        self.verticalLayout_3.addWidget(self.widget_to_spacer)
+        self.scrollArea.setWidget(self.widget_user_list)
         self.verticalLayout.addWidget(self.scrollArea)
         self.verticalLayout_2.addLayout(self.verticalLayout)
 

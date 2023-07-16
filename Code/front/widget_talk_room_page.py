@@ -29,6 +29,7 @@ class TalkRoomWidget(QWidget, Ui_talk_room_widget):
         # todo: talk_room 방 이름 갱신 로직
         self.talk_room = self.client_controller.get_talk_room_by_room_id(self.talk_room_id)
         self.label_title.setText(f"{self.talk_room.talk_room_name}")
+        self.label_member_count.setText(f"{len(self.talk_room.talk_room_user_list)}")
 
     def show(self):
         # todo: talk_room 메시지를 갱신하는 로직

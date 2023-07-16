@@ -13,7 +13,7 @@ from Code.front.widget_talk_room_list_page import TalkRoomListWidget
 from Code.front.widget_make_talk_room import InviteFriendListWidget
 from Code.front.widget_talk_room_page import TalkRoomWidget
 from Code.front.widget_search_talk_room_member_list_page import UserListWidgetInTalkRoom
-from Code.front.widget_talk_room_member_plus_page import TalkRoomMemberPlusWidget
+from Code.front.widget_invite_user_in_chat_room import InviteFriendListWidgetInTalkRoom
 from Code.front.widget_profile_page import ProfilePage
 
 from Code.domain.class_user import User
@@ -30,11 +30,12 @@ class WindowController(QtWidgets.QWidget):
     enter_square_signal = pyqtSignal(bool)
     all_user_list_signal = pyqtSignal(str)
     user_talk_room_signal = pyqtSignal(str)
-    talk_room_user_list_se_signal = pyqtSignal(str)
+    talk_room_user_list_se_signal = pyqtSignal(int, str)
     out_talk_room_signal = pyqtSignal(bool)
     send_msg_se_signal = pyqtSignal(str)
     invite_user_talk_room_signal = pyqtSignal(bool)
     make_talk_room_signal = pyqtSignal(int)
+    talk_room_msg_signal = pyqtSignal(str)
 
     def __init__(self, client_app=ClientApp):
         assert isinstance(client_app, ClientApp)
@@ -48,10 +49,10 @@ class WindowController(QtWidgets.QWidget):
         self.widget_join = JoinWidget(self)  # 회원 가입창 ui 클래스 함수화
         self.widget_talk_room_list = TalkRoomListWidget(self)
         self.widget_ask_to_make_talk_room = InviteFriendListWidget(self)
-        self.widget_room_member_list = UserListWidgetInTalkRoom(self)
-        self.widget_add_member_in_chat_room = TalkRoomMemberPlusWidget(self)
+        self.widget_add_member_in_chat_room = InviteFriendListWidgetInTalkRoom(self)
         self.widget_profile_window = ProfilePage(self)
         self.widget_talk_room = TalkRoomWidget(self, 1)
+        self.widget_room_member_list = UserListWidgetInTalkRoom(self, self.widget_talk_room)
         self.stored_user_list = list()  # 가입되어있는 모든 유저의 정보
         self.stored_talk_room_id_list = list()  # 로그인한 유저의 친구 리스트
         self.talk_room_related_user_id_list = list()
@@ -92,7 +93,7 @@ class WindowController(QtWidgets.QWidget):
         return result_list
 
     def get_all_user_list(self):
-        user_list = self.client_app.all_user_list_in_memory
+        user_list = self.client_app.get_all_user_list()
         if len(user_list) == 0:
             self.client_app.send_all_user_list()
             time.sleep(0.5)
@@ -104,11 +105,16 @@ class WindowController(QtWidgets.QWidget):
     def get_talk_room_by_room_id(self, talk_room_id):
         return self.client_app.get_talk_room_by_room_id(talk_room_id)
 
-    def send_make_talk_room_user_id(self, invite_member_list):
-        # self.db_connector.
+    def get_already_invited_user_list(self):
+        return self.client_app.get_already_invited_user_list()
+
+    def get_not_yet_invited_user_list(self):
+        return self.client_app.get_not_yet_invited_user_list()
+
+    def send_make_talk_room_user_id(self, talk_room_name, selected_user_id_list):
         # todo: 채팅방을 만들때 초대할 유저의 정보, 토크룸의 이름을 보낸다
-        # 토크룸의 아이디를 받아온다
-        pass
+        now_time = get_now_time_str()
+        self.client_app.send_make_talk_room(talk_room_name, selected_user_id_list, now_time)
 
     def uninvited_user_list(self, talk_room_id):
         """
@@ -130,24 +136,14 @@ class WindowController(QtWidgets.QWidget):
         채팅방에 초대 되어있지 않은 유저 목록 저장
         :return:
         """
+        print('show try')
+        self.client_app.selected_talk_room_id = talk_room_id
         self.widget_talk_room.set_talk_room_id(talk_room_id)
         self.widget_talk_room.show()
 
     # def get_friend_profile(self):
 
-    def show_friend_list(self):
-        """
-        친구창 보여주는 메서드
-        :return:
-        """
-        cp = self.widget_talk_room_list.frameGeometry().topLeft()
-        cp: QPoint
-        self.list_widget_geometry_x = cp.x()
-        self.list_widget_geometry_y = cp.y()
-        self.widget_friend_list_page.setGeometry(self.list_widget_geometry_x, self.list_widget_geometry_y,
-                                                 self.widget_friend_list_page.width(),
-                                                 self.widget_friend_list_page.height())
-        self.widget_friend_list_page.show()
+
 
     def show_member_plus(self):
         """
@@ -183,7 +179,19 @@ class WindowController(QtWidgets.QWidget):
                                                self.widget_talk_room_list.width(),
                                                self.widget_talk_room_list.width())
         self.widget_talk_room_list.show()
-
+    def show_friend_list(self):
+        """
+        친구창 보여주는 메서드
+        :return:
+        """
+        cp = self.widget_talk_room_list.frameGeometry().topLeft()
+        cp: QPoint
+        self.list_widget_geometry_x = cp.x()
+        self.list_widget_geometry_y = cp.y()
+        self.widget_friend_list_page.setGeometry(self.list_widget_geometry_x, self.list_widget_geometry_y,
+                                                 self.widget_friend_list_page.width(),
+                                                 self.widget_friend_list_page.height())
+        self.widget_friend_list_page.show()
     # 채팅방 리스트 화면 띄우는 메서드
     def show_join_page(self):
         """
@@ -200,7 +208,7 @@ class WindowController(QtWidgets.QWidget):
     def show_login_success(self):
         # todo: 친구창과 채팅방을 띄울때 본인의 정보를 따로 처리해야한다
         self.widget_friend_list_page.show()  # 친구창 띄우는 함수
-        # self.talk_room.show()  # 채팅방 띄우는 함수
+
 
     @staticmethod
     def clear_widget(widget):
@@ -210,14 +218,31 @@ class WindowController(QtWidgets.QWidget):
                 if item.widget():
                     item.widget().deleteLater()
 
+    # 1대1대화 시 해당 멤버가 속한 방 talk_room_id 찾기
+    def find_already_created_room(self, target_user_id):
+        talk_room_list = self.get_all_talk_room()
+        user_self_id = self.get_user_self().user_id
+        for talk_room in talk_room_list:
+            talk_room_user_list = talk_room.talk_room_user_list
+            if len(talk_room_user_list) == 2 and [user_self_id, target_user_id] in talk_room_user_list:
+                return talk_room.talk_room_id
+        else:
+            return False
+
     # 레이아웃 안에있는 위젯들 삭제
     def open_one_to_one_chat_room(self, target_user_id):
-        target_user_obj = self.get_user_by_id(target_user_id)
-        invite_list = list()
-        invite_list.append(target_user_id)
-        now_time_stamp = get_now_time_str()
-        self.client_app.send_make_talk_room(target_user_obj.nickname, invite_list, now_time_stamp)
-        print('톡방 생성 1대1 요청 보냄(클라)')
+        found_talk_room_id = self.find_already_created_room(target_user_id)
+        print('found id', found_talk_room_id)
+        if found_talk_room_id is False:
+            target_user_obj = self.get_user_by_id(target_user_id)
+            invite_list = list()
+            invite_list.append(self.get_user_self().user_id)  # 본인 포함이므로
+            invite_list.append(target_user_id)
+            now_time_stamp = get_now_time_str()
+            self.client_app.send_make_talk_room(target_user_obj.nickname, invite_list, now_time_stamp)
+
+        else:
+            self.show_talk_room(found_talk_room_id)
 
     def open_talk_room_widget_after_recv_talk_room_id(self, talk_room_id: int = None):
         self.show_talk_room(talk_room_id)
@@ -236,6 +261,7 @@ class WindowController(QtWidgets.QWidget):
         self.send_msg_se_signal.connect(self.send_msg_se_res)
         self.invite_user_talk_room_signal.connect(self.invite_user_talk_room_res)
         self.make_talk_room_signal.connect(self.make_talk_room_res)
+        self.talk_room_msg_signal.connect(self.load_message_history)
 
     # client function =================================
     # 클라 -> 서버 아이디 중복 체크 요청
@@ -285,16 +311,12 @@ class WindowController(QtWidgets.QWidget):
         if return_result is True:
             # 모든건 로그인 버튼을 누르면 시작한다. 나중에 수정
             # 받아와야할 정보 : 전체 회원 리스트, 본인이 포함된 톡방 리스트
-            user_id = self.client_app.user_id
-            username = self.client_app.username
-            user_pw = self.client_app.user_pw
-            user_nickname = self.client_app.user_nickname
-            self.widget_friend_list_page.login_user_obj = User(user_id, username, user_pw, user_nickname)
-            self.all_user_list()
-
-            self.user_talk_room_list()
+            login_user = self.get_user_self()
+            self.widget_friend_list_page.login_user_obj = login_user
+            self.all_user_list_req()
+            self.user_talk_room_list_req()
             time.sleep(0.05)
-            self.talk_room_user_list_se(1)
+            self.show_login_success()
             # self.out_talk_room()
             return NoFrameMessageBox(self, "성공", "login 성공", "about")
         elif return_result is False:
@@ -315,7 +337,7 @@ class WindowController(QtWidgets.QWidget):
 
         # 클라 -> 서버 유저 리스트 요청, 로그인시 할 수도있음
 
-    def all_user_list(self):
+    def all_user_list_req(self):
         self.client_app.send_all_user_list()
 
         # 서버 -> 클라 유저 리스트 정보 받음
@@ -324,7 +346,6 @@ class WindowController(QtWidgets.QWidget):
         user_list = self.decoder.decode_any(return_result)
         self.widget_login_page.close()
         self.client_app.all_user_list_in_memory = user_list
-        self.widget_friend_list_page.friend_list = user_list.copy()
         self.widget_friend_list_page.show()
         # 클라 -> 서버 채팅방 리스트 요청
 
@@ -334,13 +355,16 @@ class WindowController(QtWidgets.QWidget):
     def get_talk_by_room_id(self, talk_room_id):
         return self.client_app.get_talk_by_room_id(talk_room_id)
 
-    def user_talk_room_list(self):
+    def user_talk_room_list_req(self):
         self.client_app.send_user_talk_room_list()
 
         # 서버 -> 클라 채팅방 리스트 정보 받음
 
     def user_talk_room_list_res(self, return_result: str):
         result_list = self.decoder.decode_any(return_result)
+        for talk_room in result_list:
+            self.talk_room_user_list_se(talk_room.talk_room_id)
+            self.client_app.send_talk_room_msg(talk_room.talk_room_id)
         self.widget_talk_room_list.talk_room_list = self.client_app.talk_room_list_in_memory.copy()
         self.widget_talk_room_list.refresh_chat_room_list()
 
@@ -352,9 +376,8 @@ class WindowController(QtWidgets.QWidget):
 
         # 서버 -> 클라 톡방 유저 객체 정보 획득
 
-    def talk_room_user_list_se_res(self, return_result: str):
+    def talk_room_user_list_se_res(self, talk_room_id:int, return_result: str):
         related_talk_room_user_list = self.decoder.decode_any(return_result)
-        talk_room_id = self.client_app.selected_talk_room_id
         found_talk_room = None
         if len(self.get_all_talk_room()) == 0:
             time.sleep(0.5)
@@ -367,6 +390,8 @@ class WindowController(QtWidgets.QWidget):
             raise "채팅방 못찾음"
         found_talk_room.talk_room_user_list.clear()
         found_talk_room.append_user(related_talk_room_user_list)
+        print(found_talk_room, end="!!!")
+        print(found_talk_room.talk_room_user_list)
 
     def out_talk_room(self):
         self.client_app.send_out_talk_room(talk_room_id)
@@ -396,23 +421,18 @@ class WindowController(QtWidgets.QWidget):
 
         # 클라 -> 서버 단톡방 초대 요청
 
-    def invite_user_talk_room(self):
-        self.client_app.send_invite_user_talk_room(talk_room_id, invite_user)
-
-        # 서버 -> 클라 단톡방 초대 완료
-
     def invite_user_talk_room_res(self, return_result: bool):
-        print('초대완료')
+        self.show_talk_room(self.client_app.selected_talk_room_id)
 
         # 채팅방 개설하기
 
-    def make_talk_room(self):
-        # 시간은 어떻게 받을 지몰라서 그대로 둠. user_id도 같인 이유
-        self.client_app.send_make_talk_room(room_name, guest_list, open_time_stmp)
-
     def make_talk_room_res(self, return_result: int):
-        print('생성한 톡방 번호:', return_result)
         self.show_talk_room(return_result)
+
+    def load_message_history(self, return_result: str):
+        # self.widget_talk_room.hide()
+        # self.widget_talk_room.show()
+        print('메시지 저장 완료')
 
     def send_file_to_chat_room(self):
         save_excel_dialog = NoFrameMessageBox(self, "파일 업로드", "파일을 업로드합니까?", "question").result
