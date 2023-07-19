@@ -5,9 +5,10 @@ from Code.domain.class_long_contents import LongContents
 from Code.domain.class_message import Message
 from Code.domain.class_talk_room import TalkRoom
 from Code.domain.class_user import User
+from Code.domain.class_user_talk_room import UserTalkRoom
+
 from json import JSONEncoder, JSONDecoder
 
-from Code.domain.class_user_talk_room import UserTalkRoom
 
 
 
