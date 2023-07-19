@@ -1,3 +1,4 @@
+from Code.front.widget_profile_item import ProfileItemWidget
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import *
@@ -5,21 +6,15 @@ from Code.front.ui.ui_class_widget_talk_room_invite_user_list_in_chat_room impor
 from Code.front.widget_invite_member import InviteUserItem
 
 
-class TalkRoomMemberPlusWidget(QWidget, Ui_make_talk_room_widget):
+class InviteFriendListWidgetInTalkRoom(QWidget, Ui_make_talk_room_widget):
     def __init__(self, client_controller):
         super().__init__()
         self.setupUi(self)
         self.client_controller = client_controller
         self.set_btn_trigger()
         self.friend_list = None
-        self.not_invited_user_list = list()
         self.user_item_widget_list = None
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
-
-    def set_not_invited_user_list(self):
-        self.not_invited_user_list.clear()
-        all_user_list = self.client_controller.get_all_user_list()
-        # invited_user_list =
 
     def count_checked_user(self):
         count = 0
@@ -27,6 +22,13 @@ class TalkRoomMemberPlusWidget(QWidget, Ui_make_talk_room_widget):
             if w.is_btn_checked():
                 count += 1
         return count
+    def refresh_user_nickname_list_label(self):
+        invite_user_nickname_list = list()
+        for w in self.user_item_widget_list:
+            if w.is_btn_checked():
+                user_nickname = w.get_nickname()
+                invite_user_nickname_list.append(user_nickname)
+        return invite_user_nickname_list
 
     def mousePressEvent(self, event):
         self.client_controller.mousePressEvent(self, event)
@@ -34,15 +36,21 @@ class TalkRoomMemberPlusWidget(QWidget, Ui_make_talk_room_widget):
     def mouseMoveEvent(self, event):
         self.client_controller.mouseMoveEvent(self, event)
 
+    # 톡방 없는 유저 리스트 채우기
+    def set_not_yet_invited_user_widget(self):
+        not_invited_user_list = self.client_controller.get_not_yet_invited_user_list()
+        layout_to_add = self.invite_member_choice.layout()
+        if layout_to_add is None:
+            layout_to_add = QtWidgets.QVBoxLayout(self)
+            # self.invite_member_choice.
+        for user in not_invited_user_list:
+            widget_user_profile = ProfileItemWidget(self, user)
+            # self.invite_member_choice
     def show(self):
-        # todo: 채팅방에 없는 유저만 있는 리스트로 바꿔
-        self.set_not_invited_user_list()
+        self.set_not_yet_invited_user_widget()
         self.set_user_item_widget_to_scroll_layout()
         super().show()
 
-    # def set_friend_list(self):
-    #     # todo : 톡방에 없는 친구 리스트
-    #     self.friend_list = self.client_controller.uninvited_friend_list()
 
     def close(self):
         super().close()
@@ -94,10 +102,10 @@ class TalkRoomMemberPlusWidget(QWidget, Ui_make_talk_room_widget):
     def set_user_item_widget_to_scroll_layout(self):
         self.client_controller.clear_widget(self.invite_member_choice)  # 위젯 비우기
 
-        talk_room_uninvite_user_list = self.not_invited_user_list
+        user_list = self.client_controller.get_not_yet_invited_user_list()
         list_ = []
-        for uninvite_user in talk_room_uninvite_user_list:
-            user_profile = InviteUserItem(self, uninvite_user)
+        for not_yet_user in user_list:
+            user_profile = InviteUserItem(self, not_yet_user)
             list_.append(user_profile)
             self.invite_member_choice_layout.addWidget(user_profile)
         self.user_item_widget_list = list_

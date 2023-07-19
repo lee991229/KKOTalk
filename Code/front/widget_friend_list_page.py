@@ -13,9 +13,7 @@ class FriendListWidget(QWidget, Ui_friend_list_widget):
         self.client_controller = client_controller
         self.set_btn_trigger()
         self.setGeometry(250, 95, self.width(), self.height())
-        self.set_initial_widget()
         self.login_user_obj = None
-        self.friend_list = None
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
 
     def mousePressEvent(self, event):
@@ -26,12 +24,14 @@ class FriendListWidget(QWidget, Ui_friend_list_widget):
 
     def show(self):
         self.set_widget_user_list()
+        self.set_initial_widget()
         super().show()
 
     def set_initial_widget(self):
+        user = self.client_controller.get_user_self()
+        self.label_title.setText(f"{user.nickname}의 크크오톡 친구목록")
         self.friend_page_search_bar_2.hide()
         self.btn_flist_search.hide()
-        pass
 
     def set_window_drag(self):
         self.setAttribute(Qt.WA_TranslucentBackground)
@@ -56,7 +56,11 @@ class FriendListWidget(QWidget, Ui_friend_list_widget):
 
     # 친구 위젯 레이아웃에 넣기
     def set_widget_user_list(self):
-        friend_list = self.friend_list
+        self.client_controller.clear_widget(self.friend_list_layout)
+        friend_list = self.client_controller.get_all_user_list()
+        user_self = self.client_controller.get_user_self()
         for user in friend_list:
-            friend_profile = ProfileItemWidget(self, user)
+            if user.user_id == user_self.user_id:
+                continue
+            friend_profile = ProfileItemWidget(self.client_controller, user)
             self.friend_list_layout.addWidget(friend_profile)

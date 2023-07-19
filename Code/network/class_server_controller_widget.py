@@ -14,16 +14,16 @@ class ServerControllerWidget(QtWidgets.QWidget, Ui_server_controller):
     ENCODED_DOT = bytes('.', 'utf-8')
     ENCODED_PASS = bytes('pass', 'utf-8')
 
-    LOG_PATH = """C:\\Users\\KDT115\\Desktop\\KKOTalk\\log.txt"""
-    SERVER_STATUS_PATH = """C:\\Users\\KDT115\\Desktop\\KKOTalk\\server_status.txt"""
+    LOG_PATH = """C:\\Users\\KDT107\\Desktop\\KKOTalk\\log.txt"""
+    SERVER_STATUS_PATH = """C:\\Users\\KDT107\\Desktop\\KKOTalk\\server_status.txt"""
 
     @staticmethod
     def save_server_log():
-        os.system("""C:\\Users\\KDT115\\Desktop\\KKOTalk\\Code\\network\\server_logger.bat""")
+        os.system("""C:\\Users\\KDT107\\Desktop\\KKOTalk\\Code\\network\\server_logger.bat""")
 
     @staticmethod
     def check_netstat_via_cmd():
-        os.system("""C:\\Users\\KDT115\\Desktop\\KKOTalk\\Code\\network\\check_server_on.bat""")
+        os.system("""C:\\Users\\KDT107\\Desktop\\KKOTalk\\Code\\network\\check_server_on.bat""")
 
 
     def __init__(self, server_obj, db_connector):

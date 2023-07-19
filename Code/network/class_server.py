@@ -102,43 +102,55 @@ class Server:
                 self.sockets_list.remove(notified_socket)
                 del self.clients[notified_socket]
 
+    def send_message(self, client_socket: socket, result):
+        print(f"Server SENDED: ({result})")
+        client_socket.send(result)
+
     def receive_message(self, client_socket: socket):
         try:
             recv_message = client_socket.recv(self.BUFFER)
+            print(recv_message)
             request_header = recv_message[:self.HEADER_LENGTH].strip().decode(self.FORMAT)
             request_data = recv_message[self.HEADER_LENGTH:].strip().decode(self.FORMAT)
+            print(f"Server RECEIVED: ({request_header},{request_data})")
+
             # 아이디 중복
             if request_header == self.assert_username.strip():
                 result = self.db_conn.assert_same_login_id(request_data)
                 if result is True:
                     response_header = self.assert_username.encode(self.FORMAT)
-                    client_socket.send(response_header + self.pass_encoded)
+                    result = response_header + self.pass_encoded
+                    self.send_message(client_socket, result)
                 elif result is False:
                     response_header = self.assert_username.encode(self.FORMAT)
-                    client_socket.send(response_header + self.dot_encoded)
+                    result = response_header + self.dot_encoded
+                    self.send_message(client_socket, result)
             # 회원가입
             elif request_header == self.join_user.strip():
                 object_ = self.decoder.decode_any(request_data)
                 result = self.db_conn.user_sign_up(object_.username, object_.password, object_.nickname)
                 if result is False:
                     response_header = self.join_user.encode(self.FORMAT)
-                    client_socket.send(response_header + self.dot_encoded)
+                    result = response_header + self.dot_encoded
+                    self.send_message(client_socket, result)
                 else:
                     response_header = self.join_user.encode(self.FORMAT)
-                    client_socket.send(response_header + self.pass_encoded)
+                    result = response_header + self.pass_encoded
+                    self.send_message(client_socket, result)
             # 로그인
             elif request_header == self.login.strip():
-                print('로그인 버튼시')
                 object_ = self.decoder.decode_any(request_data)
                 result = self.db_conn.user_log_in(object_.username, object_.password)
                 if result is False:
                     response_header = self.login.encode(self.FORMAT)
-                    client_socket.send(response_header + self.dot_encoded)
+                    result = response_header + self.dot_encoded
+                    self.send_message(client_socket, result)
                 else:
                     response_header = self.login.encode(self.FORMAT)
                     result_str = result.toJSON()
                     result_data = f"{result_str:<{self.BUFFER - self.HEADER_LENGTH}}".encode(self.FORMAT)
-                    client_socket.send(response_header + result_data)
+                    result = response_header + result_data
+                    self.send_message(client_socket, result)
             # 필수 단톡방 입장
             elif request_header == self.enter_square.strip():
                 room = self.db_conn.find_user_by_talk_room_id(1)
@@ -154,18 +166,21 @@ class Server:
                     objcet_ = self.decoder.decode_any(request_data)
                     object_user_talk_room = UserTalkRoom(None, objcet_.user_id, 1)
                     self.db_conn.insert_user_talk_room(object_user_talk_room)
-                client_socket.send(response_header + self.pass_encoded)
+                result = response_header + self.pass_encoded
+                self.send_message(client_socket, result)
             # 본인 제외 모든 유저 보내기
             elif request_header == self.all_user_list.strip():
                 response_header = self.all_user_list.encode(self.FORMAT)
                 object_ = self.decoder.decode_any(request_data)
                 result = self.db_conn.find_all_user()
                 if result is None:
-                    client_socket.send(response_header + self.dot_encoded)
+                    result = response_header + self.dot_encoded
+                    self.send_message(client_socket, result)
                 else:
                     result_str = self.encoder.encode(result)
                     return_result = result_str.encode(self.FORMAT)
-                    client_socket.send(response_header + return_result)
+                    result = response_header + return_result
+                    self.send_message(client_socket, result)
 
             # 채팅방 리스트 보내기
             elif request_header == self.user_talk_room_list.strip():
@@ -177,74 +192,91 @@ class Server:
                     room_list.append(self.db_conn.find_talk_room_by_talk_room_id(i.talk_room_id))
                 room_list_str = self.encoder.encode(room_list)
                 return_result = room_list_str.encode(self.FORMAT)
-                client_socket.send(response_header + return_result)
+                result = response_header + return_result
+                self.send_message(client_socket, result)
 
-            # 톡방에 참여하고 있는 유저 객체 보내기
-            elif request_header == self.talk_room_user_list_se.strip():
-                response_header = self.talk_room_user_list_se.encode(self.FORMAT)
-                obj_ = self.decoder.decode_any(request_data)
-                # 확인 후 인자 지워
-                user_obj_list = self.db_conn.find_user_by_talk_room_id(obj_.talk_room_id)
-                if user_obj_list is None:
-                    client_socket.send(response_header + self.dot_encoded)
-                else:
-                    user_obj_list_str = self.encoder.encode(user_obj_list)
-                    return_result = user_obj_list_str.encode(self.FORMAT)
-                    client_socket.send(response_header + return_result)
+
 
             # 채팅방 나가기
             elif request_header == self.out_talk_room.strip():
                 response_header = self.out_talk_room.encode(self.FORMAT)
                 obj_ = self.decoder.decode_any(request_data)
                 self.db_conn.delete_user_talk_room_by_user_id_and_talk_room_id(obj_.user_id, obj_.talk_room_id)
-                client_socket.send(response_header + self.pass_encoded)
+                result = response_header + self.pass_encoded
+                self.send_message(client_socket, result)
 
             # 발신자 제외한 해당 채팅방에 있는 모든 클라이언트에게 메시지 전송
             # 메시지 db 저장
             elif request_header == self.send_msg_se.strip():
                 response_header = self.send_msg_se.encode(self.FORMAT)
                 obj_ = self.decoder.decode_any(request_data)
-                print(obj_)
                 # 메시지 내용 db에 저장
                 self.db_conn.insert_message(obj_.sender_user_id, obj_.talk_room_id, obj_.send_time_stamp, obj_.contents,
                                             obj_.long_contents_id)
                 socket_list = self.sockets_list.copy()
                 socket_list.remove(self.server_socket)
                 return_result = request_data.encode(self.FORMAT)
-                for i in socket_list:
-                    i.send(response_header + return_result)
+                for socket_ in socket_list:
+                    result = response_header + return_result
+                    self.send_message(socket_, result)
 
             # 유대 초대 요청
             elif request_header == self.invite_user_talk_room.strip():
                 response_header = self.invite_user_talk_room.encode(self.FORMAT)
                 obj_ = self.decoder.decode_any(request_data)
                 self.db_conn.insert_user_talk_room(obj_)
-                client_socket.send(response_header + self.pass_encoded)
+                result = response_header + self.pass_encoded
+                self.send_message(client_socket, result)
 
             # 방 만들기 요처
-            # json converting 안됨..
             elif request_header == self.make_talk_room.strip():
                 response_header = self.make_talk_room.encode(self.FORMAT)
-                obj_ = self.decoder.decode_any(request_data)
+                obj_ = self.decoder.decode_any(request_data) # TalkRoom
                 created_talk_room_obj = self.db_conn.insert_talk_room(obj_)
                 created_talk_room_obj_str = created_talk_room_obj.toJSON()
-                print(created_talk_room_obj_str)
-                header_bytearray = bytearray(self.HEADER_LENGTH)
-                response_bytearray = bytearray(self.BUFFER - self.HEADER_LENGTH)
-                header_bytearray.extend(response_header)
-                response_bytearray.extend(created_talk_room_obj_str)
-                result = header_bytearray + response_bytearray
-                print(result)
-                client_socket.send(result)
+                encoded_data = f"{created_talk_room_obj_str:<{self.BUFFER - self.HEADER_LENGTH}}".encode("utf-8")
+                result = response_header + encoded_data
+                self.send_message(client_socket, result)
+
+            # 톡방에 참여하고 있는 유저 객체 보내기
+            elif request_header == self.talk_room_user_list_se.strip():
+                obj_ = self.decoder.decode_any(request_data)  # talk room obj
+                user_obj_list = self.db_conn.find_user_by_talk_room_id(obj_.talk_room_id)
+                if user_obj_list is not None:
+                    result = f"{self.talk_room_user_list_se.strip()}%{obj_.talk_room_id}"
+                    response_header = f"{result:<{self.HEADER_LENGTH}}".encode(self.FORMAT)
+                else:
+                    response_header = f"{self.talk_room_user_list_se}".encode(self.FORMAT)
+                if user_obj_list is None:
+                    result = response_header + self.dot_encoded
+                    self.send_message(client_socket, result)
+                else:
+                    user_obj_list_str = self.encoder.encode(user_obj_list)
+                    return_result = f"{user_obj_list_str:<{self.BUFFER - self.HEADER_LENGTH}}".encode(self.FORMAT)
+                    result = response_header + return_result
+                    self.send_message(client_socket, result)
 
             # 이전 메시지 불러오기
             elif request_header == self.talk_room_msg.strip():
-                response_header = self.talk_room_msg.encode(self.FORMAT)
+                response_header = self.talk_room_msg
                 obj_ = self.decoder.decode_any(request_data)
-                result = self.db_conn.find_message_by_talk_room_id(obj_.talk_room_id)
-                result_str = self.encoder.encode(result)
-                return_result = result_str.encode(self.FORMAT)
-                client_socket.send(response_header + return_result)
+                talk_room_id = obj_.talk_room_id
+                print(1)
+
+                message_list = self.db_conn.find_message_by_talk_room_id(obj_.talk_room_id)
+                temp_list = list()
+                for m in message_list:
+                    temp_list.append(m.toJSON())
+
+                result_header = f"{self.talk_room_msg.strip()}%{talk_room_id}"
+                encoded_header = f"{result_header:<{self.HEADER_LENGTH}}".encode('utf-8')
+                encoded_data = f"{json.dumps(temp_list):<{self.BUFFER - self.HEADER_LENGTH}}".encode('utf-8')
+                return_result = encoded_header + encoded_data
+                print(2)
+                result = encoded_header + return_result
+                print(3)
+                self.send_message(client_socket, result)
+                print(4)
         except:
             return False
 
@@ -252,14 +284,3 @@ class Server:
         header_msg = f"{header:<{self.HEADER_LENGTH}}".encode(self.FORMAT)
         data_msg = f"{data:<{self.BUFFER - self.HEADER_LENGTH}}".encode(self.FORMAT)
         return header_msg + data_msg
-
-if __name__ == '__main__':
-    header = 'some_header'.encode('utf-8')
-    data = 'data'.encode('utf-8')
-    fix_length = 30
-    sample_bytearray= bytearray(fix_length)
-    sample_bytearray2= bytearray(fix_length)
-    sample_bytearray.extend(header)
-    sample_bytearray2.extend(data)
-
-    print(sample_bytearray+sample_bytearray2)

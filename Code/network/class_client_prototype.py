@@ -24,7 +24,7 @@ class ClientPrototypeWidget(QtWidgets.QWidget, Ui_prototype):
     enter_square_signal = pyqtSignal(bool)
     all_user_list_signal = pyqtSignal(str)
     user_talk_room_signal = pyqtSignal(str)
-    talk_room_user_list_se_signal = pyqtSignal(str)
+    talk_room_user_list_se_signal = pyqtSignal(int, str)
     out_talk_room_signal = pyqtSignal(bool)
     send_msg_se_signal = pyqtSignal(str)
     invite_user_talk_room_signal = pyqtSignal(bool)
@@ -168,8 +168,9 @@ class ClientPrototypeWidget(QtWidgets.QWidget, Ui_prototype):
         pass
 
     # 서버 -> 클라 톡방 유저 객체 정보 획득
-    def talk_room_user_list_se_res(self, return_result: str):
+    def talk_room_user_list_se_res(self, talk_room_id:int, return_result: str):
         user_list = self.decoder.decode(return_result)
+
         print('방에 존재하는 유저 정보', user_list)
 
     # 클라 -> 서버 채팅방 나가기 요청

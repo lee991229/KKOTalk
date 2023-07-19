@@ -41,7 +41,7 @@ class Ui_widget_message(object):
         self.label_nickname.setObjectName("label_nickname")
         self.horizontalLayout.addWidget(self.label_nickname)
         self.label_message = QtWidgets.QLabel(self.background_widget)
-        self.label_message.setWordWrap(True)
+        self.label_message.setWordWrap(False)
         self.label_message.setObjectName("label_message")
         self.horizontalLayout.addWidget(self.label_message)
         self.horizontalLayout_2.addWidget(self.background_widget)
